@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/_sidebar/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/contribute/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/readme/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/install/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/readme/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/readme/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_main_route/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_with_subnets/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/readme/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/scripts/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/tags/</loc>
+  </url>
+  
+</urlset>

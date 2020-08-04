@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Roles on ce-provision</title>
+    <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/</link>
+    <description>Recent content in Roles on ce-provision</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/</guid>
+      <description>&amp;ldquo;Meta&amp;rdquo; roles that group individual roles together. </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible/</guid>
+      <description>Ansible (Re-)install Ansible from the official repository</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages/</guid>
+      <description>Extra packages Provides a wrapper for installing packages through apt.
+Default variables --- apt_extra_packages: [] </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</guid>
+      <description>AWS tools roles </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</guid>
+      <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
+Dependencies This requires Boto3 and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.
+Default variables --- ami_debian_buster: aws_profile: default region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;{{ domain_name }}&amp;#34; playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials/</guid>
+      <description>Amazon credentials Simple role generating credentials &amp;ldquo;profiles&amp;rdquo; in users $HOME/.aws/credentials.
+Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1 access_key_id: XXX secret_access_key: XXXX - name: example access_key_id: XXX secret_access_key: XXXX - user: root profiles: - name: another access_key_id: XXX secret_access_key: XXXX - name: profile2 access_key_id: XXX secret_access_key: XXXX </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
+      <description>Autoscale cluster Default variables --- # This is used to construct: # - the base cidr_block as {{ cidr_base }}.0/16 # - subnets cidr_block as # a {{ cidr_base }}.0/26 # b {{ cidr_base }}.64/26 # c {{ cidr_base }}.128/26 _aws_ec2_autoscale_cluster_cidr_base: &amp;#34;10.0.0&amp;#34; aws_ec2_autoscale_cluster: aws_profile: default region: eu-west-3 name: &amp;#34;example&amp;#34; cidr_block: &amp;#34;{{ _aws_ec2_autoscale_cluster_cidr_base }}.0/24&amp;#34; subnets: # - az: a # cidr: &amp;#34;{{ _aws_ec2_autoscale_cluster_cidr_base }}.0/26&amp;#34; - az: b cidr: &amp;#34;{{ _aws_ec2_autoscale_cluster_cidr_base }}.64/26&amp;#34; - az: c cidr: &amp;#34;{{ _aws_ec2_autoscale_cluster_cidr_base }}.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</guid>
+      <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
+Default variables --- aws_ec2_with_eip: aws_profile: default region: eu-west-3 instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image. vpc_subnet_id: subnet-xxx state: running instance_name: &amp;#34;{{ domain_name }}&amp;#34; root_volume_size: 80 security_groups: [] tags: Name: &amp;#34;{{ domain_name }}&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
+      <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
+Default variables --- aws_efs_client: aws_profile: default region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair/</guid>
+      <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;
+Default variables --- aws_provision_ec2_keypair: aws_profile: default region: eu-west-3 key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_main_route/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_main_route/</guid>
+      <description>Update main route for a given VPC This will add/update routes on the &amp;ldquo;main&amp;rdquo; route table for a given VPC, leaving existing routes for different CIDR blocks intact.
+Default variables --- aws_vpc_main_route: aws_profile: default region: eu-west-3 # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # See https://docs.ansible.com/ansible/latest/modules/ec2_vpc_route_table_module.html#parameter-routes routes: - dest: &amp;#34;10.0.0.0/16&amp;#34; # CIDR block for the route. gateway_id: igw-XXX </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_with_subnets/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_with_subnets/</guid>
+      <description>VPC Creates a VPC and associated subnets.
+Default variables --- # This is used to construct: # - the base cidr_block as {{ cidr_base }}.0/16 # - subnets cidr_block as # a {{ cidr_base }}.0/26 # b {{ cidr_base }}.64/26 # c {{ cidr_base }}.128/26 _aws_vpc_with_subnets_cidr_base: &amp;#34;10.0.0&amp;#34; aws_vpc_with_subnets: aws_profile: default region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;{{ _aws_vpc_with_subnets_cidr_base }}.0/24&amp;#34; tags: # Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false create_gateway: true subnets: # - az: a # cidr: &amp;#34;{{ _aws_vpc_with_subnets_cidr_base }}.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy/</guid>
+      <description>ce-deploy Installs Code Enigma&amp;rsquo;s deploy stack on a server.
+Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-deploy.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; local_dir: &amp;#34;/home/{{ _ce_deploy.username }}/ce-deploy&amp;#34; # List of additional groups to add the user to. groups: &amp;#34;&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev/</guid>
+      <description>Extra packages Provides a wrapper for installing packages through apt.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</guid>
+      <description>ce-provision Installs Code Enigma&amp;rsquo;s infrastructure management stack on a server.
+Default variables --- _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}provision{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.username }}&amp;#34; # Main repo. own_repository: &amp;#34;https://github.com/codeenigma/ce-provision.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; # Destination. local_dir: &amp;#34;/home/{{ _ce_provision.username }}/ce-provision&amp;#34; # Private config repo. config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; # Extra config repo. extra_repository: &amp;#34;&amp;#34; extra_repository_branch: &amp;#34;master&amp;#34; extra_repository_vars_file: &amp;#34;custom.yml&amp;#34; extra_repository_allowed_vars: [] # List of additional groups to add the user to.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</guid>
+      <description>ClamAV Clamscan Configuration This role will install the ClamAV base package which will allow us to run clamscan on demand and email scan reports to an email address. NOTE: This approach will not install clamd. Check the clamav_daemon role if this is what you are looking for.
+Default variables --- # defaults file for clamav clamav_clamscan: email: &amp;#34;admins@example.com&amp;#34; schedule: &amp;#34;0 0 * * *&amp;#34; path: &amp;#34;/var/www&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</guid>
+      <description>ClamAV Daemon Configuration This role will install the ClamAV daemon. If you want to install clamscan and generate reports check the clamav_clamscan role.
+Default variables --- # defaults file for clamav clamav_daemon: host: &amp;#34;127.0.0.1&amp;#34; port: &amp;#34;3310&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</guid>
+      <description>UFW Firewall Default variables --- # rules: # - { [port: &amp;#34;&amp;#34;] [rule: allow] [proto: any] [from_ip: any] [to_ip: any] [comment: &amp;#39;rule comment&amp;#39;]} # # https://docs.ansible.com/ansible/latest/modules/ufw_module.html#parameters # firewall: # Define any custom rule. rules: [] # - { to_ip: any, direction: out, port: &amp;#39;123&amp;#39;, rule: &amp;#39;allow&amp;#39;, proto: udp, comment: &amp;#39;Allow outgoing NTP&amp;#39; } # - { from_ip: any, direction: in, port: &amp;#39;53&amp;#39;, rule: &amp;#39;allow&amp;#39;, comment: &amp;#39;Allow DNS&amp;#39; } input_policy: DROP output_policy: ACCEPT forward_policy: ACCEPT application_policy: SKIP ipv6: &amp;#34;yes&amp;#34; ipt_modules: &amp;#34;nf_conntrack_ftp nf_nat_ftp nf_conntrack_netbios_ns&amp;#34; # Defaults IPs to whitelist.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</guid>
+      <description>Gitlab Configuration Because of the size of the gitlab.rb file, it is impractical to try to parameterized it. Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &amp;ldquo;override&amp;rdquo; system and provide a custom template.
+Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ domain_name }}&amp;#34; ssl_handling: &amp;#34;ssl_selfsigned&amp;#34; unicorn_worker_processes: 2 initial_root_password: &amp;#34;&amp;#34; ldap: false ldap_endpoint: &amp;#34;{{ ldap_client.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner/</guid>
+      <description>Gitlab Runner Install the Gitlab Runner binary from .deb package.
+Default variables </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key/</guid>
+      <description>GPG Key Generates a passwordless GPG key for a given user or users.
+Default variables --- gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy/</guid>
+      <description>HA Proxy Default variables --- _haproxy: ssl_handling: ssl_selfsigned haproxy: template: &amp;#34;haproxy-ssl-passthru&amp;#34; ssl_handling: &amp;#34;{{ _haproxy.ssl_handling }}&amp;#34; listen_bind_address: &amp;#34;0.0.0.0&amp;#34; listen_https: true listen_http: false default_backend: default backends: - name: default ip: 127.0.0.1 port: 8080 domain: &amp;#34;{{ domain_name }}&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts/</guid>
+      <description>Managed /etc/hosts Forked from https://github.com/bertvv/ansible-role-hosts
+Default variables --- hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set to true, an entry for `ansible_hostname`, bound to the host&amp;#39;s default IPv4 address is added added. hosts_add_default_ipv4: true # If set to true, basic IPv6 entries (localhost6, ip6-localnet, etc) are added. hosts_add_basic_ipv6: true # If set to true, an entry for every host managed by Ansible is added. Remark that this makes `hosts_add_default_ipv4` unnecessary, as it will be added as wel by this setting.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins/</guid>
+      <description>Jenkins Default variables --- ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; lookup_user: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; jenkins: server_name: &amp;#34;jenkins.{{ domain_name }}&amp;#34; ssl_handling: &amp;#34;ssl_selfsigned&amp;#34; listen_http_port: -1 listen_https_port: 8884 listen_bind_address: &amp;#34;0.0.0.0&amp;#34; keystore_pass: &amp;#34;cleartext&amp;#34; user: &amp;#34;jenkins&amp;#34; adminuser: &amp;#34;admin&amp;#34; adminpass: &amp;#34;{{ lookup(&amp;#39;password&amp;#39;, _ce_provision_data_dir + &amp;#39;/&amp;#39; + inventory_hostname + &amp;#39;/jenkins-adminpass&amp;#39;) }}&amp;#34; # security: basic | ldap security: &amp;#34;basic&amp;#34; plugins: - ldap - mattermost ldap_endpoint: &amp;#34;{{ ldap_client.endpoints[0] }}&amp;#34; ldap_lookup_base: &amp;#34;{{ ldap_client.lookup_base }}&amp;#34; ldap_lookup_user: &amp;#34;{{ ldap_client.lookup_user }}&amp;#34; ldap_binddn: &amp;#34;{{ ldap_client.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</guid>
+      <description>MariaDB Client Default variables --- # @todo do we want to support percona client ? mysql_client: client: &amp;#34;mysql-client&amp;#34; host: &amp;#34;rds.example.com&amp;#34; user: &amp;#34;user&amp;#34; password: &amp;#34;password&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</guid>
+      <description>opcache Installs and configures gordalina&amp;rsquo;s cache tool: https://github.com/gordalina/cachetool
+Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#34; port: &amp;#34;&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</guid>
+      <description>Role Name The ossec role is used to install ossec server or client.
+Role Variables  defaults file for ossec ossec: client: true	# if client is true installs the ossec agent, if false installs the server serverip: &amp;ldquo;123.123.123.123&amp;rdquo;	# server IP in case of client false
+global: email_notification: &amp;ldquo;yes&amp;rdquo; email_to: &amp;ldquo;admin@example.com&amp;rdquo; smtp_server: &amp;ldquo;mail.google.com&amp;rdquo; email_from: &amp;ldquo;admin@example.com&amp;rdquo; white_list:
+ &amp;ldquo;8.8.8.8&amp;rdquo; &amp;ldquo;4.4.4.4&amp;rdquo; alerts: log_alert_level: 1 email_alert_level: 7  email_alerts: email_to: &amp;ldquo;admin@example.com&amp;rdquo; level: 14</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server/</guid>
+      <description>SSHD Default variables --- sshd: # Main options. Port: - 22 ListenAddress: - &amp;#34;0.0.0.0&amp;#34; - &amp;#34;::&amp;#34; AllowAgentForwarding: &amp;#34;yes&amp;#34; AllowGroups: &amp;#34;&amp;#34; AllowTcpForwarding: &amp;#34;yes&amp;#34; AuthenticationMethods: &amp;#34;&amp;#34; AuthorizedKeysCommand: &amp;#34;&amp;#34; AuthorizedKeysCommandUser: &amp;#34;nobody&amp;#34; ChallengeResponseAuthentication: &amp;#34;no&amp;#34; ClientAliveCountMax: 3 ClientAliveInterval: 60 Compression: &amp;#34;delayed&amp;#34; GatewayPorts: &amp;#34;no&amp;#34; HostKey: [] LoginGraceTime: &amp;#34;2m&amp;#34; LogLevel: &amp;#34;INFO&amp;#34; MaxAuthTries: 6 MaxSessions: 10 PasswordAuthentication: &amp;#34;no&amp;#34; PermitRootLogin: &amp;#34;prohibit-password&amp;#34; PermitTTY: &amp;#34;yes&amp;#34; PermitTunnel: &amp;#34;no&amp;#34; PermitUserEnvironment: &amp;#34;no&amp;#34; PrintLastLog: &amp;#34;yes&amp;#34; PrintMotd: &amp;#34;no&amp;#34; PubkeyAuthentication: &amp;#34;yes&amp;#34; RekeyLimit: &amp;#34;default none&amp;#34; StrictModes: &amp;#34;yes&amp;#34; Subsystem_sftp: &amp;#34;internal-sftp&amp;#34; SyslogFacility: &amp;#34;AUTH&amp;#34; TCPKeepAlive: &amp;#34;yes&amp;#34; UseDNS: &amp;#34;no&amp;#34; UsePAM: &amp;#34;yes&amp;#34; X11DisplayOffset: 10 X11Forwarding: &amp;#34;yes&amp;#34; X11UseLocalhost: &amp;#34;yes&amp;#34; # Define some defaults &amp;#34;special&amp;#34; groups.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl/</guid>
+      <description>SSL Manages SSL certificates.
+Default variables --- ssl: domain: www.example.com # Handling for certs, can be one of: # - letsencrypt: Generates individual LetsEncrypt certificate using the HTTP challenge # - selfsigned: Generates self-signed certificates # - manual: Use provided certificates. Requires key/cert. # - unmanaged: Doesn&amp;#39;t do anything. Note that for consistency reasons, key/cert paths are still needed. handling: selfsigned # For &amp;#34;manual&amp;#34; handling, this is the content of the certificate.</description>
+    </item>
+    
+  </channel>
+</rss>
