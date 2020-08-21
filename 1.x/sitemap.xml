@@ -84,11 +84,19 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_main_route/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds/</loc>
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_with_subnets/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</loc>
   </url>
   
   <url>
