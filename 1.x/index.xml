@@ -209,7 +209,7 @@ Default variables aws_rds: aws_profile: default region: eu-west-3 subnets: - sub
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc: aws_profile: default region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: no security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443  </description>
+Default variables aws_vpc: aws_profile: default region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
     </item>
     
     <item>
@@ -229,7 +229,7 @@ Default variables # @todo Support associating route with several subnets. aws_vp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: default region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: no # A NAT gateway to associate with each of the subnets. # This will make the subnet use its own route table. # When set to no, subnets inherit the main VPC&amp;#39;s route table. # @todo IPV6 nat_ipv4: no name: example.</description>
+Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: default region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with each of the subnets. # This will make the subnet use its own route table. # When set to no, subnets inherit the main VPC&amp;#39;s route table. # @todo IPV6 nat_ipv4: false name: example.</description>
     </item>
     
     <item>

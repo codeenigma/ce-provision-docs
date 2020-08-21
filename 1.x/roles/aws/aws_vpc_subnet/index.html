@@ -21,16 +21,17 @@
   <span style="color:#66d9ef">subnets</span>:
     - <span style="color:#66d9ef">cidr_block</span>: <span style="color:#e6db74">&#34;10.0.0.0/24&#34;</span>
       <span style="color:#66d9ef">az</span>: b
-      <span style="color:#66d9ef">assign_instances_ipv6</span>: no
+      <span style="color:#66d9ef">assign_instances_ipv6</span>: <span style="color:#66d9ef">false</span>
       <span style="color:#75715e"># A NAT gateway to associate with each of the subnets.</span>
       <span style="color:#75715e"># This will make the subnet use its own route table.</span>
       <span style="color:#75715e"># When set to no, subnets inherit the main VPC&#39;s route table.</span>
       <span style="color:#75715e"># @todo IPV6</span>
-      <span style="color:#66d9ef">nat_ipv4</span>: no
+      <span style="color:#66d9ef">nat_ipv4</span>: <span style="color:#66d9ef">false</span>
       <span style="color:#66d9ef">name</span>: example.
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#75715e">#Type: &#34;util&#34;</span>
   <span style="color:#66d9ef">state</span>: present
+
 </code></pre></div><!-- raw HTML omitted -->
 
     </article>

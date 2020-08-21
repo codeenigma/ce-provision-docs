@@ -21,8 +21,9 @@
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#75715e">#Type: &#34;util&#34;</span>
   <span style="color:#66d9ef">state</span>: present
-  <span style="color:#66d9ef">assign_instances_ipv6</span>: no
-  <span style="color:#66d9ef">security_groups</span>: []
+  <span style="color:#66d9ef">assign_instances_ipv6</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">security_groups</span>:
+    []
     <span style="color:#75715e"># - name: web - open</span>
     <span style="color:#75715e">#   description: Allow all incoming traffic on ports 80 and 443</span>
     <span style="color:#75715e">#   rules:</span>
@@ -31,7 +32,7 @@
     <span style="color:#75715e">#         - 80</span>
     <span style="color:#75715e">#         - 443</span>
     <span style="color:#75715e">#       cidr_ip: 0.0.0.0/0</span>
-    <span style="color:#75715e">#       rule_desc: Allow all incoming traffic on ports 80 and 443 </span>
+    <span style="color:#75715e">#       rule_desc: Allow all incoming traffic on ports 80 and 443</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
