@@ -124,6 +124,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</loc>
   </url>
   
@@ -152,11 +156,19 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</loc>
   </url>
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</loc>
   </url>
   
   <url>

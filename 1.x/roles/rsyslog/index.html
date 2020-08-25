@@ -7,39 +7,18 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="gitlab">Gitlab</h1>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h2 id="configuration">Configuration</h2>
-<p>Because of the size of the gitlab.rb file, it is impractical to try to parameterized it.
-Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &ldquo;override&rdquo; system and provide a custom template.</p>
+        <h1 id="rsyslog">Rsyslog</h1>
+<p>Configures rsyslog in a client/server topology. Note this doesn&rsquo;t allow for any advanced settings,
+and will group everything in the main /var/log/syslog file.</p>
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#75715e"># See https://github.com/ansible/ansible/issues/8603</span>
-
-<span style="color:#66d9ef">ldap_client</span>:
-  <span style="color:#66d9ef">endpoints</span>: [<span style="color:#e6db74">&#34;&#34;</span>]
-  <span style="color:#66d9ef">lookup_base</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">binddn</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">bindpw</span>: <span style="color:#e6db74">&#34;&#34;</span>
-
-<span style="color:#66d9ef">gitlab</span>:
-  <span style="color:#66d9ef">server_name</span>: <span style="color:#e6db74">&#34;gitlab.{{ domain_name }}&#34;</span>
-  <span style="color:#66d9ef">ssl_handling</span>: <span style="color:#e6db74">&#34;ssl_selfsigned&#34;</span>
-  <span style="color:#66d9ef">unicorn_worker_processes</span>: <span style="color:#ae81ff">2</span>
-  <span style="color:#66d9ef">initial_root_password</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">ldap</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">ldap_endpoint</span>: <span style="color:#e6db74">&#34;{{ ldap_client.endpoints[0] }}&#34;</span>
-  <span style="color:#66d9ef">ldap_lookup_base</span>: <span style="color:#e6db74">&#34;{{ ldap_client.lookup_base }}&#34;</span>
-  <span style="color:#66d9ef">ldap_binddn</span>: <span style="color:#e6db74">&#34;{{ ldap_client.binddn }}&#34;</span>
-  <span style="color:#66d9ef">ldap_bindpw</span>: <span style="color:#e6db74">&#34;{{ ldap_client.bindpw }}&#34;</span>
-  <span style="color:#66d9ef">nginx</span>:
-    <span style="color:#66d9ef">listen_port</span>: <span style="color:#ae81ff">8881</span>
-    <span style="color:#66d9ef">listen_https</span>: nil
-    <span style="color:#66d9ef">client_max_body_size</span>: <span style="color:#e6db74">&#34;250m&#34;</span>
-    <span style="color:#66d9ef">redirect_http_to_https</span>: <span style="color:#e6db74">&#34;false&#34;</span>
-    <span style="color:#66d9ef">redirect_http_to_https_port</span>: <span style="color:#ae81ff">8881</span>
+<span style="color:#66d9ef">rsyslog</span>:
+  <span style="color:#66d9ef">listen_port</span>: <span style="color:#ae81ff">514</span>
+  <span style="color:#75715e"># Either client or server.</span>
+  <span style="color:#66d9ef">role</span>: client
+  <span style="color:#75715e"># For clients, server name or IP.</span>
+  <span style="color:#66d9ef">server</span>: my.server.example.com
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -47,9 +26,8 @@ Only a few basic variables are thus provided. To further customize it, the recom
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#gitlab">Gitlab</a>
+    <li><a href="#rsyslog">Rsyslog</a>
       <ul>
-        <li><a href="#configuration">Configuration</a></li>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>
     </li>

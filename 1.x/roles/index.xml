@@ -207,6 +207,15 @@ Default variables --- # defaults file for clamav clamav_daemon: host: &amp;#34;1
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail/</guid>
+      <description>Frontail Installs https://github.com/mthenw/frontail globally. This is used for local dev environments.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -274,6 +283,16 @@ Default variables --- hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set t
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs/</guid>
+      <description>NodeJS Installs NodeJS from official repos.
+Default variables --- nodejs: version: 12.x </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -292,6 +311,16 @@ Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#
 Role Variables  defaults file for ossec ossec: client: true	# if client is true installs the ossec agent, if false installs the server serverip: &amp;ldquo;123.123.123.123&amp;rdquo;	# server IP in case of client false
 global: email_notification: &amp;ldquo;yes&amp;rdquo; email_to: &amp;ldquo;admin@example.com&amp;rdquo; smtp_server: &amp;ldquo;mail.google.com&amp;rdquo; email_from: &amp;ldquo;admin@example.com&amp;rdquo; white_list:
  &amp;ldquo;8.8.8.8&amp;rdquo; &amp;ldquo;4.4.4.4&amp;rdquo; alerts: log_alert_level: 1 email_alert_level: 7  email_alerts: email_to: &amp;ldquo;admin@example.com&amp;rdquo; level: 14</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</guid>
+      <description>Rsyslog Configures rsyslog in a client/server topology. Note this doesn&amp;rsquo;t allow for any advanced settings, and will group everything in the main /var/log/syslog file.
+Default variables --- rsyslog: listen_port: 514 # Either client or server. role: client # For clients, server name or IP. server: my.server.example.com </description>
     </item>
     
     <item>
