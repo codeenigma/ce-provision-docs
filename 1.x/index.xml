@@ -258,7 +258,7 @@ Default variables --- # defaults file for clamav clamav_daemon: host: &amp;#34;1
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</guid>
       <description>Gitlab Configuration Because of the size of the gitlab.rb file, it is impractical to try to parameterized it. Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &amp;ldquo;override&amp;rdquo; system and provide a custom template.
-Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ domain_name }}&amp;#34; ssl_handling: &amp;#34;ssl_selfsigned&amp;#34; unicorn_worker_processes: 2 initial_root_password: &amp;#34;&amp;#34; ldap: false ldap_endpoint: &amp;#34;{{ ldap_client.</description>
+Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ domain_name }}&amp;#34; ssl: # @see the &amp;#39;ssl&amp;#39; role. Note that domain is autopopulated from server_name above.</description>
     </item>
     
     <item>
