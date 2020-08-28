@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/_sidebar/</loc>
     <priority>0</priority>
   </url>
@@ -13,28 +18,7 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/contribute/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/readme/</loc>
-  </url>
-  
-  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/install/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/readme/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/readme/</loc>
     <priority>0</priority>
   </url>
   
@@ -189,35 +173,11 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/readme/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/scripts/</loc>
-  </url>
-  
-  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/categories/</loc>
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/contribute/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/install/</loc>
-  </url>
-  
-  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/scripts/</loc>
   </url>
   
   <url>
