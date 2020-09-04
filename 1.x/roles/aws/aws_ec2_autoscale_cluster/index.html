@@ -13,7 +13,7 @@
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_ec2_autoscale_cluster</span>:
-  <span style="color:#66d9ef">aws_profile</span>: default
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
   <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
   <span style="color:#66d9ef">name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#66d9ef">vpc_id</span>: vpc-XXXX <span style="color:#75715e"># One of vpc_id or vpc_name is mandatory.</span>

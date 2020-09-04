@@ -16,7 +16,7 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#66d9ef">aws_efs_client</span>:
-  <span style="color:#66d9ef">aws_profile</span>: default
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
   <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
   <span style="color:#66d9ef">version</span>: <span style="color:#ae81ff">1.26.2</span> <span style="color:#75715e"># Version of AWS EFS utils to use.</span>
   <span style="color:#75715e"># See https://docs.ansible.com/ansible/latest/modules/mount_module.html</span>

@@ -14,7 +14,7 @@
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_rds</span>:
-  <span style="color:#66d9ef">aws_profile</span>: default
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
   <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
   <span style="color:#66d9ef">subnets</span>:
     - subnet-aaaaaaaa
@@ -30,6 +30,7 @@
   <span style="color:#66d9ef">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
   <span style="color:#66d9ef">master_username</span>: hello <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
   <span style="color:#66d9ef">master_user_password</span>: hellothere
+
 </code></pre></div><!-- raw HTML omitted -->
 
     </article>

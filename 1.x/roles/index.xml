@@ -55,7 +55,7 @@ Default variables --- apt_extra_packages: [] </description>
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</guid>
       <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
 Dependencies This requires boto and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.
-Default variables --- ami_debian_buster: aws_profile: default region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;{{ domain_name }}&amp;#34; playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
+Default variables --- ami_debian_buster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;{{ domain_name }}&amp;#34; playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
     </item>
     
     <item>
@@ -74,7 +74,7 @@ Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
-      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: default region: eu-west-3 name: &amp;#34;example&amp;#34; vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.0.3.0/26&amp;#34; - az: b cidr_block: &amp;#34;10.0.3.64/26&amp;#34; # Name of a public subnet in the same AZ. public_subnet: public-b - az: c cidr_block: &amp;#34;10.0.3.128/26&amp;#34; public_subnet: public-c instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
+      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: &amp;#34;example&amp;#34; vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.0.3.0/26&amp;#34; - az: b cidr_block: &amp;#34;10.0.3.64/26&amp;#34; # Name of a public subnet in the same AZ. public_subnet: public-b - az: c cidr_block: &amp;#34;10.0.3.128/26&amp;#34; public_subnet: public-c instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
     </item>
     
     <item>
@@ -84,7 +84,7 @@ Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</guid>
       <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
-Default variables --- aws_ec2_with_eip: aws_profile: default region: eu-west-3 instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image. vpc_subnet_id: subnet-xxx state: running instance_name: &amp;#34;{{ domain_name }}&amp;#34; root_volume_size: 80 security_groups: [] tags: Name: &amp;#34;{{ domain_name }}&amp;#34; </description>
+Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
     </item>
     
     <item>
@@ -94,7 +94,7 @@ Default variables --- aws_ec2_with_eip: aws_profile: default region: eu-west-3 i
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
       <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
-Default variables --- aws_efs_client: aws_profile: default region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present </description>
+Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present </description>
     </item>
     
     <item>
@@ -104,7 +104,7 @@ Default variables --- aws_efs_client: aws_profile: default region: eu-west-3 ver
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair/</guid>
       <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;
-Default variables --- aws_provision_ec2_keypair: aws_profile: default region: eu-west-3 key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
+Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
     </item>
     
     <item>
@@ -114,7 +114,7 @@ Default variables --- aws_provision_ec2_keypair: aws_profile: default region: eu
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds/</guid>
       <description>AWS RDS Creates an RDS instance and associated ressources.
-Default variables aws_rds: aws_profile: default region: eu-west-3 subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. master_username: hello # The name of the master user for the DB cluster.</description>
+Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. master_username: hello # The name of the master user for the DB cluster.</description>
     </item>
     
     <item>
@@ -124,7 +124,7 @@ Default variables aws_rds: aws_profile: default region: eu-west-3 subnets: - sub
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc: aws_profile: default region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
+Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
     </item>
     
     <item>
@@ -134,7 +134,7 @@ Default variables aws_vpc: aws_profile: default region: eu-west-3 name: example-
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route/</guid>
       <description>Update main route for a given VPC This will add/update routes on the &amp;ldquo;main&amp;rdquo; route table for a given VPC, leaving existing routes for different CIDR blocks intact.
-Default variables # @todo Support associating route with several subnets. aws_vpc_route: aws_profile: default region: eu-west-3 # Beware when calling this on &amp;#34;peering&amp;#34; routes, not to override tags with the target peer&amp;#39;s one. # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # subnet_id: subnet-XXX # Optional.</description>
+Default variables # @todo Support associating route with several subnets. aws_vpc_route: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 # Beware when calling this on &amp;#34;peering&amp;#34; routes, not to override tags with the target peer&amp;#39;s one. # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # subnet_id: subnet-XXX # Optional.</description>
     </item>
     
     <item>
@@ -144,7 +144,7 @@ Default variables # @todo Support associating route with several subnets. aws_vp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: default region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with each of the subnets. # This will make the subnet use its own route table. # When set to no, subnets inherit the main VPC&amp;#39;s route table. # @todo IPV6 nat_ipv4: false name: example.</description>
+Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with each of the subnets. # This will make the subnet use its own route table. # When set to no, subnets inherit the main VPC&amp;#39;s route table.</description>
     </item>
     
     <item>
@@ -154,7 +154,7 @@ Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name i
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy/</guid>
       <description>ce-deploy Installs Code Enigma&amp;rsquo;s deploy stack on a server.
-Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-deploy.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; local_dir: &amp;#34;/home/{{ _ce_deploy.username }}/ce-deploy&amp;#34; # List of additional groups to add the user to. groups: &amp;#34;&amp;#34; </description>
+Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-deploy.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; local_dir: &amp;#34;/home/{{ _ce_deploy.username }}/ce-deploy&amp;#34; # List of additional groups to add the user to. groups: [] </description>
     </item>
     
     <item>

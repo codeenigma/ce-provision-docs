@@ -17,7 +17,7 @@
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#66d9ef">ami_debian_buster</span>:
-  <span style="color:#66d9ef">aws_profile</span>: default
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
   <span style="color:#66d9ef">region</span>: us-east<span style="color:#ae81ff">-2</span>
   <span style="color:#66d9ef">instance_type</span>: t2.micro
   <span style="color:#66d9ef">ami_name</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
