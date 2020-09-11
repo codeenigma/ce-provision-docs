@@ -307,10 +307,8 @@ Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</guid>
-      <description>Role Name The ossec role is used to install ossec server or client.
-Role Variables  defaults file for ossec ossec: client: true	# if client is true installs the ossec agent, if false installs the server serverip: &amp;ldquo;123.123.123.123&amp;rdquo;	# server IP in case of client false
-global: email_notification: &amp;ldquo;yes&amp;rdquo; email_to: &amp;ldquo;admin@example.com&amp;rdquo; smtp_server: &amp;ldquo;mail.google.com&amp;rdquo; email_from: &amp;ldquo;admin@example.com&amp;rdquo; white_list:
- &amp;ldquo;8.8.8.8&amp;rdquo; &amp;ldquo;4.4.4.4&amp;rdquo; alerts: log_alert_level: 1 email_alert_level: 7  email_alerts: email_to: &amp;ldquo;admin@example.com&amp;rdquo; level: 14</description>
+      <description>OSSEC The ossec role is used to install ossec server or client.
+Default variables --- # defaults file for ossec ossec: client: true serverip: &amp;#34;123.123.123.123&amp;#34; #auth_password should be 32 chars, lowercase letters and numbers, no symbols auth_password: &amp;#34;xxx&amp;#34; global: email_notification: &amp;#34;yes&amp;#34; email_to: &amp;#34;admin@example.com&amp;#34; smtp_server: &amp;#34;mail.google.com&amp;#34; email_from: &amp;#34;admin@example.com&amp;#34; white_list: - &amp;#34;8.8.8.8&amp;#34; - &amp;#34;4.4.4.4&amp;#34; alerts: log_alert_level: 1 email_alert_level: 7 email_alerts: email_to: &amp;#34;admin@example.com&amp;#34; level: 14 ssl: domain: &amp;#34;ossec.example.com&amp;#34; handling: &amp;#34;selfsigned&amp;#34; syscheck: frequency: 79200 directories: - /etc - /usr/bin - /usr/sbin - /bin - /sbin ignore: - /etc/mtab - /etc/mnttab - /etc/hosts.</description>
     </item>
     
     <item>

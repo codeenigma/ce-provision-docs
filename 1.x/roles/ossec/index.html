@@ -7,180 +7,189 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="role-name">Role Name</h1>
+        <h1 id="ossec">OSSEC</h1>
 <p>The ossec role is used to install ossec server or client.</p>
-<h2 id="role-variables">Role Variables</h2>
-<hr>
-<h1 id="defaults-file-for-ossec">defaults file for ossec</h1>
-<p>ossec:
-client: true								# if client is true installs the ossec agent, if false installs the server
-serverip: &ldquo;123.123.123.123&rdquo;						# server IP in case of client false</p>
-<p>global:
-email_notification: &ldquo;yes&rdquo;
-email_to: &ldquo;<a href="mailto:admin@example.com">admin@example.com</a>&rdquo;
-smtp_server: &ldquo;mail.google.com&rdquo;
-email_from: &ldquo;<a href="mailto:admin@example.com">admin@example.com</a>&rdquo;
-white_list:</p>
-<ul>
-<li>&ldquo;8.8.8.8&rdquo;</li>
-<li>&ldquo;4.4.4.4&rdquo;
-alerts:
-log_alert_level: 1
-email_alert_level: 7</li>
-</ul>
-<p>email_alerts:
-email_to: &ldquo;<a href="mailto:admin@example.com">admin@example.com</a>&rdquo;
-level: 14</p>
-<p>syscheck:
-frequency: 79200
-directories:</p>
-<ul>
-<li>/etc</li>
-<li>/usr/bin</li>
-<li>/usr/sbin</li>
-<li>/bin</li>
-<li>/sbin
-ignore:</li>
-<li>/etc/mtab</li>
-<li>/etc/mnttab</li>
-<li>/etc/hosts.deny</li>
-<li>/etc/mail/statistics</li>
-<li>/etc/random-seed</li>
-<li>/etc/adjtime</li>
-<li>/etc/httpd/logs</li>
-<li>/etc/utmpx</li>
-<li>/etc/wtmpx</li>
-<li>/etc/cups/certs</li>
-<li>/etc/dumpdates</li>
-<li>/etc/svc/volatile</li>
-<li>/etc/puppet</li>
-<li>/etc/resolv.conf</li>
-<li>/etc/hybserv</li>
-</ul>
-<p>rootcheck:
-disabled: &ldquo;no&rdquo;
-rootkit_files:</p>
-<ul>
-<li>/var/ossec/etc/shared/rootkit_files.txt
-rootkit_trojans:</li>
-<li>/var/ossec/etc/shared/rootkit_trojans.txt
-system_audit:</li>
-<li>/var/ossec/etc/shared/system_audit_rcl.txt</li>
-<li>/var/ossec/etc/shared/cis_debian_linux_rcl.txt</li>
-<li>/var/ossec/etc/shared/cis_rhel_linux_rcl.txt</li>
-<li>/var/ossec/etc/shared/cis_rhel5_linux_rcl.txt</li>
-</ul>
-<p>command:</p>
-<ul>
-<li>{ name: &lsquo;firewall-drop&rsquo;, executable: &lsquo;firewall-drop.sh&rsquo;, expect: &lsquo;srcip&rsquo;, timeout_allowed: &lsquo;yes&rsquo; }</li>
-</ul>
-<p>activeresponse:</p>
-<ul>
-<li>{ disabled: &lsquo;no&rsquo;, command: &lsquo;firewall-drop&rsquo;, location: &lsquo;all&rsquo;, rules_id: &lsquo;31151,5712,104130,101071,101132,101238,101251,103011&rsquo;, repeated_offenders: &lsquo;30,60,120&rsquo;, timeout: &lsquo;600&rsquo; }</li>
-<li>{ disabled: &lsquo;no&rsquo;, command: &lsquo;firewall-drop&rsquo;, location: &lsquo;all&rsquo;, rules_id: &lsquo;100205&rsquo;, repeated_offenders: &lsquo;30,60,120&rsquo;, timeout: &lsquo;3600&rsquo; }</li>
-</ul>
-<p>remote:
-connection:</p>
-<ul>
-<li>syslog</li>
-<li>secure</li>
-</ul>
-<p>localfile:</p>
-<ul>
-<li>{ log_format: &lsquo;syslog&rsquo;, location: &lsquo;/var/log/messages&rsquo; }</li>
-<li>{ log_format: &lsquo;syslog&rsquo;, location: &lsquo;/var/log/auth.log&rsquo; }</li>
-<li>{ log_format: &lsquo;syslog&rsquo;, location: &lsquo;/var/log/syslog&rsquo; }</li>
-<li>{ log_format: &lsquo;syslog&rsquo;, location: &lsquo;/var/log/mail.info&rsquo; }</li>
-<li>{ log_format: &lsquo;syslog&rsquo;, location: &lsquo;/var/log/dpkg.log&rsquo; }</li>
-</ul>
-<p>rules:								# all *_rules.xml files will be copied over</p>
-<ul>
-<li>rules_config.xml							# for customer rules you can create customerX_rules.xml</li>
-<li>pam_rules.xml</li>
-<li>sshd_rules.xml</li>
-<li>telnetd_rules.xml</li>
-<li>syslog_rules.xml</li>
-<li>arpwatch_rules.xml</li>
-<li>symantec-av_rules.xml</li>
-<li>symantec-ws_rules.xml</li>
-<li>pix_rules.xml</li>
-<li>named_rules.xml</li>
-<li>smbd_rules.xml</li>
-<li>vsftpd_rules.xml</li>
-<li>proftpd_rules.xml</li>
-<li>ms_ftpd_rules.xml</li>
-<li>ftpd_rules.xml</li>
-<li>hordeimp_rules.xml</li>
-<li>roundcube_rules.xml</li>
-<li>wordpress_rules.xml</li>
-<li>cimserver_rules.xml</li>
-<li>vpopmail_rules.xml</li>
-<li>vmpop3d_rules.xml</li>
-<li>courier_rules.xml</li>
-<li>web_rules.xml</li>
-<li>web_appsec_rules.xml</li>
-<li>apache_rules.xml</li>
-<li>nginx_rules.xml</li>
-<li>php_rules.xml</li>
-<li>mysql_rules.xml</li>
-<li>postgresql_rules.xml</li>
-<li>ids_rules.xml</li>
-<li>squid_rules.xml</li>
-<li>firewall_rules.xml</li>
-<li>cisco-ios_rules.xml</li>
-<li>netscreenfw_rules.xml</li>
-<li>sonicwall_rules.xml</li>
-<li>postfix_rules.xml</li>
-<li>sendmail_rules.xml</li>
-<li>imapd_rules.xml</li>
-<li>mailscanner_rules.xml</li>
-<li>dovecot_rules.xml</li>
-<li>ms-exchange_rules.xml</li>
-<li>racoon_rules.xml</li>
-<li>vpn_concentrator_rules.xml</li>
-<li>spamd_rules.xml</li>
-<li>msauth_rules.xml</li>
-<li>mcafee_av_rules.xml</li>
-<li>trend-osce_rules.xml</li>
-<li>ms-se_rules.xml</li>
-<li>zeus_rules.xml</li>
-<li>solaris_bsm_rules.xml</li>
-<li>vmware_rules.xml</li>
-<li>ms_dhcp_rules.xml</li>
-<li>asterisk_rules.xml</li>
-<li>ossec_rules.xml</li>
-<li>attack_rules.xml</li>
-<li>openbsd_rules.xml</li>
-<li>clam_av_rules.xml</li>
-<li>dropbear_rules.xml</li>
-</ul>
-<h1 id="--customer1_rulesxml">- customer1_rules.xml</h1>
-<h1 id="--customer2_rulesxml">- customer2_rules.xml</h1>
-<h1 id="--customern_rulesxml">- customerN_rules.xml</h1>
-<ul>
-<li>local_rules.xml</li>
-</ul>
-<h2 id="license">License</h2>
-<p>BSD</p>
-<h2 id="author-information">Author Information</h2>
-<p>An optional section for the role authors to include contact information, or a website (HTML is not allowed).</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#75715e"># defaults file for ossec</span>
+
+<span style="color:#66d9ef">ossec</span>:
+  <span style="color:#66d9ef">client</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">serverip</span>: <span style="color:#e6db74">&#34;123.123.123.123&#34;</span>
+  <span style="color:#75715e">#auth_password should be 32 chars, lowercase letters and numbers, no symbols</span>
+  <span style="color:#66d9ef">auth_password</span>: <span style="color:#e6db74">&#34;xxx&#34;</span>
+
+  <span style="color:#66d9ef">global</span>:
+    <span style="color:#66d9ef">email_notification</span>: <span style="color:#e6db74">&#34;yes&#34;</span>
+    <span style="color:#66d9ef">email_to</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+    <span style="color:#66d9ef">smtp_server</span>: <span style="color:#e6db74">&#34;mail.google.com&#34;</span>
+    <span style="color:#66d9ef">email_from</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+    <span style="color:#66d9ef">white_list</span>:
+      - <span style="color:#e6db74">&#34;8.8.8.8&#34;</span>
+      - <span style="color:#e6db74">&#34;4.4.4.4&#34;</span>
+  <span style="color:#66d9ef">alerts</span>:
+    <span style="color:#66d9ef">log_alert_level</span>: <span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">email_alert_level</span>: <span style="color:#ae81ff">7</span>
+
+  <span style="color:#66d9ef">email_alerts</span>:
+    <span style="color:#66d9ef">email_to</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+    <span style="color:#66d9ef">level</span>: <span style="color:#ae81ff">14</span>
+
+  <span style="color:#66d9ef">ssl</span>:
+    <span style="color:#66d9ef">domain</span>: <span style="color:#e6db74">&#34;ossec.example.com&#34;</span>
+    <span style="color:#66d9ef">handling</span>: <span style="color:#e6db74">&#34;selfsigned&#34;</span>
+
+  <span style="color:#66d9ef">syscheck</span>:
+    <span style="color:#66d9ef">frequency</span>: <span style="color:#ae81ff">79200</span>
+    <span style="color:#66d9ef">directories</span>:
+      - /etc
+      - /usr/bin
+      - /usr/sbin
+      - /bin
+      - /sbin
+    <span style="color:#66d9ef">ignore</span>:
+      - /etc/mtab
+      - /etc/mnttab
+      - /etc/hosts.deny
+      - /etc/mail/statistics
+      - /etc/random-seed
+      - /etc/adjtime
+      - /etc/httpd/logs
+      - /etc/utmpx
+      - /etc/wtmpx
+      - /etc/cups/certs
+      - /etc/dumpdates
+      - /etc/svc/volatile
+      - /etc/puppet
+      - /etc/resolv.conf
+      - /etc/hybserv
+
+  <span style="color:#66d9ef">rootcheck</span>:
+    <span style="color:#66d9ef">disabled</span>: <span style="color:#e6db74">&#34;no&#34;</span>
+    <span style="color:#66d9ef">rootkit_files</span>:
+      - /var/ossec/etc/shared/rootkit_files.txt
+    <span style="color:#66d9ef">rootkit_trojans</span>:
+      - /var/ossec/etc/shared/rootkit_trojans.txt
+    <span style="color:#66d9ef">system_audit</span>:
+      - /var/ossec/etc/shared/system_audit_rcl.txt
+      - /var/ossec/etc/shared/cis_debian_linux_rcl.txt
+      - /var/ossec/etc/shared/cis_rhel_linux_rcl.txt
+      - /var/ossec/etc/shared/cis_rhel5_linux_rcl.txt
+
+  <span style="color:#66d9ef">command</span>:
+    - {
+        <span style="color:#66d9ef">name</span>: <span style="color:#e6db74">&#34;firewall-drop&#34;</span>,
+        <span style="color:#66d9ef">executable</span>: <span style="color:#e6db74">&#34;firewall-drop.sh&#34;</span>,
+        <span style="color:#66d9ef">expect</span>: <span style="color:#e6db74">&#34;srcip&#34;</span>,
+        <span style="color:#66d9ef">timeout_allowed</span>: <span style="color:#e6db74">&#34;yes&#34;</span>,
+      }
+
+  <span style="color:#66d9ef">activeresponse</span>:
+    - {
+        <span style="color:#66d9ef">disabled</span>: <span style="color:#e6db74">&#34;no&#34;</span>,
+        <span style="color:#66d9ef">command</span>: <span style="color:#e6db74">&#34;firewall-drop&#34;</span>,
+        <span style="color:#66d9ef">location</span>: <span style="color:#e6db74">&#34;all&#34;</span>,
+        <span style="color:#66d9ef">rules_id</span>: <span style="color:#e6db74">&#34;31151,5712,104130,101071,101132,101238,101251,103011&#34;</span>,
+        <span style="color:#66d9ef">repeated_offenders</span>: <span style="color:#e6db74">&#34;30,60,120&#34;</span>,
+        <span style="color:#66d9ef">timeout</span>: <span style="color:#e6db74">&#34;600&#34;</span>,
+      }
+    - {
+        <span style="color:#66d9ef">disabled</span>: <span style="color:#e6db74">&#34;no&#34;</span>,
+        <span style="color:#66d9ef">command</span>: <span style="color:#e6db74">&#34;firewall-drop&#34;</span>,
+        <span style="color:#66d9ef">location</span>: <span style="color:#e6db74">&#34;all&#34;</span>,
+        <span style="color:#66d9ef">rules_id</span>: <span style="color:#e6db74">&#34;100205&#34;</span>,
+        <span style="color:#66d9ef">repeated_offenders</span>: <span style="color:#e6db74">&#34;30,60,120&#34;</span>,
+        <span style="color:#66d9ef">timeout</span>: <span style="color:#e6db74">&#34;3600&#34;</span>,
+      }
+
+  <span style="color:#66d9ef">remote</span>:
+    <span style="color:#66d9ef">connection</span>:
+      - syslog
+      - secure
+
+  <span style="color:#66d9ef">localfile</span>:
+    - { <span style="color:#66d9ef">log_format</span>: <span style="color:#e6db74">&#34;syslog&#34;</span><span style="color:#66d9ef">, location</span>: <span style="color:#e6db74">&#34;/var/log/messages&#34;</span> }
+    - { <span style="color:#66d9ef">log_format</span>: <span style="color:#e6db74">&#34;syslog&#34;</span><span style="color:#66d9ef">, location</span>: <span style="color:#e6db74">&#34;/var/log/auth.log&#34;</span> }
+    - { <span style="color:#66d9ef">log_format</span>: <span style="color:#e6db74">&#34;syslog&#34;</span><span style="color:#66d9ef">, location</span>: <span style="color:#e6db74">&#34;/var/log/syslog&#34;</span> }
+    - { <span style="color:#66d9ef">log_format</span>: <span style="color:#e6db74">&#34;syslog&#34;</span><span style="color:#66d9ef">, location</span>: <span style="color:#e6db74">&#34;/var/log/mail.info&#34;</span> }
+    - { <span style="color:#66d9ef">log_format</span>: <span style="color:#e6db74">&#34;syslog&#34;</span><span style="color:#66d9ef">, location</span>: <span style="color:#e6db74">&#34;/var/log/dpkg.log&#34;</span> }
+
+  <span style="color:#66d9ef">rules</span>:
+    - rules_config.xml
+    - pam_rules.xml
+    - sshd_rules.xml
+    - telnetd_rules.xml
+    - syslog_rules.xml
+    - arpwatch_rules.xml
+    - symantec-av_rules.xml
+    - symantec-ws_rules.xml
+    - pix_rules.xml
+    - named_rules.xml
+    - smbd_rules.xml
+    - vsftpd_rules.xml
+    - proftpd_rules.xml
+    - ms_ftpd_rules.xml
+    - ftpd_rules.xml
+    - hordeimp_rules.xml
+    - roundcube_rules.xml
+    - wordpress_rules.xml
+    - cimserver_rules.xml
+    - vpopmail_rules.xml
+    - vmpop3d_rules.xml
+    - courier_rules.xml
+    - web_rules.xml
+    - web_appsec_rules.xml
+    - apache_rules.xml
+    - nginx_rules.xml
+    - php_rules.xml
+    - mysql_rules.xml
+    - postgresql_rules.xml
+    - ids_rules.xml
+    - squid_rules.xml
+    - firewall_rules.xml
+    - cisco-ios_rules.xml
+    - netscreenfw_rules.xml
+    - sonicwall_rules.xml
+    - postfix_rules.xml
+    - sendmail_rules.xml
+    - imapd_rules.xml
+    - mailscanner_rules.xml
+    - dovecot_rules.xml
+    - ms-exchange_rules.xml
+    - racoon_rules.xml
+    - vpn_concentrator_rules.xml
+    - spamd_rules.xml
+    - msauth_rules.xml
+    - mcafee_av_rules.xml
+    - trend-osce_rules.xml
+    - ms-se_rules.xml
+    - zeus_rules.xml
+    - solaris_bsm_rules.xml
+    - vmware_rules.xml
+    - ms_dhcp_rules.xml
+    - asterisk_rules.xml
+    - ossec_rules.xml
+    - attack_rules.xml
+    - openbsd_rules.xml
+    - clam_av_rules.xml
+    - dropbear_rules.xml
+    <span style="color:#75715e"># - customer1_rules.xml</span>
+    <span style="color:#75715e"># - customer2_rules.xml</span>
+    <span style="color:#75715e"># - customerN_rules.xml</span>
+    - local_rules.xml
+
+</code></pre></div><!-- raw HTML omitted -->
 
     </article>
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#role-name">Role Name</a>
+    <li><a href="#ossec">OSSEC</a>
       <ul>
-        <li><a href="#role-variables">Role Variables</a></li>
-      </ul>
-    </li>
-    <li><a href="#defaults-file-for-ossec">defaults file for ossec</a></li>
-    <li><a href="#--customer1_rulesxml">- customer1_rules.xml</a></li>
-    <li><a href="#--customer2_rulesxml">- customer2_rules.xml</a></li>
-    <li><a href="#--customern_rulesxml">- customerN_rules.xml</a>
-      <ul>
-        <li><a href="#license">License</a></li>
-        <li><a href="#author-information">Author Information</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
       </ul>
     </li>
   </ul>
@@ -227,7 +236,7 @@ connection:</p>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">defaults file for ossec</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
