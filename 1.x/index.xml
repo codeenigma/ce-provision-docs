@@ -181,7 +181,7 @@ Default variables # @todo Support associating route with several subnets. aws_vp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with each of the subnets. # This will make the subnet use its own route table. # When set to no, subnets inherit the main VPC&amp;#39;s route table.</description>
+Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with the subnets. # @todo IPV6 nat_ipv4: false name: example. # Wether to create a dedicated security group allowing internal traffic. security_group: false tags: #Type: &amp;#34;util&amp;#34; state: present </description>
     </item>
     
     <item>
