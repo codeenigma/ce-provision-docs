@@ -7,48 +7,29 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="ssl">SSL</h1>
-<p>Manages SSL certificates.</p>
+        <h1 id="mount-sync">Mount sync</h1>
+<p>Syncronize some &ldquo;mounted&rdquo; filesystems with the local one. Typically used for EFS/NFS mounts on autoscale clusters.
+It will:</p>
+<ul>
+<li>perform an initial rsync using a cloud-init script</li>
+<li>use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment)
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+</li>
+</ul>
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#66d9ef">ssl</span>:
-  <span style="color:#66d9ef">domain</span>: www.example.com
-  <span style="color:#75715e"># Handling for certs, can be one of:</span>
-  <span style="color:#75715e"># - letsencrypt: Generates individual LetsEncrypt certificate using the HTTP challenge</span>
-  <span style="color:#75715e"># - selfsigned: Generates self-signed certificates</span>
-  <span style="color:#75715e"># - manual: Use provided certificates. Requires key/cert.</span>
-  <span style="color:#75715e"># - unmanaged: Doesn&#39;t do anything. Note that for consistency reasons, key/cert paths are still needed.</span>
-  <span style="color:#66d9ef">handling</span>: selfsigned
-  <span style="color:#75715e"># For &#34;manual&#34; handling, this is the content of the certificate.</span>
-  <span style="color:#75715e"># If you want to to provide a file instead, use lookup(&#39;file&#39;, &#39;/path/on/the/controller&#39;) as the value.</span>
-  <span style="color:#75715e"># For &#34;unmanaged&#34; handling, this must be set to the absolute path on the target.</span>
-  <span style="color:#66d9ef">cert</span>: <span style="color:#e6db74">|
-</span><span style="color:#e6db74">    -----BEGIN CERTIFICATE-----</span>
-    f34XAAVI+R04k0TLUcfeU4/8QYQ3qY1aDvwonT3PE6VYRAGMGJflz//133EquNUR
-    oMz3CA==
-    -----END CERTIFICATE----<span style="color:#e6db74">-
-</span><span style="color:#e6db74">  # For &#34;manual&#34; handling, this is the content of the key.</span>
-  <span style="color:#75715e"># For &#34;unmanaged&#34; handling, this must be set to the absolute path on the target.</span>
-  <span style="color:#66d9ef">key</span>: <span style="color:#e6db74">|
-</span><span style="color:#e6db74">    -----BEGIN PRIVATE KEY-----</span>
-    79RG06iurGJEorFopyQesKwix1h6aBYXpM8yZ0IPR0leeeipBtYHIwbPHEYRJiFn
-    6XoQQlb5mYuLKCzAZws9uceeVH+z
-    -----END PRIVATE KEY----<span style="color:#e6db74">-
-</span><span style="color:#e6db74">  # For &#34;letsencrypt&#34; handling.</span>
-  <span style="color:#66d9ef">email</span>: admin@example.com
-  <span style="color:#75715e"># For &#34;letsencrypt&#34; handling, a list of service to stop while creating the certificate.</span>
-  <span style="color:#75715e"># This is because we need port 80 to be free.</span>
-  <span style="color:#75715e"># eg;</span>
-  <span style="color:#75715e"># services:</span>
-  <span style="color:#75715e">#   - nginx</span>
-  <span style="color:#66d9ef">services</span>: []
-<span style="color:#75715e">############ Facts</span>
-<span style="color:#75715e"># ssl_facts</span>
-<span style="color:#75715e"># A dict of domain names with key/cert destination paths.</span>
-<span style="color:#75715e"># { }</span>
+<span style="color:#66d9ef">mount_sync</span>:
+  <span style="color:#75715e"># A list of target/destination definitions.</span>
+  <span style="color:#66d9ef">sync_pairs</span>:
+    - <span style="color:#66d9ef">src</span>: /my/path/to/sync
+      <span style="color:#66d9ef">dest</span>: /another/path/to/sync
+      <span style="color:#66d9ef">minute</span>: <span style="color:#e6db74">&#34;*/10&#34;</span>
+      <span style="color:#66d9ef">name</span>: example
+      <span style="color:#66d9ef">owner</span>: root
+      <span style="color:#66d9ef">group</span>: root
+      <span style="color:#66d9ef">tarball</span>: /path/to/initial/seed.tar
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -56,7 +37,7 @@
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#ssl">SSL</a>
+    <li><a href="#mount-sync">Mount sync</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>

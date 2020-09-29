@@ -136,6 +136,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</loc>
   </url>
   
