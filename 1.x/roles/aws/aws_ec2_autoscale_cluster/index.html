@@ -57,6 +57,12 @@
     <span style="color:#66d9ef">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
     <span style="color:#66d9ef">master_username</span>: hello <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
     <span style="color:#66d9ef">master_user_password</span>: hellothere
+  <span style="color:#75715e"># Add an CNAM record tied to the ALB.</span>
+  <span style="color:#75715e"># Set the zone to empty to skip.</span>
+  <span style="color:#66d9ef">route_53</span>:
+    <span style="color:#66d9ef">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
+    <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;*.{{ domain_name }}&#34;</span>
+    <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
