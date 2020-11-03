@@ -25,6 +25,7 @@
   <span style="color:#66d9ef">state</span>: present
   <span style="color:#66d9ef">instance_name</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
   <span style="color:#66d9ef">root_volume_size</span>: <span style="color:#ae81ff">80</span>
+  <span style="color:#66d9ef">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">security_groups</span>: []
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#66d9ef">Name</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
@@ -32,8 +33,9 @@
   <span style="color:#75715e"># Set the zone to empty to skip.</span>
   <span style="color:#66d9ef">route_53</span>:
     <span style="color:#66d9ef">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
-    <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;*.{{ domain_name }}&#34;</span>
+    <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
     <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
+    <span style="color:#66d9ef">wildcard</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Creates a matching wildcard CNAME</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
