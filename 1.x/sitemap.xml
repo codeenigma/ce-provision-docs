@@ -160,6 +160,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</loc>
   </url>
   

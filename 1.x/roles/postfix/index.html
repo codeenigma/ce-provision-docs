@@ -7,20 +7,47 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="gitlab-runner">Gitlab Runner</h1>
-<p>Install the Gitlab Runner binary from .deb package.</p>
+        <h1 id="postfix">Postfix</h1>
+<p>Installs and configures Postfix for sending mail. Mail sending is disabled by default.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+
+<span style="color:#66d9ef">postfix</span>:
+  <span style="color:#66d9ef">dest_hosts</span>: <span style="color:#e6db74">&#34;mail.host1.com,mail.host2.com&#34;</span>
+  <span style="color:#66d9ef">disable_vrfy</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">forward_domains</span>:
+    - another.com
+    - lalala.com
+  <span style="color:#66d9ef">forward_from</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+  <span style="color:#66d9ef">forward_to</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+  <span style="color:#66d9ef">forward</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">hostname</span>: <span style="color:#e6db74">&#34;{{ ansible_fqdn }}&#34;</span>
+  <span style="color:#66d9ef">interfaces</span>: all
+  <span style="color:#75715e"># ce_dev_delivery_mode is only used when is_local == true, which means you&#39;re probably using ce-dev locally. Valid modes are host, local and discard.</span>
+  <span style="color:#66d9ef">ce_dev_delivery_mode</span>: <span style="color:#e6db74">&#34;host&#34;</span>
+  <span style="color:#66d9ef">message_size</span>: <span style="color:#ae81ff">10240000</span>
+  <span style="color:#66d9ef">networks</span>:
+    - <span style="color:#e6db74">&#34;[::1]/128&#34;</span>
+    - <span style="color:#e6db74">&#34;[::ffff:127.0.0.0]/104&#34;</span>
+    - <span style="color:#ae81ff">127.0.0.0</span>/<span style="color:#ae81ff">8</span>
+  <span style="color:#66d9ef">protocols</span>: all
+  <span style="color:#66d9ef">relayhost</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#66d9ef">ses_creds</span>: <span style="color:#e6db74">&#34;fwefe&#34;</span>
+  <span style="color:#66d9ef">transport_maps</span>:
+    - <span style="color:#e6db74">&#34;* discard :&#34;</span>
+  <span style="color:#66d9ef">use_dkim</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">use_ses</span>: <span style="color:#66d9ef">false</span>
+
 </code></pre></div><!-- raw HTML omitted -->
 
     </article>
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#gitlab-runner">Gitlab Runner</a>
+    <li><a href="#postfix">Postfix</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>
