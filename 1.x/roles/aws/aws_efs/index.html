@@ -7,27 +7,25 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="ha-proxy">HA Proxy</h1>
+        <h1 id="aws-efs">AWS EFS</h1>
+<p>Creates or update an EFS volume.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#66d9ef">_haproxy</span>:
-  <span style="color:#66d9ef">ssl_handling</span>: ssl_selfsigned
-
-<span style="color:#66d9ef">haproxy</span>:
-  <span style="color:#66d9ef">template</span>: <span style="color:#e6db74">&#34;haproxy-ssl-passthru&#34;</span>
-  <span style="color:#66d9ef">ssl_handling</span>: <span style="color:#e6db74">&#34;{{ _haproxy.ssl_handling }}&#34;</span>
-  <span style="color:#66d9ef">listen_bind_address</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>
-  <span style="color:#66d9ef">listen_https</span>: <span style="color:#66d9ef">true</span>
-  <span style="color:#66d9ef">listen_http</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">default_backend</span>: default
-  <span style="color:#66d9ef">backends</span>:
-    - <span style="color:#66d9ef">name</span>: default
-      <span style="color:#66d9ef">ip</span>: <span style="color:#ae81ff">127.0.0.1</span>
-      <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">8080</span>
-      <span style="color:#66d9ef">domain</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_efs</span>:
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
+  <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
+  <span style="color:#66d9ef">name</span>: example
+  <span style="color:#75715e"># If false, we omit tags enterly and leave them as is.</span>
+  <span style="color:#66d9ef">purge_tags</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">tags</span>: []
+  <span style="color:#66d9ef">state</span>: present
+  <span style="color:#66d9ef">wait</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># Subnets names.</span>
+  <span style="color:#66d9ef">subnets</span>: []
+  <span style="color:#75715e"># SG names. Note, the assumption is that all subnets have the same SGs.</span>
+  <span style="color:#66d9ef">security_groups</span>: []
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -35,7 +33,7 @@
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#ha-proxy">HA Proxy</a>
+    <li><a href="#aws-efs">AWS EFS</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>

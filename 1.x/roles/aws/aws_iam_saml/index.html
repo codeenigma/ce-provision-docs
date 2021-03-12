@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
+</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
+        <h1 id="aws-iam-saml">AWS IAM SAML</h1>
+<p>Creates the necessary policies and roles for SAML-based SSO in AWS and optionally creates Service Provider (SP) includes for 
+<a href="https://simplesamlphp.org/"  target="_blank" rel="noopener">SimpleSAMLphp</a>
+.</p>
+<p>All tasks in this role are optional and can be skipped by simply not presenting a variable.</p>
+<p>Variables are generic for AWS SAML configuration up until the <code>saml_metadata_document</code> variable. Groups are intended to be LDAP groups, but in reality they can be any array of values you wish to pass to AWS to match against the <code>eduPersonAffiliation</code> SAML attribute on login.</p>
+<p>Variables from <code>linotp_server</code> onwards assume you use SimpleSAMLphp as your organisation&rsquo;s SAML Identity Provider (IdP) and should not be used unless you have a SimpleSAMLphp instance set up in a specific way.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="configuring-simplesamlphp">Configuring SimpleSAMLphp</h2>
+<p>If you do not wish to make use of the automatic SimpleSAMLphp configuration you can simply ignore this section, with the default variables all the tasks will be skipped. If you do wish to use these tasks then you will need to ensure your provisioning server can commit to a Git repository that contains your SimpleSAMLphp configuration code. How you organise your SimpleSAMLphp repo is up to you, however there are some important points about config file organisation below.</p>
+<p>The role will create two SimpleSAMLphp files, an include file intended to be used to populate a consolidated login page of a series of AWS accounts, as you might require for a support team or IT department, and an SP for the AWS account. If you do not wish to use either of these files you can simply disregard them and the ensuing instructions.</p>
+<p>As you will probably have several SPs and the <code>saml20-sp-remote.php</code> file can quickly get unmanageably long, we recommend you put each SP in an include file. That is the assumed behaviour of this role, that&rsquo;s why it creates an array of SP metadata for a single SP in a file of its own (see the <code>templates/simplesamlphp_sp.j2</code> template file). Here is an example of an <code>saml20-sp-remote.php</code> file using includes:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#75715e">&lt;?php</span>
+<span style="color:#66d9ef">foreach</span> (<span style="color:#a6e22e">glob</span>(<span style="color:#e6db74">&#34;/path/to/your/service-providers/*.php&#34;</span>) <span style="color:#66d9ef">as</span> $filename)
+{
+  <span style="color:#66d9ef">include</span>($filename);
+}
+</code></pre></div><p>As long as this role has the <code>saml_sp_path</code> variable set to match the path you are including your SP files and you have provided the <code>X509Certificate</code> data required in the <code>saml_sp_certificate</code> variable, Ansible will build the file from the template and put it in the right place in your repository and the SP be available on a URL similar to this one, where <code>123456789012</code> is the AWS account number:</p>
+<ul>
+<li><a href="https://www.example.com/simplesamlphp/saml2/idp/SSOService.php?spentityid=urn:amazon:123456789012">https://www.example.com/simplesamlphp/saml2/idp/SSOService.php?spentityid=urn:amazon:123456789012</a></li>
+</ul>
+<p>We set our SimpleSAMLphp repo to build automatically on change, if you do not then you will of course need to manually deploy the SimpleSAMLphp configuration to your IdP before the SP becomes available.</p>
+<p>As we stated already, you can completely disregard the consolidated login page include file, however if you wish to make use of it here is a PHP code snippet leveraging the <code>core:PHP</code> filter which you can use as an <code>authproc</code> filter in the metadata for your AWS consolidated login page. We assume this metadata would be within another include file in the same directory you specified under <code>saml_sp_path</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    15 =&gt; array(
+      &#39;class&#39; =&gt; &#39;core:PHP&#39;,
+      &#39;code&#39; =&gt; &#39;
+        # Make $attributes global so includes can use it
+        global $attributes;
+        $attributes = $state[&#34;Attributes&#34;];
+        $aws_accounts = array();
+        # Loop through our include files which array_push() into $aws_accounts
+        # Array of AWS ARNs built by the includes in the &#34;aws&#34; directory
+        foreach (glob(&#34;/path/to/your/includes/*.php&#34;) as $filename) {
+          include($filename);
+        }
+        # Save the array back into state for later
+        $state[&#34;Attributes&#34;][&#34;https://aws.amazon.com/SAML/Attributes/Role&#34;] = $aws_accounts;
+      &#39;,
+    ),
+</code></pre></div><p>If you use the above, clearly <code>path/to/your/includes</code> needs to match the <code>saml_include_path</code> variable in this role.</p>
+<p>To make use of the 
+<a href="https://linotp.org/"  target="_blank" rel="noopener">LinOTP2</a>
+ integration supported here, see our SimpleSAMLphp module on GitHub: <a href="https://github.com/codeenigma/ce2fa">https://github.com/codeenigma/ce2fa</a></p>
+<p>If you intend to use LDAP groups for the groups variables you will need to configure the <code>ldap</code> module for SimpleSAMLphp correctly, specifically the <code>ldap:AttributeAddUsersGroups</code> filter which is documented here: <a href="https://simplesamlphp.org/docs/stable/ldap:ldap#section_3">https://simplesamlphp.org/docs/stable/ldap:ldap#section_3</a></p>
+<p>Be sure to leave the default attribute name <code>groups</code> as is, this role assumes that is the case.</p>
+<h2 id="dependencies">Dependencies</h2>
+<p>This requires boto and AWS-CLI on the provisioning server.</p>
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_iam_saml</span>:
+  <span style="color:#66d9ef">aws_account_alias</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># IAM account alias - human readable name to order SSO page</span>
+  <span style="color:#66d9ef">provider_name</span>: <span style="color:#e6db74">&#34;SAMLProvider&#34;</span> <span style="color:#75715e"># The name of your SAML provider in the AWS console</span>
+  <span style="color:#66d9ef">admin_role</span>: <span style="color:#e6db74">&#34;Administrators&#34;</span> <span style="color:#75715e"># The name of your admin IAM role in the AWS console</span>
+  <span style="color:#66d9ef">admin_groups</span>: [] <span style="color:#75715e"># An array of groups you wish to permit to assume the admin IAM role</span>
+  <span style="color:#66d9ef">readonly_role</span>: <span style="color:#e6db74">&#34;ReadOnly&#34;</span> <span style="color:#75715e"># The name of your read-only IAM role in the AWS console</span>
+  <span style="color:#66d9ef">readonly_groups</span>: [] <span style="color:#75715e"># An array of groups you wish to permit to assume the read-only IAM role</span>
+  <span style="color:#66d9ef">billing_role</span>: <span style="color:#e6db74">&#34;Billing&#34;</span> <span style="color:#75715e"># The name of your billing access IAM role in the AWS console</span>
+  <span style="color:#66d9ef">billing_policy</span>: <span style="color:#e6db74">&#34;BillingPolicy&#34;</span> <span style="color:#75715e"># The name of the customer-managed IAM policy to allow billing access only</span>
+  <span style="color:#66d9ef">billing_groups</span>: [] <span style="color:#75715e"># An array of groups you wish to permit to assume the billing access IAM role</span>
+  <span style="color:#66d9ef">saml_metadata_document</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># The SAML metadata from your IdP in multiline XML format</span>
+  <span style="color:#66d9ef">linotp_server</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Optional LinOTP endpoint URL for 2FA</span>
+  <span style="color:#66d9ef">saml_repository</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Git repository URL for SimpleSAMLphp</span>
+  <span style="color:#66d9ef">saml_repository_directory</span>: <span style="color:#e6db74">&#34;simplesamlphp&#34;</span> <span style="color:#75715e"># Temp directory to clone SimpleSAMLphp into</span>
+  <span style="color:#66d9ef">saml_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span> <span style="color:#75715e"># Branch of SimpleSAMLphp repo to work in</span>
+  <span style="color:#66d9ef">saml_include_path</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Location to save the AWS admin include</span>
+  <span style="color:#66d9ef">saml_sp_path</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Location to save account-specific SP in</span>
+  <span style="color:#66d9ef">saml_sp_certificate</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># The value for the X509Certificate</span>
+</code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#aws-iam-saml">AWS IAM SAML</a>
+      <ul>
+        <li><a href="#configuring-simplesamlphp">Configuring SimpleSAMLphp</a></li>
+        <li><a href="#dependencies">Dependencies</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/">Home</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/install">Install</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
+<li><a href="roles">Roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS tools roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</aside>
+    </body>
+</html>

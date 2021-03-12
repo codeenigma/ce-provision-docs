@@ -42,6 +42,15 @@
   <span style="color:#66d9ef">cluster_security_groups</span>: []
   <span style="color:#75715e"># Security groups for the ALB.</span>
   <span style="color:#66d9ef">alb_security_groups</span>: []
+  <span style="color:#75715e"># ALB health checks</span>
+  <span style="color:#66d9ef">health_check_protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
+  <span style="color:#66d9ef">health_check_path</span>: <span style="color:#e6db74">&#34;/&#34;</span>
+  <span style="color:#66d9ef">health_check_port</span>: <span style="color:#e6db74">&#34;traffic-port&#34;</span> <span style="color:#75715e"># Default is traffic-port, which matches the target port. Can be overridden with a port number.</span>
+  <span style="color:#66d9ef">health_check_success_codes</span>: <span style="color:#e6db74">&#34;200&#34;</span> <span style="color:#75715e"># Can be single code, like &#34;200&#34;, or a comma-separated value with ranges: &#34;200,250-260&#34;.</span>
+  <span style="color:#66d9ef">health_check_interval</span>: <span style="color:#ae81ff">30</span>
+  <span style="color:#66d9ef">health_check_timeout</span>: <span style="color:#ae81ff">5</span>
+  <span style="color:#66d9ef">health_check_healthy_count</span>: <span style="color:#ae81ff">5</span>
+  <span style="color:#66d9ef">health_check_unhealthy_count</span>: <span style="color:#ae81ff">2</span>
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#66d9ef">Name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#75715e"># Hosts to peer with. This will gather vpc info from the Name tag and create a peering connection and route tables.</span>
@@ -58,12 +67,18 @@
     <span style="color:#66d9ef">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
     <span style="color:#66d9ef">master_username</span>: hello <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
     <span style="color:#66d9ef">master_user_password</span>: hellothere
+    <span style="color:#66d9ef">multi_az</span>: <span style="color:#66d9ef">true</span>
   <span style="color:#75715e"># Add an CNAM record tied to the ALB.</span>
   <span style="color:#75715e"># Set the zone to empty to skip.</span>
   <span style="color:#66d9ef">route_53</span>:
     <span style="color:#66d9ef">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
     <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;*.{{ domain_name }}&#34;</span>
     <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
+  <span style="color:#66d9ef">ssl_certificate_ARN</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#75715e"># Add custom listeners. See https://docs.ansible.com/ansible/latest/collections/community/aws/elb_application_lb_module.html</span>
+  <span style="color:#66d9ef">listeners</span>: []
+  <span style="color:#75715e"># Wether to create an EFS volume.</span>
+  <span style="color:#66d9ef">efs</span>: <span style="color:#66d9ef">true</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -96,6 +111,8 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>

@@ -89,12 +89,33 @@ Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</guid>
+      <description>AWS EFS Creates or update an EFS volume.
+Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: [] state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
       <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
 Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present owner: root group: root </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml/</guid>
+      <description>AWS IAM SAML Creates the necessary policies and roles for SAML-based SSO in AWS and optionally creates Service Provider (SP) includes for SimpleSAMLphp .
+All tasks in this role are optional and can be skipped by simply not presenting a variable.
+Variables are generic for AWS SAML configuration up until the saml_metadata_document variable. Groups are intended to be LDAP groups, but in reality they can be any array of values you wish to pass to AWS to match against the eduPersonAffiliation SAML attribute on login.</description>
     </item>
     
     <item>
@@ -114,7 +135,7 @@ Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_p
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds/</guid>
       <description>AWS RDS Creates an RDS instance and associated ressources.
-Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. master_username: hello # The name of the master user for the DB cluster.</description>
+Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 multi_az: true subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. master_username: hello # The name of the master user for the DB cluster.</description>
     </item>
     
     <item>
@@ -279,7 +300,7 @@ Default variables --- hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set t
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync/</guid>
       <description>Mount sync Syncronize some &amp;ldquo;mounted&amp;rdquo; filesystems with the local one. Typically used for EFS/NFS mounts on autoscale clusters. It will:
- perform an initial rsync using a cloud-init script use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment)   Default variables --- mount_sync: # A list of target/destination definitions. sync_pairs: - src: /my/path/to/sync dest: /another/path/to/sync minute: &amp;#34;*/10&amp;#34; name: example owner: root group: root tarball: /path/to/initial/seed.</description>
+ perform an initial rsync using a cloud-init script use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment)   Default variables --- mount_sync: # A list of target/destination definitions. sync_pairs: - src: /my/path/to/sync dest: /another/path/to/sync minute: &amp;#34;*/10&amp;#34; name: example owner: root group: root tarballs: - /path/to/initial/seed.</description>
     </item>
     
     <item>
