@@ -21,6 +21,7 @@
   <span style="color:#66d9ef">region</span>: us-east<span style="color:#ae81ff">-2</span>
   <span style="color:#66d9ef">instance_type</span>: t2.micro
   <span style="color:#66d9ef">ami_name</span>: <span style="color:#e6db74">&#34;{{ domain_name }}&#34;</span>
+  <span style="color:#66d9ef">encrypt_boot</span>: <span style="color:#66d9ef">false</span>
   <span style="color:#66d9ef">playbook_file</span>: <span style="color:#e6db74">&#34;{{ playbook_dir }}/base-playbook.yml&#34;</span> <span style="color:#75715e"># Path to a playbook used to provision the image.</span>
   <span style="color:#75715e"># Operation can be one of:</span>
   <span style="color:#75715e"># - create: delete existing image if any and re-create a new one.</span>

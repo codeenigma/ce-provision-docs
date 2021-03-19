@@ -55,7 +55,7 @@ Default variables --- apt_extra_packages: [] </description>
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</guid>
       <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
 Dependencies This requires boto and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.
-Default variables --- ami_debian_buster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;{{ domain_name }}&amp;#34; playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
+Default variables --- ami_debian_buster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;{{ domain_name }}&amp;#34; encrypt_boot: false playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
     </item>
     
     <item>
@@ -94,7 +94,7 @@ Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</guid>
       <description>AWS EFS Creates or update an EFS volume.
-Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: [] state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] </description>
+Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: [] state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false </description>
     </item>
     
     <item>
@@ -135,7 +135,7 @@ Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_p
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds/</guid>
       <description>AWS RDS Creates an RDS instance and associated ressources.
-Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 multi_az: true subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. master_username: hello # The name of the master user for the DB cluster.</description>
+Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 multi_az: true subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: [] db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. storage_encrypted: false # Whether to encrypt the RDS instance or not.</description>
     </item>
     
     <item>

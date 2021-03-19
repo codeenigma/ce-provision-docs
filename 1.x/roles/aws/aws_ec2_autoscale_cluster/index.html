@@ -34,6 +34,7 @@
   <span style="color:#66d9ef">ami_owner</span>: self <span style="color:#75715e"># Default to self-created image.</span>
   <span style="color:#66d9ef">root_volume_size</span>: <span style="color:#ae81ff">40</span>
   <span style="color:#66d9ef">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">encrypt_boot</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EBS volumes or not.</span>
   <span style="color:#66d9ef">ami_playbook_file</span>: <span style="color:#e6db74">&#34;{{ playbook_dir }}/ami.yml&#34;</span>
   <span style="color:#66d9ef">min_size</span>: <span style="color:#ae81ff">4</span>
   <span style="color:#66d9ef">max_size</span>: <span style="color:#ae81ff">8</span>
@@ -65,6 +66,7 @@
     <span style="color:#75715e">#engine_version: 5.7.9</span>
     <span style="color:#66d9ef">allocated_storage</span>: <span style="color:#ae81ff">100</span> <span style="color:#75715e"># Initial size in GB. Minimum is 100.</span>
     <span style="color:#66d9ef">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
+    <span style="color:#66d9ef">storage_encrypted</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the RDS instance or not.</span>
     <span style="color:#66d9ef">master_username</span>: hello <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
     <span style="color:#66d9ef">master_user_password</span>: hellothere
     <span style="color:#66d9ef">multi_az</span>: <span style="color:#66d9ef">true</span>
@@ -77,8 +79,8 @@
   <span style="color:#66d9ef">ssl_certificate_ARN</span>: <span style="color:#e6db74">&#34;&#34;</span>
   <span style="color:#75715e"># Add custom listeners. See https://docs.ansible.com/ansible/latest/collections/community/aws/elb_application_lb_module.html</span>
   <span style="color:#66d9ef">listeners</span>: []
-  <span style="color:#75715e"># Wether to create an EFS volume.</span>
-  <span style="color:#66d9ef">efs</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">efs</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to create an EFS volume.</span>
+  <span style="color:#66d9ef">efs_encrypt</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EFS volume</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
