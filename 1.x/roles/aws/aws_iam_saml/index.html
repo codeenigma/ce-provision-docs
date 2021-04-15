@@ -58,6 +58,9 @@
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_iam_saml</span>:
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span> <span style="color:#75715e"># Boto profile to use for AWS connections</span>
+  <span style="color:#66d9ef">region</span>: <span style="color:#e6db74">&#34;{{ _region }}&#34;</span> <span style="color:#75715e"># AWS region to use, if applicable</span>
+  <span style="color:#66d9ef">tags</span>: [] <span style="color:#75715e"># AWS tags to apply</span>
   <span style="color:#66d9ef">aws_account_alias</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># IAM account alias - human readable name to order SSO page</span>
   <span style="color:#66d9ef">provider_name</span>: <span style="color:#e6db74">&#34;SAMLProvider&#34;</span> <span style="color:#75715e"># The name of your SAML provider in the AWS console</span>
   <span style="color:#66d9ef">admin_role</span>: <span style="color:#e6db74">&#34;Administrators&#34;</span> <span style="color:#75715e"># The name of your admin IAM role in the AWS console</span>
@@ -136,6 +139,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>

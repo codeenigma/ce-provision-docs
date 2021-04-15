@@ -7,25 +7,30 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="ce-deploy">ce-deploy</h1>
-<p>Installs Code Enigma&rsquo;s deploy stack on a server.</p>
+        <h1 id="_overrides">_overrides.</h1>
+<p>Allow some files and symlinks to be created or replaced on the target server.
+Usually not called by itself, but triggered by other roles relying on it.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#66d9ef">_ce_deploy</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&#34;</span>
-
-<span style="color:#66d9ef">ce_deploy</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_deploy.username }}&#34;</span>
-  <span style="color:#66d9ef">own_repository</span>: <span style="color:#e6db74">&#34;https://github.com/codeenigma/ce-deploy.git&#34;</span>
-  <span style="color:#66d9ef">own_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">config_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">config_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">local_dir</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_deploy.username }}/ce-deploy&#34;</span>
-  <span style="color:#75715e"># List of additional groups to add the user to.</span>
-  <span style="color:#66d9ef">groups</span>: []
+<span style="color:#66d9ef">_overrides</span>:
+  <span style="color:#75715e"># A list of files to override.</span>
+  <span style="color:#66d9ef">files</span>: []
+  <span style="color:#75715e"># files:</span>
+  <span style="color:#75715e">#   - src: &#34;php/php.ini&#34; # This is relative to the &#34;extra&#34; config, or to the playbook.</span>
+  <span style="color:#75715e">#     dest: &#34;/etc/php7.4/fpm/php.ini&#34;</span>
+  <span style="color:#75715e">#     mode: &#34;0755&#34;</span>
+  <span style="color:#75715e">#     owner: &#34;root&#34;</span>
+  <span style="color:#75715e">#     group: &#34;root&#34;</span>
+  <span style="color:#66d9ef">links</span>: []
+  <span style="color:#75715e"># links:</span>
+  <span style="color:#75715e">#   - src: &#34;/mnt/assets&#34; # This is absolute, on the target.</span>
+  <span style="color:#75715e">#     dest: &#34;/var/www/static&#34;</span>
+  <span style="color:#75715e">#     mode: &#34;0755&#34;</span>
+  <span style="color:#75715e">#     owner: &#34;nginx&#34;</span>
+  <span style="color:#75715e">#     group: &#34;nginx&#34;</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -33,7 +38,7 @@
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#ce-deploy">ce-deploy</a>
+    <li><a href="#_overrides">_overrides.</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>

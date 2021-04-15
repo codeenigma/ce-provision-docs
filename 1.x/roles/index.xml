@@ -21,6 +21,16 @@
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides/</guid>
+      <description>_overrides. Allow some files and symlinks to be created or replaced on the target server. Usually not called by itself, but triggered by other roles relying on it.
+Default variables --- _overrides: # A list of files to override. files: [] # files: # - src: &amp;#34;php/php.ini&amp;#34; # This is relative to the &amp;#34;extra&amp;#34; config, or to the playbook. # dest: &amp;#34;/etc/php7.4/fpm/php.ini&amp;#34; # mode: &amp;#34;0755&amp;#34; # owner: &amp;#34;root&amp;#34; # group: &amp;#34;root&amp;#34; links: [] # links: # - src: &amp;#34;/mnt/assets&amp;#34; # This is absolute, on the target.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
