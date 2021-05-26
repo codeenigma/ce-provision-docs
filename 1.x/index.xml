@@ -16,7 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/_sidebar/</guid>
-      <description>Home   Install   Usage   Roles   Ansible   Extra packages   AWS tools roles   AMI Debian Buster   Amazon credentials   Autoscale cluster   AMI Debian Buster   EFS client   AWS EFS   AWS IAM SAML   AWS key pair.   AWS RDS   VPC   Update main route for a given VPC   VPC     ce-deploy   Extra packages   ce-provision   ClamAV Clamscan   ClamAV Daemon   UFW Firewall   Frontail   Gitlab   Gitlab Runner   GPG Key   HA Proxy   Managed /etc/hosts   Jenkins   &amp;ldquo;Meta&amp;rdquo; roles that group individual roles together.</description>
+      <description>Home   Install   Usage   Roles   Ansible   Extra packages   AWS tools roles   AMI Debian Buster   Amazon credentials   Autoscale cluster   AMI Debian Buster   EFS client   AWS EFS   AWS IAM EC2   AWS IAM SAML   AWS key pair.   AWS RDS   VPC   Update main route for a given VPC   VPC     ce-deploy   Extra packages   ce-provision   ClamAV Clamscan   ClamAV Daemon   UFW Firewall   Frontail   Gitlab   Gitlab Runner   GPG Key   HA Proxy   Managed /etc/hosts   Jenkins   &amp;ldquo;Meta&amp;rdquo; roles that group individual roles together.</description>
     </item>
     
     <item>
@@ -152,6 +152,16 @@ Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
       <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
 Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present owner: root group: root </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</guid>
+      <description>AWS IAM EC2 Set up an IAM role, with basic document/trust policy.
+Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Only EC2 is implemented for now. policy_document: ec2 tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
     </item>
     
     <item>

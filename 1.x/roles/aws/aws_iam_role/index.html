@@ -7,33 +7,24 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="aws-rds">AWS RDS</h1>
-<p>Creates an RDS instance and associated ressources.</p>
+        <h1 id="aws-iam-ec2">AWS IAM EC2</h1>
+<p>Set up an IAM role, with basic document/trust policy.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_rds</span>:
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">aws_iam_role</span>:
+  <span style="color:#66d9ef">name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
-  <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
-  <span style="color:#66d9ef">multi_az</span>: <span style="color:#66d9ef">true</span>
-  <span style="color:#66d9ef">subnets</span>:
-    - subnet-aaaaaaaa
-    - subnet-bbbbbbbb
-  <span style="color:#66d9ef">name</span>: example
-  <span style="color:#66d9ef">tags</span>: []
-  <span style="color:#66d9ef">db_instance_class</span>: db.m5.large
+  <span style="color:#75715e"># Pass either names or ARNs for the role.</span>
+  <span style="color:#66d9ef">managed_policies</span>: []
+  <span style="color:#75715e"># Which document policy to apply.</span>
+  <span style="color:#75715e"># Only EC2 is implemented for now.</span>
+  <span style="color:#66d9ef">policy_document</span>: ec2
+  <span style="color:#66d9ef">tags</span>:
+    <span style="color:#75715e">#Type: &#34;util&#34;</span>
   <span style="color:#66d9ef">state</span>: present
-  <span style="color:#66d9ef">description</span>: example
-  <span style="color:#66d9ef">engine</span>: mariadb
-  <span style="color:#75715e"># engine_version: &#39;5.7.2&#39; # Omit to use latest.</span>
-  <span style="color:#66d9ef">allocated_storage</span>: <span style="color:#ae81ff">100</span> <span style="color:#75715e"># Initial size in GB. Minimum is 100.</span>
-  <span style="color:#66d9ef">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
-  <span style="color:#66d9ef">storage_encrypted</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the RDS instance or not.</span>
-  <span style="color:#66d9ef">master_username</span>: hello <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
-  <span style="color:#66d9ef">master_user_password</span>: hellothere
-  <span style="color:#66d9ef">publicly_accessible</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Wether to allocate an IP address</span>
-  <span style="color:#66d9ef">security_groups</span>: []
+  <span style="color:#66d9ef">_result</span>: {}
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -41,7 +32,7 @@
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#aws-rds">AWS RDS</a>
+    <li><a href="#aws-iam-ec2">AWS IAM EC2</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>

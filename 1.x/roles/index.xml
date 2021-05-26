@@ -119,6 +119,16 @@ Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&a
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</guid>
+      <description>AWS IAM EC2 Set up an IAM role, with basic document/trust policy.
+Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Only EC2 is implemented for now. policy_document: ec2 tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
