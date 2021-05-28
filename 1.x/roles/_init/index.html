@@ -7,16 +7,44 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="frontail">Frontail</h1>
-<p>Installs <a href="https://github.com/mthenw/frontail">https://github.com/mthenw/frontail</a> globally. This is used for local dev environments.</p>
+        <h1 id="init-role">Init role</h1>
+<p>This is meant to ALWAYS be included as the first task of a play.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#66d9ef">_ce_provision</span>:
+  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}provision{% endif %}&#34;</span>
+
+<span style="color:#66d9ef">ce_provision</span>:
+  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_provision.username }}&#34;</span>
+  <span style="color:#66d9ef">own_repository</span>: <span style="color:#e6db74">&#34;https://github.com/codeenigma/ce-provision.git&#34;</span>
+  <span style="color:#66d9ef">own_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
+  <span style="color:#66d9ef">config_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#66d9ef">config_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
+  <span style="color:#66d9ef">extra_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#66d9ef">extra_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
+  <span style="color:#66d9ef">extra_repository_vars_file</span>: <span style="color:#e6db74">&#34;custom.yml&#34;</span>
+  <span style="color:#66d9ef">extra_repository_allowed_vars</span>: []
+  <span style="color:#66d9ef">local_dir</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision.username }}/ce-provision&#34;</span>
+
+<span style="color:#66d9ef">_init</span>:
+  <span style="color:#75715e"># A list of var directories to include. We only support .yml extensions.</span>
+  <span style="color:#75715e"># This is used to detect if the playbook must re-run or not.</span>
+  <span style="color:#66d9ef">vars_dirs</span>: []
+
+</code></pre></div><!-- raw HTML omitted -->
 
     </article>
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#frontail">Frontail</a></li>
+    <li><a href="#init-role">Init role</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </aside><aside class="menu">

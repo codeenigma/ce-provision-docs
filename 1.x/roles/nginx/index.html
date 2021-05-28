@@ -7,16 +7,81 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="frontail">Frontail</h1>
-<p>Installs <a href="https://github.com/mthenw/frontail">https://github.com/mthenw/frontail</a> globally. This is used for local dev environments.</p>
+        <h1 id="nginx">NGINX</h1>
+<p>Install and configure the nginx webserver.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#66d9ef">php</span>:
+  <span style="color:#66d9ef">version</span>:
+    - <span style="color:#ae81ff">7.3</span>
+<span style="color:#66d9ef">symfony_env</span>: <span style="color:#e6db74">&#34;{{ _env_type }}&#34;</span>
+<span style="color:#66d9ef">nginx</span>:
+  <span style="color:#75715e"># Global default config for nginx.conf.</span>
+  <span style="color:#66d9ef">user</span>: www-data
+  <span style="color:#66d9ef">worker_processes</span>: auto
+  <span style="color:#66d9ef">events</span>:
+    <span style="color:#66d9ef">worker_connections</span>: <span style="color:#ae81ff">768</span>
+  <span style="color:#66d9ef">http</span>:
+    <span style="color:#66d9ef">server_names_hash_bucket_size</span>: <span style="color:#ae81ff">256</span>
+    <span style="color:#66d9ef">access_log</span>: /var/log/nginx-access.log
+    <span style="color:#66d9ef">error_log</span>: /var/log/nginx-error.log
+  <span style="color:#75715e"># Group prefix. Useful for grouping by environments.</span>
+  <span style="color:#66d9ef">log_group_prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#75715e"># Main log stream for nginx (Cloudwatch).</span>
+  <span style="color:#66d9ef">log_stream_name</span>: example
+  <span style="color:#75715e"># We can only have one backend, due to the way we use &#34;common&#34; templates.</span>
+  <span style="color:#75715e"># Moving this per domain means instead having templates per project type.</span>
+  <span style="color:#66d9ef">php_fastcgi_backend</span>: <span style="color:#e6db74">&#34;127.0.0.1:90{{ php.version[-1] | replace(&#39;.&#39;,&#39;&#39;) }}&#34;</span>
+  <span style="color:#66d9ef">ratelimitingcrawlers</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">client_max_body_size</span>: <span style="color:#e6db74">&#34;700M&#34;</span>
+  <span style="color:#66d9ef">fastcgi_read_timeout</span>: <span style="color:#ae81ff">60</span>
+  <span style="color:#66d9ef">overrides</span>: [] <span style="color:#75715e"># See the &#39;_overrides&#39; role.</span>
+  <span style="color:#66d9ef">domains</span>:
+    - <span style="color:#66d9ef">server_name</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+      <span style="color:#66d9ef">access_log</span>: <span style="color:#e6db74">&#34;/var/log/nginx/access.log&#34;</span>
+      <span style="color:#66d9ef">error_log</span>: <span style="color:#e6db74">&#34;/var/log/nginx/error.log&#34;</span>
+      <span style="color:#66d9ef">error_log_level</span>: <span style="color:#e6db74">&#34;notice&#34;</span>
+      <span style="color:#75715e"># Server specific log stream (Cloudwatch),</span>
+      <span style="color:#66d9ef">log_stream_name</span>: example
+      <span style="color:#66d9ef">webroot</span>: <span style="color:#e6db74">&#34;/var/www/html&#34;</span>
+      <span style="color:#66d9ef">project_type</span>: <span style="color:#e6db74">&#34;flat&#34;</span>
+      <span style="color:#66d9ef">ssl</span>: <span style="color:#75715e"># @see the &#39;ssl&#39; role.</span>
+        <span style="color:#66d9ef">domain</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+        <span style="color:#66d9ef">handling</span>: selfsigned
+      <span style="color:#66d9ef">ratelimitingcrawlers</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#66d9ef">is_default</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#66d9ef">basic_auth</span>:
+        <span style="color:#66d9ef">auth_enabled</span>: <span style="color:#66d9ef">false</span>
+        <span style="color:#66d9ef">auth_user</span>: <span style="color:#e6db74">&#34;hello&#34;</span>
+        <span style="color:#66d9ef">auth_pass</span>: <span style="color:#e6db74">&#34;P3nguin!&#34;</span>
+      <span style="color:#66d9ef">servers</span>:
+        - <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">80</span>
+          <span style="color:#66d9ef">ssl</span>: <span style="color:#66d9ef">false</span>
+          <span style="color:#66d9ef">https_redirect</span>: <span style="color:#66d9ef">true</span>
+        - <span style="color:#66d9ef">port</span>: <span style="color:#ae81ff">443</span>
+          <span style="color:#66d9ef">ssl</span>: <span style="color:#66d9ef">true</span>
+          <span style="color:#66d9ef">https_redirect</span>: <span style="color:#66d9ef">false</span>
+      <span style="color:#66d9ef">upstreams</span>: []
+      <span style="color:#75715e"># upstreams:</span>
+      <span style="color:#75715e">#   - name: &#39;backend_example&#39;</span>
+      <span style="color:#75715e">#     backends:</span>
+      <span style="color:#75715e">#       - 142.42.64.2:8080</span>
+      <span style="color:#75715e">#       - 142.42.64.3:8080</span>
+
+</code></pre></div><!-- raw HTML omitted -->
 
     </article>
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#frontail">Frontail</a></li>
+    <li><a href="#nginx">NGINX</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </aside><aside class="menu">

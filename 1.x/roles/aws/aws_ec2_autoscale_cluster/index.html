@@ -30,7 +30,6 @@
       <span style="color:#66d9ef">public_subnet</span>: public-c
   <span style="color:#66d9ef">instance_type</span>: t2.micro
   <span style="color:#66d9ef">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span> <span style="color:#75715e"># This needs to match your &#34;provision&#34; user SSH key.</span>
-  <span style="color:#66d9ef">ami_name</span>: <span style="color:#e6db74">&#34;example&#34;</span> <span style="color:#75715e"># The name of an AMI image to use. Image must exists in the same region.</span>
   <span style="color:#66d9ef">ami_owner</span>: self <span style="color:#75715e"># Default to self-created image.</span>
   <span style="color:#66d9ef">root_volume_size</span>: <span style="color:#ae81ff">40</span>
   <span style="color:#66d9ef">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
@@ -54,6 +53,8 @@
   <span style="color:#66d9ef">health_check_unhealthy_count</span>: <span style="color:#ae81ff">2</span>
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#66d9ef">Name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+  <span style="color:#75715e"># An IAM Role name to associate with instances.</span>
+  <span style="color:#66d9ef">iam_role_name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#75715e"># Hosts to peer with. This will gather vpc info from the Name tag and create a peering connection and route tables.</span>
   <span style="color:#66d9ef">peering</span>:
     - <span style="color:#66d9ef">name</span>: utility-server.example.com
@@ -74,7 +75,7 @@
   <span style="color:#75715e"># Set the zone to empty to skip.</span>
   <span style="color:#66d9ef">route_53</span>:
     <span style="color:#66d9ef">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
-    <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;*.{{ domain_name }}&#34;</span>
+    <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;*.{{ _domain_name }}&#34;</span>
     <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
   <span style="color:#66d9ef">ssl_certificate_ARN</span>: <span style="color:#e6db74">&#34;&#34;</span>
   <span style="color:#75715e"># Add custom listeners. See https://docs.ansible.com/ansible/latest/collections/community/aws/elb_application_lb_module.html</span>
@@ -106,9 +107,11 @@
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS tools roles</a>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
@@ -118,11 +121,13 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
 </ul>
 </li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
@@ -135,10 +140,18 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>

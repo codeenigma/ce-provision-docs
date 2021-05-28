@@ -28,7 +28,23 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region/</loc>
   </url>
   
   <url>
@@ -49,6 +65,10 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group/</loc>
   </url>
   
   <url>
@@ -88,6 +108,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</loc>
   </url>
   
@@ -97,6 +121,14 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent/</loc>
   </url>
   
   <url>
@@ -157,6 +189,10 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx/</loc>
   </url>
   
   <url>
