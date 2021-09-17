@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
+</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
+        <h1 id="firewall-config">Firewall Config</h1>
+<p>This role provides a wrapper for 
+<a href="https://github.com/geerlingguy/ansible-role-firewall/"  target="_blank" rel="noopener">Jeff Geerling&rsquo;s Ansible firewall role for iptables</a>
+.</p>
+<p>Note, it explicitly does not state that dependency in <code>meta</code> because in some cases <code>iptables</code> needs installing from <code>buster-backports</code> and that cannot work if Ansible tries to install it as a dependency. This is why the first task in this role is installing <code>iptables</code> from <code>buster-backports</code> if the <code>is_local</code> variable is set (e.g we are in a 
+<a href="https://github.com/codeenigma/ce-dev/"  target="_blank" rel="noopener">ce-dev</a>
+ container).</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="usage">Usage</h2>
+<p>The role has a concept of <code>rulesets</code> which take the form of a set of lists of firewall rules to apply. We ship some standard <code>rulesets</code>, such as this one called <code>web_open</code> which opens TCP ports 80 and 443:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">firewall_config</span>:
+  <span style="color:#66d9ef">web_open</span>:
+    <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>:
+      - <span style="color:#e6db74">&#34;80&#34;</span>
+      - <span style="color:#e6db74">&#34;443&#34;</span>
+
+</code></pre></div><p>See the main firewall role for available options and usage: <a href="https://github.com/geerlingguy/ansible-role-firewall/blob/master/defaults/main.yml#L7">https://github.com/geerlingguy/ansible-role-firewall/blob/master/defaults/main.yml#L7</a></p>
+<p>Your <code>firewall_config</code> rulesets can be loaded in from anywhere Ansible will load variables, so modules can invoke this role directly and set their own rulesets in their variables files. To work through an example, if I wanted to have a list of restricted IPs for SSH on a web server, I could make a custom ruleset like this in a file in <code>config/hosts/group_vars/all</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">firewall_config</span>:
+  <span style="color:#66d9ef">ssh_restricted</span>:
+    <span style="color:#66d9ef">firewall_additional_rules</span>:
+      - <span style="color:#e6db74">&#34;iptables -A INPUT -p tcp --dport 22 -s 1.0.0.1 -j ACCEPT&#34;</span> <span style="color:#75715e"># old vpn</span>
+      - <span style="color:#e6db74">&#34;iptables -A INPUT -p tcp --dport 22 -s 1.1.1.1 -j ACCEPT&#34;</span> <span style="color:#75715e"># vpn</span>
+      - <span style="color:#e6db74">&#34;iptables -A INPUT -p tcp --dport 22 -s 8.8.8.8 -j ACCEPT&#34;</span> <span style="color:#75715e"># infra1</span>
+
+</code></pre></div><p>Then in my variables for the web server I can set <code>rulesets</code> like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">firewall_config</span>:
+  <span style="color:#66d9ef">rulesets</span>:
+    - ssh_restricted
+    - web_open
+</code></pre></div><p>So Ansible will apply my custom <code>ssh_restricted</code> ruleset and the built-in <code>web_open</code> ruleset.</p>
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#66d9ef">firewall_config</span>:
+  <span style="color:#75715e"># Because firewall.bash isn&#39;t overwritten once it exists we need to delete it to apply rule changes.</span>
+  <span style="color:#66d9ef">purge</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># General settings</span>
+  <span style="color:#75715e"># See https://github.com/geerlingguy/ansible-role-firewall/blob/master/defaults/main.yml</span>
+  <span style="color:#66d9ef">firewall_state</span>: started
+  <span style="color:#66d9ef">firewall_enabled_at_boot</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">firewall_enable_ipv6</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">firewall_log_dropped_packets</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">firewall_disable_ufw</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>: [ <span style="color:#e6db74">&#34;22&#34;</span> ] <span style="color:#75715e"># initially open port 22 so we don&#39;t lose connection</span>
+  <span style="color:#66d9ef">rulesets</span>:
+    - ssh_open
+
+  <span style="color:#75715e"># Ruleset definitions</span>
+  <span style="color:#75715e"># Permitted rule lists</span>
+  <span style="color:#75715e"># firewall_allowed_tcp_ports</span>
+  <span style="color:#75715e"># firewall_allowed_udp_ports</span>
+  <span style="color:#75715e"># firewall_forwarded_tcp_ports</span>
+  <span style="color:#75715e"># firewall_forwarded_udp_ports</span>
+  <span style="color:#75715e"># firewall_additional_rules</span>
+  <span style="color:#75715e"># firewall_ip6_additional_rules</span>
+  <span style="color:#66d9ef">ssh_open</span>:
+    <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>:
+      - <span style="color:#e6db74">&#34;22&#34;</span>
+  <span style="color:#66d9ef">web_open</span>:
+    <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>:
+      - <span style="color:#e6db74">&#34;80&#34;</span>
+      - <span style="color:#e6db74">&#34;443&#34;</span>
+  <span style="color:#66d9ef">ftp_open</span>:
+    <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>:
+      - <span style="color:#e6db74">&#34;20&#34;</span>
+      - <span style="color:#e6db74">&#34;21&#34;</span>
+  <span style="color:#66d9ef">sftp_open</span>:
+    <span style="color:#66d9ef">firewall_allowed_tcp_ports</span>:
+      - <span style="color:#e6db74">&#34;989&#34;</span>
+      - <span style="color:#e6db74">&#34;990&#34;</span>
+  <span style="color:#66d9ef">ossec</span>:
+    <span style="color:#66d9ef">firewall_allowed_udp_ports</span>:
+      - <span style="color:#e6db74">&#34;1514&#34;</span>
+      - <span style="color:#e6db74">&#34;1515&#34;</span>
+
+</code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#firewall-config">Firewall Config</a>
+      <ul>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/">Home</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/install">Install</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
+<li><a href="roles">Roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns">AWS SNS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
+<li>[<a href="#openvpn">openvpn</a>](/roles/openvpn)</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</aside>
+    </body>
+</html>

@@ -25,6 +25,7 @@
   <span style="color:#75715e"># For &#34;manual&#34; handling, this is the content of the certificate.</span>
   <span style="color:#75715e"># If you want to to provide a file instead, use lookup(&#39;file&#39;, &#39;/path/on/the/controller&#39;) as the value.</span>
   <span style="color:#75715e"># For &#34;unmanaged&#34; handling, this must be set to the absolute path on the target.</span>
+  <span style="color:#75715e"># For &#34;manual&#34; handling you can optionally include a ca_cert variable if your CA cert must be a separate file.</span>
   <span style="color:#66d9ef">cert</span>: <span style="color:#e6db74">|
 </span><span style="color:#e6db74">    -----BEGIN CERTIFICATE-----</span>
     f34XAAVI+R04k0TLUcfeU4/8QYQ3qY1aDvwonT3PE6VYRAGMGJflz//133EquNUR
@@ -78,9 +79,12 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
@@ -89,6 +93,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns">AWS SNS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
@@ -100,6 +105,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
@@ -109,6 +115,9 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
@@ -121,13 +130,17 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
+<li>[<a href="#openvpn">openvpn</a>](/roles/openvpn)</li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
 </ul>
 </li>
 </ul>

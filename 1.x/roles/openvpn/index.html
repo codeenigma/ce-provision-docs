@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
+</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
+        <h1 id="openvpnopenvpn">
+<a href="#openvpn" >openvpn</a>
+</h1>
+<p>Install and configure openvpn server or client on your system.</p>
+<table>
+<thead>
+<tr>
+<th>GitHub</th>
+<th>GitLab</th>
+<th>Quality</th>
+<th>Downloads</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/robertdebock/ansible-role-openvpn/actions"  target="_blank" rel="noopener">
+<img src="https://github.com/robertdebock/ansible-role-openvpn/workflows/Ansible%20Molecule/badge.svg" alt="github"  />
+</a>
+</td>
+<td>
+<a href="https://gitlab.com/robertdebock/ansible-role-openvpn"  target="_blank" rel="noopener">
+<img src="https://gitlab.com/robertdebock/ansible-role-openvpn/badges/master/pipeline.svg" alt="gitlab"  />
+</a>
+</td>
+<td>
+<a href="https://galaxy.ansible.com/robertdebock/openvpn"  target="_blank" rel="noopener">
+<img src="https://img.shields.io/ansible/quality/37845" alt="quality"  />
+</a>
+</td>
+<td>
+<a href="https://galaxy.ansible.com/robertdebock/openvpn"  target="_blank" rel="noopener">
+<img src="https://img.shields.io/ansible/role/d/37845" alt="downloads"  />
+</a>
+</td>
+<td>
+<a href="https://github.com/robertdebock/ansible-role-openvpn/releases/"  target="_blank" rel="noopener">
+<img src="https://img.shields.io/github/release/robertdebock/ansible-role-openvpn.svg" alt="Version"  />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="example-playbookexample-playbook">
+<a href="#example-playbook" >Example Playbook</a>
+</h2>
+<p>This example is taken from <code>molecule/resources/converge.yml</code> and is tested on each push, pull request and release.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+- <span style="color:#66d9ef">name</span>: Converge
+  <span style="color:#66d9ef">hosts</span>: all
+  <span style="color:#66d9ef">become</span>: yes
+  <span style="color:#66d9ef">gather_facts</span>: yes
+
+  <span style="color:#66d9ef">tasks</span>:
+    - <span style="color:#66d9ef">name</span>: create openvpn server
+      <span style="color:#66d9ef">ansible.builtin.include_role</span>:
+        <span style="color:#66d9ef">name</span>: robertdebock.openvpn
+      <span style="color:#66d9ef">vars</span>:
+        <span style="color:#66d9ef">openvpn_role</span>: <span style="color:#e6db74">&#34;server&#34;</span>
+
+    - <span style="color:#66d9ef">name</span>: copy certificates and keys from the server to the client
+      <span style="color:#66d9ef">ansible.builtin.copy</span>:
+        <span style="color:#66d9ef">src</span>: /etc/openvpn/easy-rsa/pki/{{ item }}
+        <span style="color:#66d9ef">dest</span>: /etc/openvpn/client/{{ item | basename }}
+        <span style="color:#66d9ef">mode</span>: <span style="color:#e6db74">&#34;0640&#34;</span>
+        <span style="color:#66d9ef">remote_src</span>: yes
+      <span style="color:#66d9ef">loop</span>:
+        - ca.crt
+        - issued/client.crt
+        - private/client.key
+        - ta.key
+
+    - <span style="color:#66d9ef">name</span>: create openvpn client
+      <span style="color:#66d9ef">ansible.builtin.include_role</span>:
+        <span style="color:#66d9ef">name</span>: robertdebock.openvpn
+      <span style="color:#66d9ef">vars</span>:
+        <span style="color:#66d9ef">openvpn_role</span>: <span style="color:#e6db74">&#34;client&#34;</span>
+        <span style="color:#66d9ef">openvpn_client_server</span>: <span style="color:#ae81ff">127.0.0.1</span>
+</code></pre></div><p>The machine needs to be prepared in CI this is done using <code>molecule/resources/prepare.yml</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+- <span style="color:#66d9ef">name</span>: Prepare server
+  <span style="color:#66d9ef">hosts</span>: all
+  <span style="color:#66d9ef">gather_facts</span>: no
+  <span style="color:#66d9ef">become</span>: yes
+
+  <span style="color:#66d9ef">roles</span>:
+    - <span style="color:#66d9ef">role</span>: robertdebock.bootstrap
+    <span style="color:#75715e"># - role: robertdebock.buildtools</span>
+    - <span style="color:#66d9ef">role</span>: robertdebock.epel
+    <span style="color:#75715e"># - role: robertdebock.python_pip</span>
+    <span style="color:#75715e"># - role: robertdebock.openssl</span>
+</code></pre></div><p>Also see a 
+<a href="https://robertdebock.nl/how-to-use-these-roles.html"  target="_blank" rel="noopener">full explanation and example</a>
+ on how to use these roles.</p>
+<h2 id="role-variablesrole-variables">
+<a href="#role-variables" >Role Variables</a>
+</h2>
+<p>These variables are set in <code>defaults/main.yml</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#75715e"># defaults file for openvpn</span>
+
+<span style="color:#75715e"># You can setup both a client and a server using this role.</span>
+<span style="color:#75715e"># Use `server` or `client` for `openvpn_role`.</span>
+
+<span style="color:#66d9ef">openvpn_role</span>: server
+
+<span style="color:#75715e"># If you are configuring a client, setup these variables:</span>
+<span style="color:#75715e"># openvpn_role: client</span>
+<span style="color:#75715e"># openvpn_client_server: vpn.example.com</span>
+</code></pre></div><h2 id="requirementsrequirements">
+<a href="#requirements" >Requirements</a>
+</h2>
+<ul>
+<li>pip packages listed in 
+<a href="https://github.com/robertdebock/ansible-role-openvpn/blob/master/requirements.txt"  target="_blank" rel="noopener">requirements.txt</a>
+.</li>
+</ul>
+<h2 id="status-of-requirementsstatus-of-requirements">
+<a href="#status-of-requirements" >Status of requirements</a>
+</h2>
+<p>The following roles are used to prepare a system. You may choose to prepare your system in another way, I have tested these roles as well.</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>GitHub</th>
+<th>GitLab</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://galaxy.ansible.com/robertdebock/bootstrap"  target="_blank" rel="noopener">robertdebock.bootstrap</a>
+</td>
+<td>
+<a href="https://github.com/robertdebock/ansible-role-bootstrap/actions"  target="_blank" rel="noopener">
+<img src="https://github.com/robertdebock/ansible-role-bootstrap/workflows/Ansible%20Molecule/badge.svg" alt="Build Status GitHub"  />
+</a>
+</td>
+<td>
+<a href="https://gitlab.com/robertdebock/ansible-role-bootstrap"  target="_blank" rel="noopener">
+<img src="https://gitlab.com/robertdebock/ansible-role-bootstrap/badges/master/pipeline.svg" alt="Build Status GitLab "  />
+</a>
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://galaxy.ansible.com/robertdebock/epel"  target="_blank" rel="noopener">robertdebock.epel</a>
+</td>
+<td>
+<a href="https://github.com/robertdebock/ansible-role-epel/actions"  target="_blank" rel="noopener">
+<img src="https://github.com/robertdebock/ansible-role-epel/workflows/Ansible%20Molecule/badge.svg" alt="Build Status GitHub"  />
+</a>
+</td>
+<td>
+<a href="https://gitlab.com/robertdebock/ansible-role-epel"  target="_blank" rel="noopener">
+<img src="https://gitlab.com/robertdebock/ansible-role-epel/badges/master/pipeline.svg" alt="Build Status GitLab "  />
+</a>
+</td>
+</tr>
+</tbody>
+</table>
+<h2 id="contextcontext">
+<a href="#context" >Context</a>
+</h2>
+<p>This role is a part of many compatible roles. Have a look at 
+<a href="https://robertdebock.nl/"  target="_blank" rel="noopener">the documentation of these roles</a>
+ for further information.</p>
+<p>Here is an overview of related roles:
+
+<img src="https://raw.githubusercontent.com/robertdebock/ansible-role-openvpn/png/requirements.png" alt="dependencies" 
+  title="Dependencies"  />
+</p>
+<h2 id="compatibilitycompatibility">
+<a href="#compatibility" >Compatibility</a>
+</h2>
+<p>This role has been tested on these 
+<a href="https://hub.docker.com/u/robertdebock"  target="_blank" rel="noopener">container images</a>
+:</p>
+<table>
+<thead>
+<tr>
+<th>container</th>
+<th>tags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>amazon</td>
+<td>Candidate</td>
+</tr>
+<tr>
+<td>debian</td>
+<td>buster, bullseye</td>
+</tr>
+<tr>
+<td>el</td>
+<td>8</td>
+</tr>
+<tr>
+<td>fedora</td>
+<td>all</td>
+</tr>
+<tr>
+<td>debian</td>
+<td>buster, bullseye</td>
+</tr>
+<tr>
+<td>ubuntu</td>
+<td>focal</td>
+</tr>
+</tbody>
+</table>
+<p>The minimum version of Ansible required is 2.10, tests have been done to:</p>
+<ul>
+<li>The previous version.</li>
+<li>The current version.</li>
+<li>The development version.</li>
+</ul>
+<p>If you find issues, please register them in 
+<a href="https://github.com/robertdebock/ansible-role-openvpn/issues"  target="_blank" rel="noopener">GitHub</a>
+</p>
+<h2 id="licenselicense">
+<a href="#license" >License</a>
+</h2>
+<p>Apache-2.0</p>
+<h2 id="author-informationauthor-information">
+<a href="#author-information" >Author Information</a>
+</h2>
+<p>
+<a href="https://robertdebock.nl/"  target="_blank" rel="noopener">Robert de Bock</a>
+</p>
+<p>Please consider 
+<a href="https://github.com/sponsors/robertdebock"  target="_blank" rel="noopener">sponsoring me</a>
+.</p>
+<h2 id="forked-for-ce-provision-projectfork">
+<a href="#fork" >Forked for ce-provision-project</a>
+</h2>
+<p>This is a slightly modified version of the original by Code Enigma for its ce-provision project.</p>
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#openvpnopenvpn"><a href="#openvpn">openvpn</a></a>
+      <ul>
+        <li><a href="#example-playbookexample-playbook"><a href="#example-playbook">Example Playbook</a></a></li>
+        <li><a href="#role-variablesrole-variables"><a href="#role-variables">Role Variables</a></a></li>
+        <li><a href="#requirementsrequirements"><a href="#requirements">Requirements</a></a></li>
+        <li><a href="#status-of-requirementsstatus-of-requirements"><a href="#status-of-requirements">Status of requirements</a></a></li>
+        <li><a href="#contextcontext"><a href="#context">Context</a></a></li>
+        <li><a href="#compatibilitycompatibility"><a href="#compatibility">Compatibility</a></a></li>
+        <li><a href="#licenselicense"><a href="#license">License</a></a></li>
+        <li><a href="#author-informationauthor-information"><a href="#author-information">Author Information</a></a></li>
+        <li><a href="#forked-for-ce-provision-projectfork"><a href="#fork">Forked for ce-provision-project</a></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/">Home</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/install">Install</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
+<li><a href="roles">Roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns">AWS SNS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
+<li>[<a href="#openvpn">openvpn</a>](/roles/openvpn)</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</aside>
+    </body>
+</html>

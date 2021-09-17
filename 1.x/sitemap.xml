@@ -68,6 +68,14 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group/</loc>
   </url>
   
@@ -77,6 +85,10 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm/</loc>
   </url>
   
   <url>
@@ -109,6 +121,10 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns/</loc>
   </url>
   
   <url>
@@ -156,6 +172,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail/</loc>
   </url>
   
@@ -184,6 +204,18 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync/</loc>
   </url>
   
@@ -204,6 +236,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</loc>
   </url>
   
@@ -216,7 +252,15 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr/</loc>
   </url>
   
   <url>
@@ -225,6 +269,10 @@
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config/</loc>
   </url>
   
   <url>

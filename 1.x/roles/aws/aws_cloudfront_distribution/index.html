@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
+</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
+        <h1 id="aws-cloudfront-distribution">AWS CloudFront distribution</h1>
+<p>Creates a new AWS CloudFront distribution (CDN) for content delivery.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#66d9ef">aws_cloudfront_distribution</span>:
+  <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
+  <span style="color:#66d9ef">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
+  <span style="color:#66d9ef">tags</span>: {}
+  <span style="color:#66d9ef">state</span>: present
+  <span style="color:#66d9ef">aliases</span>: <span style="color:#75715e"># A list of aliases to serve on.</span>
+    - <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+  <span style="color:#66d9ef">validate_certs</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">viewer_certificate</span>:
+    <span style="color:#66d9ef">cloudfront_default_certificate</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">acm_certificate_arn</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># The certificate must be in us-east-1 for CloudFront.</span>
+    <span style="color:#66d9ef">ssl_support_method</span>: <span style="color:#e6db74">&#34;sni-only&#34;</span> <span style="color:#75715e"># Do not include if cloudfront_default_certificate is true.</span>
+    <span style="color:#75715e">#minumum_protocol_version: &#34;TLSv1.2_2019&#34; # If not supplied the AWS default is TLSv1.1_2016.</span>
+  <span style="color:#66d9ef">origins</span>:
+    - <span style="color:#66d9ef">custom_origin_config</span>:
+        <span style="color:#66d9ef">http_port</span>: <span style="color:#ae81ff">80</span>
+        <span style="color:#66d9ef">https_port</span>: <span style="color:#ae81ff">443</span>
+        <span style="color:#66d9ef">origin_keepalive_timeout</span>: <span style="color:#ae81ff">5</span>
+        <span style="color:#66d9ef">origin_read_timeout</span>: <span style="color:#ae81ff">60</span>
+        <span style="color:#66d9ef">origin_protocol_policy</span>: <span style="color:#e6db74">&#34;https-only&#34;</span>
+        <span style="color:#66d9ef">origin_ssl_protocols</span>:
+          <span style="color:#66d9ef">items</span>:
+            - <span style="color:#e6db74">&#34;TLSv1.2&#34;</span>
+      <span style="color:#66d9ef">domain_name</span>: <span style="color:#e6db74">&#34;backend.example.com&#34;</span> <span style="color:#75715e"># Back end domain name, e.g. the DNS name of the ALB.</span>
+      <span style="color:#66d9ef">id</span>: <span style="color:#e6db74">&#34;backend-example-com&#34;</span> <span style="color:#75715e"># Identifying string.</span>
+      <span style="color:#66d9ef">origin_path</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Optional if you to prepend back end calls with a path.</span>
+  <span style="color:#75715e">#s3_origin_access_identity_enabled: false</span>
+  <span style="color:#66d9ef">default_cache_behavior</span>:
+    <span style="color:#66d9ef">target_origin_id</span>: <span style="color:#e6db74">&#34;backend-example-com&#34;</span> <span style="color:#75715e"># Must match the desired origin: id.</span>
+    <span style="color:#66d9ef">viewer_protocol_policy</span>: redirect-to-https
+    <span style="color:#66d9ef">allowed_methods</span>:
+      <span style="color:#66d9ef">items</span>:
+        - GET
+        - HEAD
+        - OPTIONS
+        - PUT
+        - POST
+        - PATCH
+        - DELETE
+      <span style="color:#66d9ef">cached_methods</span>:
+        - GET
+        - HEAD
+        - OPTIONS
+    <span style="color:#66d9ef">min_ttl</span>: <span style="color:#ae81ff">0</span>
+    <span style="color:#66d9ef">max_ttl</span>: <span style="color:#ae81ff">300000</span>
+    <span style="color:#66d9ef">default_ttl</span>: <span style="color:#ae81ff">3600</span>
+    <span style="color:#66d9ef">forwarded_values</span>:
+      <span style="color:#66d9ef">query_string</span>: <span style="color:#66d9ef">true</span>
+      <span style="color:#66d9ef">cookies</span>:
+        <span style="color:#66d9ef">forward</span>: whitelist
+        <span style="color:#66d9ef">whitelisted_names</span>:
+          - <span style="color:#e6db74">&#34;SESS*&#34;</span>
+          - <span style="color:#e6db74">&#34;SSESS*&#34;</span>
+      <span style="color:#66d9ef">headers</span>:
+        - <span style="color:#e6db74">&#39;Accept&#39;</span>
+        - <span style="color:#e6db74">&#39;Authorization&#39;</span>
+        - <span style="color:#e6db74">&#39;Host&#39;</span>
+    <span style="color:#66d9ef">smooth_streaming</span>: <span style="color:#66d9ef">false</span>
+    <span style="color:#66d9ef">compress</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">cache_behaviors</span>: [] <span style="color:#75715e"># A list of cache behaviors same as default_cache_behavior with additional path_pattern var required.</span>
+  <span style="color:#66d9ef">enabled</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">purge_existing</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Set to false to append entries instead of replacing them.</span>
+</code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#aws-cloudfront-distribution">AWS CloudFront distribution</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/">Home</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/install">Install</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
+<li><a href="roles">Roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns">AWS SNS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
+<li>[<a href="#openvpn">openvpn</a>](/roles/openvpn)</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</aside>
+    </body>
+</html>
