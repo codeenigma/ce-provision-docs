@@ -193,7 +193,7 @@ Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
       <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
-Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html state: present owner: root group: root </description>
+Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # _netdev tells OS to wait for network before attempting to mount state: present owner: root group: root </description>
     </item>
     
     <item>
@@ -203,7 +203,7 @@ Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&a
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</guid>
       <description>AWS IAM EC2 Set up an IAM role, with basic document/trust policy.
-Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Only EC2 is implemented for now. policy_document: ec2 tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
+Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Current options are &amp;#39;ec2&amp;#39; or &amp;#39;ecs&amp;#39; policy_document: ec2 purge_policies: true # set to false if you want to add policies to an existing role tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
     </item>
     
     <item>

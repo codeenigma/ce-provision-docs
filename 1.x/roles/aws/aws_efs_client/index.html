@@ -23,7 +23,7 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
   <span style="color:#66d9ef">mounts</span>:
     - <span style="color:#66d9ef">path</span>: /mnt/shared
       <span style="color:#66d9ef">src</span>: example-efs <span style="color:#75715e"># This will be translated from the &#34;name&#34;</span>
-      <span style="color:#66d9ef">opts</span>: _netdev <span style="color:#75715e"># See https://docs.aws.amazon.com/efs/latest/ug/mount-fs-auto-mount-onreboot.html</span>
+      <span style="color:#66d9ef">opts</span>: _netdev <span style="color:#75715e"># _netdev tells OS to wait for network before attempting to mount</span>
       <span style="color:#66d9ef">state</span>: present
       <span style="color:#66d9ef">owner</span>: root
       <span style="color:#66d9ef">group</span>: root
@@ -85,6 +85,7 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>

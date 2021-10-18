@@ -19,8 +19,9 @@
   <span style="color:#75715e"># Pass either names or ARNs for the role.</span>
   <span style="color:#66d9ef">managed_policies</span>: []
   <span style="color:#75715e"># Which document policy to apply.</span>
-  <span style="color:#75715e"># Only EC2 is implemented for now.</span>
+  <span style="color:#75715e"># Current options are &#39;ec2&#39; or &#39;ecs&#39;</span>
   <span style="color:#66d9ef">policy_document</span>: ec2
+  <span style="color:#66d9ef">purge_policies</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if you want to add policies to an existing role</span>
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#75715e">#Type: &#34;util&#34;</span>
   <span style="color:#66d9ef">state</span>: present
@@ -83,6 +84,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
