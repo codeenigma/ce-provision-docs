@@ -109,6 +109,16 @@ Default variables --- ami_debian_buster: aws_profile: &amp;#34;{{ _aws_profile }
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup/</guid>
+      <description>AWS Backup Creates AWS Backup vaults and plans. Resources are assigned to these plans, if the variable is set, in the other roles, such as aws/aws_efs and aws/aws_rds.
+Default variables --- aws_backup: vault: name: &amp;#34;Default&amp;#34; # Set the vault name; if anything but &amp;#39;default&amp;#39;, a vault will be created with the name specified and the encryption key below. encryption_key: &amp;#34;Default&amp;#34; # An Amazon Resource Name (ARN) that identifies the encryption key to use in the copy region.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -183,7 +193,7 @@ Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</guid>
       <description>AWS EFS Creates or update an EFS volume.
-Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false </description>
+Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false backup: &amp;#34;{{ _infra_name }}-{{ _env_type }}&amp;#34; # Name of the AWS Backup plan to use to backup the instance.</description>
     </item>
     
     <item>
@@ -254,7 +264,7 @@ Default variables aws_s3_bucket: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#3
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns/</guid>
       <description>AWS SNS Creates an SNS topic and subscription.
-Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topic. region: &amp;#34;eu-west-2&amp;#34; # The region to create the SNS topic. display_name: &amp;#34;&amp;#34; # Display name for the topic, for when the topic is owned by this AWS account. delivery_policy_default_healthy_retry_policy_min_delay_target: 20 delivery_policy_default_healthy_retry_policy_max_delay_target: 20 delivery_policy_default_healthy_retry_policy_num_retries: 3 delivery_policy_default_healthy_retry_policy_num_max_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_no_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_min_delay_retries: 0 delivery_policy_default_healthy_retry_policy_backoff_function: &amp;#34;linear&amp;#34; delivery_policy_disable_subscription_overrides: false subscriptions: [] # A list of subscriptions. # subscriptions: # - endpoint: &amp;#34;admin@example.</description>
+Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topic. region: &amp;#34;eu-west-2&amp;#34; # The region to create the SNS topic. display_name: &amp;#34;&amp;#34; # Display name for the topic, for when the topic is owned by this AWS account. purge_subscriptions: true # Purge subscriptions not specified in the subscriptions list. policy: &amp;#34;&amp;#34; # A dictionary containing the policy to use when creating the topic delivery_policy_default_healthy_retry_policy_min_delay_target: 20 delivery_policy_default_healthy_retry_policy_max_delay_target: 20 delivery_policy_default_healthy_retry_policy_num_retries: 3 delivery_policy_default_healthy_retry_policy_num_max_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_no_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_min_delay_retries: 0 delivery_policy_default_healthy_retry_policy_backoff_function: &amp;#34;linear&amp;#34; delivery_policy_disable_subscription_overrides: false subscriptions: [] # A list of subscriptions.</description>
     </item>
     
     <item>

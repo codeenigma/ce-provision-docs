@@ -180,6 +180,7 @@
       <span style="color:#66d9ef">subscriptions</span>:
         - <span style="color:#66d9ef">endpoint</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
           <span style="color:#66d9ef">protocol</span>: <span style="color:#e6db74">&#34;email&#34;</span>
+    <span style="color:#66d9ef">backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Whether to back up the RDS instance. Set to the plan you want to use, or an empty string if you don&#39;t want to back up.</span>
   <span style="color:#75715e"># Add an CNAM record tied to the ALB.</span>
   <span style="color:#75715e"># Set the zone to empty to skip.</span>
   <span style="color:#66d9ef">route_53</span>:
@@ -194,6 +195,7 @@
   <span style="color:#66d9ef">alb_ssl_policy</span>: <span style="color:#e6db74">&#34;ELBSecurityPolicy-TLS-1-2-2017-01&#34;</span> <span style="color:#75715e"># Sets the ALB SSL policy to only accect TLSv1.2 and apply more secure ciphers.</span>
   <span style="color:#66d9ef">efs</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to create an EFS volume.</span>
   <span style="color:#66d9ef">efs_encrypt</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EFS volume</span>
+  <span style="color:#66d9ef">efs_backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Whether to back up the EFS volume. Set to the plan you want to use, or an empty string if you don&#39;t want to back up.</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -223,6 +225,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup">AWS Backup</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>

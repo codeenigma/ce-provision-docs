@@ -39,6 +39,7 @@
     <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
     <span style="color:#66d9ef">wildcard</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Creates a matching wildcard CNAME</span>
   <span style="color:#66d9ef">autorecover</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Creates an EC2 autorecovery alarm to recover the machine if a system failure occurs.</span>
+  <span style="color:#66d9ef">backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Name of the AWS Backup plan to use to backup the instance.</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -68,6 +69,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup">AWS Backup</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
