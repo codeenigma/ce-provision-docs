@@ -449,7 +449,7 @@ Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner/</guid>
       <description>Gitlab Runner Install the Gitlab Runner binary from .deb package.
-Default variables </description>
+The role installs the gitlab-runner package on the target server and installs a default built in shell runner, though you will need to create the registration token for the runner and add it to your variables. You can define one or more runners as a list of dicts as shown below. You can also set gitlab_runner.runners to an empty list if you do not want to override the default config shipped with the Debian package.</description>
     </item>
     
     <item>
