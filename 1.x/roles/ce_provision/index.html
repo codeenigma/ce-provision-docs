@@ -15,7 +15,7 @@
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#66d9ef">_ce_provision</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}provision{% endif %}&#34;</span>
+  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&#34;</span>
 
 <span style="color:#66d9ef">ce_provision</span>:
   <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_provision.username }}&#34;</span>
@@ -101,7 +101,6 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
