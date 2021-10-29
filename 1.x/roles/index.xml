@@ -17,7 +17,7 @@
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init/</guid>
       <description>Init role This is meant to ALWAYS be included as the first task of a play.
-Default variables --- _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}provision{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-provision.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; extra_repository: &amp;#34;&amp;#34; extra_repository_branch: &amp;#34;master&amp;#34; extra_repository_vars_file: &amp;#34;custom.yml&amp;#34; extra_repository_allowed_vars: [] local_dir: &amp;#34;/home/{{ _ce_provision.username }}/ce-provision&amp;#34; _init: # A list of var directories to include. We only support .</description>
+Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] </description>
     </item>
     
     <item>
