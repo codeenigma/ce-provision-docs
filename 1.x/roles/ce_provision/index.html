@@ -14,35 +14,8 @@
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#66d9ef">_ce_provision</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&#34;</span>
-
-<span style="color:#66d9ef">ce_provision</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_provision.username }}&#34;</span>
-  <span style="color:#75715e"># Main repo.</span>
-  <span style="color:#66d9ef">own_repository</span>: <span style="color:#e6db74">&#34;https://github.com/codeenigma/ce-provision.git&#34;</span>
-  <span style="color:#66d9ef">own_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">own_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#75715e"># Destination.</span>
-  <span style="color:#66d9ef">local_dir</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision.username }}/ce-provision&#34;</span>
-  <span style="color:#75715e"># Private config repo.</span>
-  <span style="color:#66d9ef">config_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">config_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">config_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#75715e"># Extra config repo.</span>
-  <span style="color:#66d9ef">extra_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">extra_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">extra_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">extra_repository_vars_file</span>: <span style="color:#e6db74">&#34;custom.yml&#34;</span>
-  <span style="color:#75715e"># Wether to commit back changes to extra repo.</span>
-  <span style="color:#66d9ef">extra_repository_push</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">extra_repository_allowed_vars</span>: []
-  <span style="color:#75715e"># List of additional groups to add the user to.</span>
-  <span style="color:#66d9ef">groups</span>: []
-  <span style="color:#75715e"># File containing default roles and collections to install via Ansible Galaxy.</span>
-  <span style="color:#75715e"># Roles will be installed to $HOME/.ansible/roles for the provision user. This roles path should be added to your ansible.cfg file.</span>
-  <span style="color:#66d9ef">galaxy_custom_requirements_file</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision.username }}/ce-provision/config/files/galaxy-requirements.yml&#34;</span>
-
+<span style="color:#75715e"># See roles/_init/defaults/main.yml for variables</span>
+<span style="color:#75715e"># All ce_provision variables should be set in _init</span>
 </code></pre></div><!-- raw HTML omitted -->
 
     </article>

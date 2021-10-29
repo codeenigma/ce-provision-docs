@@ -17,7 +17,7 @@
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init/</guid>
       <description>Init role This is meant to ALWAYS be included as the first task of a play.
-Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] </description>
+Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] # ce_provision vars are sometimes needed even when the role isn&amp;#39;t used so we define them here _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.</description>
     </item>
     
     <item>
@@ -343,7 +343,7 @@ Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined a
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</guid>
       <description>ce-provision Installs Code Enigma&amp;rsquo;s infrastructure management stack on a server.
-Default variables --- _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.username }}&amp;#34; # Main repo. own_repository: &amp;#34;https://github.com/codeenigma/ce-provision.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; own_repository_skip_checkout: false # Destination. local_dir: &amp;#34;/home/{{ _ce_provision.username }}/ce-provision&amp;#34; # Private config repo. config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; config_repository_skip_checkout: false # Extra config repo. extra_repository: &amp;#34;&amp;#34; extra_repository_branch: &amp;#34;master&amp;#34; extra_repository_skip_checkout: false extra_repository_vars_file: &amp;#34;custom.yml&amp;#34; # Wether to commit back changes to extra repo.</description>
+Default variables --- # See roles/_init/defaults/main.yml for variables # All ce_provision variables should be set in _init </description>
     </item>
     
     <item>
