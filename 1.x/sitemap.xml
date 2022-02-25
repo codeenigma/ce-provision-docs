@@ -64,7 +64,11 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami/</loc>
   </url>
   
   <url>
@@ -160,19 +164,11 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</loc>
-  </url>
-  
-  <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</loc>
   </url>
   
   <url>
@@ -240,11 +236,15 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config/</loc>
   </url>
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer/</loc>
   </url>
   
   <url>

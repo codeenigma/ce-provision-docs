@@ -17,7 +17,7 @@
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init/</guid>
       <description>Init role This is meant to ALWAYS be included as the first task of a play.
-Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] # ce_provision vars are sometimes needed even when the role isn&amp;#39;t used so we define them here _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.</description>
+Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] force_play: false # ce_provision vars are sometimes needed even when the role isn&amp;#39;t used so we define them here. # If you are using ce_provision and *not* using _init you can copy these vars to your playbook.</description>
     </item>
     
     <item>
@@ -98,13 +98,24 @@ Default variables --- apt_extra_packages: [] </description>
     
     <item>
       <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</link>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster/</guid>
-      <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm/</guid>
+      <description>AWS Certificate Manager Fork from https://github.com/FairwindsOps/ansible-acm
+Creates AWS certificate requests. Allows for passing a validation domain. From the AWS documentation :
+ To ensure that email is sent to the administrative addresses for an apex domain, such as example.com, rather than to the administrative addresses for a subdomain, such as test.example.com, specify the ValidationDomain option in the RequestCertificate API or the request-certificate AWS CLI command. This feature is not currently supported in the console.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami/</guid>
+      <description>AWS AMI Creates an image from a selected base with Packer, provisioned with an Ansible Playbook.
 Dependencies This requires boto and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.
-Default variables --- ami_debian_buster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: us-east-2 instance_type: t2.micro ami_name: &amp;#34;example&amp;#34; encrypt_boot: false playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image. # Operation can be one of: # - create: delete existing image if any and re-create a new one.</description>
+Default variables --- aws_ami: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t2.micro virtualization_type: hvm root_device_type: ebs name_filter: &amp;#34;debian-10-amd64-*&amp;#34; ami_name: &amp;#34;example&amp;#34; owner: &amp;#34;136693071363&amp;#34; # Global AWS account ID of owner, defaults to Debian official encrypt_boot: false playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image.</description>
     </item>
     
     <item>
@@ -144,7 +155,7 @@ Default variables --- aws_cloudfront_distribution: aws_profile: &amp;#34;{{ _aws
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group/</guid>
       <description>Cloudwatch log group Manage log groups states and retention policies.
-Default variables --- aws_cloudwatch_log_group: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;eu-west-3&amp;#34; tags: {} state: present # Number of days to keep logs, in days. # Valid values are: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653] retention: 365 # Group names to apply the policy to. log_group_names: - &amp;#34;syslog&amp;#34; - &amp;#34;auth&amp;#34; </description>
+Default variables --- aws_cloudwatch_log_group: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; tags: {} state: present # Number of days to keep logs, in days. # Valid values are: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653] retention: 365 # Group names to apply the policy to. log_group_names: - &amp;#34;syslog&amp;#34; - &amp;#34;auth&amp;#34; </description>
     </item>
     
     <item>
@@ -163,7 +174,7 @@ Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
-      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: &amp;#34;example&amp;#34; vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.0.3.0/26&amp;#34; - az: b cidr_block: &amp;#34;10.0.3.64/26&amp;#34; # Name of a public subnet in the same AZ. public_subnet: public-b - az: c cidr_block: &amp;#34;10.0.3.128/26&amp;#34; public_subnet: public-c instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
+      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.0.3.0/26&amp;#34; - az: b cidr_block: &amp;#34;10.0.3.64/26&amp;#34; # Name of a public subnet in the same AZ. public_subnet: public-b - az: c cidr_block: &amp;#34;10.0.3.128/26&amp;#34; public_subnet: public-c instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
     </item>
     
     <item>
@@ -182,8 +193,8 @@ Default variables --- aws_ec2_metric_alarm: aws_profile: &amp;#34;{{ _aws_profil
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</guid>
-      <description>AMI Debian Buster Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.
-Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ _domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
+      <description>EC2 instance with EIP Creates a new EC2 instance at AWS with a static IP address.
+Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ _domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
     </item>
     
     <item>
@@ -193,7 +204,7 @@ Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</guid>
       <description>AWS EFS Creates or update an EFS volume.
-Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false backup: &amp;#34;{{ _infra_name }}-{{ _env_type }}&amp;#34; # Name of the AWS Backup plan to use to backup the instance.</description>
+Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false backup: &amp;#34;{{ _infra_name }}-{{ _env_type }}&amp;#34; # Name of the AWS Backup plan to use to backup the instance.</description>
     </item>
     
     <item>
@@ -203,7 +214,7 @@ Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
       <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
-Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # _netdev tells OS to wait for network before attempting to mount state: present owner: root group: root </description>
+Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # _netdev tells OS to wait for network before attempting to mount state: present owner: root group: root </description>
     </item>
     
     <item>
@@ -213,7 +224,7 @@ Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&a
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</guid>
       <description>AWS IAM EC2 Set up an IAM role, with basic document/trust policy.
-Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Current options are &amp;#39;ec2&amp;#39; or &amp;#39;ecs&amp;#39; policy_document: ec2 purge_policies: true # set to false if you want to add policies to an existing role tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
+Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Current options are &amp;#39;ec2&amp;#39;, &amp;#39;ecs&amp;#39; or &amp;#39;backup&amp;#39; policy_document: ec2 purge_policies: true # set to false if you want to add policies to an existing role tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
     </item>
     
     <item>
@@ -234,7 +245,7 @@ Variables are generic for AWS SAML configuration up until the saml_metadata_docu
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair/</guid>
       <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;
-Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
+Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
     </item>
     
     <item>
@@ -244,7 +255,8 @@ Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_p
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds/</guid>
       <description>AWS RDS Creates an RDS instance and associated ressources.
-Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 multi_az: true subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb name: example tags: {} db_instance_class: db.m5.large state: present description: example engine: mariadb # engine_version: &amp;#39;5.7.2&amp;#39; # Omit to use latest. allocated_storage: 100 # Initial size in GB. Minimum is 100. max_allocated_storage: 1000 # Max size in GB for autoscaling. storage_encrypted: false # Whether to encrypt the RDS instance or not.</description>
+If the engine variable is set to aurora-mysql, you&amp;rsquo;ll need to manually create the Aurora cluster first. Typically, a controller will already exist, so something like this can be run from the controller:
+AWS_PROFILE=example aws rds create-db-cluster --db-cluster-identifier example-aurora-cluster --engine aurora-mysql --engine-version 5.7.mysql_aurora.2.10.2 --db-subnet-group-name example-aurora --vpc-security-group-ids sg-abcdefghijklmnop --storage-encrypted --master-username &amp;quot;auroradev&amp;quot; --master-user-password &amp;quot;aurora12345&amp;quot; You&amp;rsquo;ll need to have created the subnet group first as well as the security groups.</description>
     </item>
     
     <item>
@@ -254,7 +266,7 @@ Default variables aws_rds: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket/</guid>
       <description>AWS S3 Bucket Creates an S3 bucket and a matching policy.
-Default variables aws_s3_bucket: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: &amp;#34;example&amp;#34; tags: Name: &amp;#34;example&amp;#34; state: &amp;#34;present&amp;#34; _result: {} </description>
+Default variables aws_s3_bucket: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; tags: Name: &amp;#34;example&amp;#34; state: &amp;#34;present&amp;#34; _result: {} </description>
     </item>
     
     <item>
@@ -264,7 +276,7 @@ Default variables aws_s3_bucket: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#3
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns/</guid>
       <description>AWS SNS Creates an SNS topic and subscription.
-Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topic. region: &amp;#34;eu-west-2&amp;#34; # The region to create the SNS topic. display_name: &amp;#34;&amp;#34; # Display name for the topic, for when the topic is owned by this AWS account. purge_subscriptions: true # Purge subscriptions not specified in the subscriptions list. policy: &amp;#34;&amp;#34; # A dictionary containing the policy to use when creating the topic delivery_policy_default_healthy_retry_policy_min_delay_target: 20 delivery_policy_default_healthy_retry_policy_max_delay_target: 20 delivery_policy_default_healthy_retry_policy_num_retries: 3 delivery_policy_default_healthy_retry_policy_num_max_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_no_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_min_delay_retries: 0 delivery_policy_default_healthy_retry_policy_backoff_function: &amp;#34;linear&amp;#34; delivery_policy_disable_subscription_overrides: false subscriptions: [] # A list of subscriptions.</description>
+Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topic. region: &amp;#34;{{ _aws_region }}&amp;#34; # The region to create the SNS topic. display_name: &amp;#34;&amp;#34; # Display name for the topic, for when the topic is owned by this AWS account. purge_subscriptions: true # Purge subscriptions not specified in the subscriptions list. policy: &amp;#34;&amp;#34; # A dictionary containing the policy to use when creating the topic delivery_policy_default_healthy_retry_policy_min_delay_target: 20 delivery_policy_default_healthy_retry_policy_max_delay_target: 20 delivery_policy_default_healthy_retry_policy_num_retries: 3 delivery_policy_default_healthy_retry_policy_num_max_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_no_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_min_delay_retries: 0 delivery_policy_default_healthy_retry_policy_backoff_function: &amp;#34;linear&amp;#34; delivery_policy_disable_subscription_overrides: false subscriptions: [] # A list of subscriptions.</description>
     </item>
     
     <item>
@@ -274,7 +286,7 @@ Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topi
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: {} #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
+Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: {} #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
     </item>
     
     <item>
@@ -284,7 +296,7 @@ Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route/</guid>
       <description>Update main route for a given VPC This will add/update routes on the &amp;ldquo;main&amp;rdquo; route table for a given VPC, leaving existing routes for different CIDR blocks intact.
-Default variables # @todo Support associating route with several subnets. aws_vpc_route: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 # Beware when calling this on &amp;#34;peering&amp;#34; routes, not to override tags with the target peer&amp;#39;s one. # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # subnet_id: subnet-XXX # Optional.</description>
+Default variables # @todo Support associating route with several subnets. aws_vpc_route: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; # Beware when calling this on &amp;#34;peering&amp;#34; routes, not to override tags with the target peer&amp;#39;s one. # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # subnet_id: subnet-XXX # Optional.</description>
     </item>
     
     <item>
@@ -294,7 +306,7 @@ Default variables # @todo Support associating route with several subnets. aws_vp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: eu-west-3 subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with the subnets. # @todo IPV6 nat_ipv4: false name: example. # Wether to create a dedicated security group allowing internal traffic. security_group: false tags: {} #Type: &amp;#34;util&amp;#34; state: present </description>
+Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with the subnets. # @todo IPV6 nat_ipv4: false name: example. # Wether to create a dedicated security group allowing internal traffic. security_group: false tags: {} #Type: &amp;#34;util&amp;#34; state: present </description>
     </item>
     
     <item>
@@ -314,7 +326,7 @@ Default variables --- aws_cloudwatch_agent: # Stream name. log_stream_name: &amp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent/</guid>
       <description>AWS SSM agent Install and configure the SSM agent.
-Default variables --- aws_ssm_agent: region: &amp;#34;eu-west-2&amp;#34; </description>
+Default variables --- aws_ssm_agent: region: &amp;#34;{{ _aws_region }}&amp;#34; </description>
     </item>
     
     <item>
@@ -338,41 +350,22 @@ Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined a
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher/</guid>
+      <description>Automated patching Runs automated patching for apt-based package management systems.
+Default variables --- ce_patcher: username: controller reboot: false </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</guid>
       <description>ce-provision Installs Code Enigma&amp;rsquo;s infrastructure management stack on a server.
 Default variables --- # See roles/_init/defaults/main.yml for variables # All ce_provision variables should be set in _init </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan/</guid>
-      <description>ClamAV Clamscan Configuration This role will install the ClamAV base package which will allow us to run clamscan on demand and email scan reports to an email address. NOTE: This approach will not install clamd. Check the clamav_daemon role if this is what you are looking for.
-Default variables --- # defaults file for clamav clamav_clamscan: email: &amp;#34;admins@example.com&amp;#34; schedule: &amp;#34;0 0 * * *&amp;#34; path: &amp;#34;/var/www&amp;#34; </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon/</guid>
-      <description>ClamAV Daemon Configuration This role will install the ClamAV daemon. If you want to install clamscan and generate reports check the clamav_clamscan role.
-Default variables --- # defaults file for clamav clamav_daemon: host: &amp;#34;127.0.0.1&amp;#34; port: &amp;#34;3310&amp;#34; </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall/</guid>
-      <description>UFW Firewall Default variables --- # rules: # - { [port: &amp;#34;&amp;#34;] [rule: allow] [proto: any] [from_ip: any] [to_ip: any] [comment: &amp;#39;rule comment&amp;#39;]} # # https://docs.ansible.com/ansible/latest/modules/ufw_module.html#parameters # firewall: # Define any custom rule. rules: [] # - { to_ip: any, direction: out, port: &amp;#39;123&amp;#39;, rule: &amp;#39;allow&amp;#39;, proto: udp, comment: &amp;#39;Allow outgoing NTP&amp;#39; } # - { from_ip: any, direction: in, port: &amp;#39;53&amp;#39;, rule: &amp;#39;allow&amp;#39;, comment: &amp;#39;Allow DNS&amp;#39; } input_policy: DROP output_policy: ACCEPT forward_policy: ACCEPT application_policy: SKIP ipv6: &amp;#34;yes&amp;#34; ipt_modules: &amp;#34;nf_conntrack_ftp nf_nat_ftp nf_conntrack_netbios_ns&amp;#34; nat: false # Defaults IPs to whitelist.</description>
     </item>
     
     <item>
@@ -422,7 +415,7 @@ The role installs the gitlab-runner package on the target server and installs a 
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key/</guid>
       <description>GPG Key Generates a passwordless GPG key for a given user or users.
-Default variables --- gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
+Default variables --- gpg_key_servers: - hkps://pgp.mit.edu - hkps://keys.openpgp.org gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
     </item>
     
     <item>
@@ -501,7 +494,7 @@ export DISPLAY=:99 Here is an example lighthouserc.yml file for running lhci in 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</guid>
-      <description>MariaDB Client Default variables --- # @todo do we want to support percona client ? mysql_client: client: &amp;#34;mysql-client&amp;#34; host: &amp;#34;rds.example.com&amp;#34; user: &amp;#34;user&amp;#34; password: &amp;#34;password&amp;#34; </description>
+      <description>MariaDB Client Default variables --- # @todo do we want to support percona client ? mysql_client: client: &amp;#34;mysql-client&amp;#34; host: &amp;#34;rds.example.com&amp;#34; user: &amp;#34;user&amp;#34; password: &amp;#34;password&amp;#34; creds_file_dest: &amp;#34;/home/{{ user_deploy.username }}/.mysql.creds&amp;#34; creds_file_owner: &amp;#34;{{ user_deploy.username }}&amp;#34; creds_file_group: &amp;#34;{{ user_deploy.username }}&amp;#34; </description>
     </item>
     
     <item>
@@ -536,13 +529,12 @@ Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#
     
     <item>
       <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn/</link>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn/</guid>
-      <description>openvpn  Install and configure openvpn server or client on your system.
-   GitHub GitLab Quality Downloads Version                       Example Playbook  This example is taken from molecule/resources/converge.yml and is tested on each push, pull request and release.
---- - name: Converge hosts: all become: yes gather_facts: yes tasks: - name: create openvpn server ansible.</description>
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config/</guid>
+      <description>OpenVPN Config This role is used to install an OpenVPN server with an Ansible Galaxy role and corresponding configuration afterwards. The Galaxy role is here:
+ https://galaxy.ansible.com/robertdebock/openvpn  Default variables --- openvpn_config: install: true # set to false if we do not want to overwrite the existing VPN certs # Defaults from https://github.com/robertdebock/ansible-role-openvpn/blob/master/vars/main.yml configuration_directory: /etc/openvpn easyrsa_path: /usr/share/easy-rsa service: &amp;#34;openvpn@server&amp;#34; server_ip_range: &amp;#34;server 10.8.0.0 255.255.255.0&amp;#34; # Additional options force_redirect_gateway: true compress: true no_client_cert: true custom_directives: [] # optional list of directives, i.</description>
     </item>
     
     <item>
@@ -553,6 +545,16 @@ Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</guid>
       <description>OSSEC The ossec role is used to install ossec server or client.
 Default variables --- # defaults file for ossec ossec: client: true serverip: &amp;#34;123.123.123.123&amp;#34; #auth_password should be 32 chars, lowercase letters and numbers, no symbols auth_password: &amp;#34;xxx&amp;#34; global: email_notification: &amp;#34;yes&amp;#34; email_to: &amp;#34;admin@example.com&amp;#34; smtp_server: &amp;#34;mail.google.com&amp;#34; email_from: &amp;#34;admin@example.com&amp;#34; white_list: - &amp;#34;8.8.8.8&amp;#34; - &amp;#34;4.4.4.4&amp;#34; alerts: log_alert_level: 1 email_alert_level: 7 email_alerts: email_to: &amp;#34;admin@example.com&amp;#34; level: 14 ssl: domain: &amp;#34;ossec.example.com&amp;#34; handling: &amp;#34;selfsigned&amp;#34; syscheck: frequency: 79200 directories: - /etc - /usr/bin - /usr/sbin - /bin - /sbin ignore: - /etc/mtab - /etc/mnttab - /etc/hosts.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer/</guid>
+      <description>PHP Composer This role is used to install the Composer package manager for PHP. It wraps the Galaxy role from Jeff Geerling which can be found here:
+ https://github.com/geerlingguy/ansible-role-composer  Default variables php_composer: # Abstractions of default variables which can be found here: # https://github.com/geerlingguy/ansible-role-composer/blob/master/defaults/main.yml version: &amp;#39;1.8.4&amp;#39; # Buster apt package is &amp;#39;Composer 1.8.4 2019-02-11 10:52:10&amp;#39; keep_updated: false version_branch: &amp;#39;&amp;#39; github_oauth_token: &amp;#39;&amp;#39; </description>
     </item>
     
     <item>

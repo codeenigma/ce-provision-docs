@@ -7,8 +7,8 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="ami-debian-buster">AMI Debian Buster</h1>
-<p>Creates an image from Debian Buster base with Packer, provisioned with an Ansible Playbook.</p>
+        <h1 id="ec2-instance-with-eip">EC2 instance with EIP</h1>
+<p>Creates a new EC2 instance at AWS with a static IP address.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
@@ -16,15 +16,18 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#66d9ef">aws_ec2_with_eip</span>:
   <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
-  <span style="color:#66d9ef">region</span>: eu-west<span style="color:#ae81ff">-3</span>
+  <span style="color:#66d9ef">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
   <span style="color:#66d9ef">instance_type</span>: t2.micro
   <span style="color:#66d9ef">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span> <span style="color:#75715e"># This needs to match your &#34;provision&#34; user SSH key.</span>
   <span style="color:#66d9ef">ami_name</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span> <span style="color:#75715e"># The name of an AMI image to use. Image must exists in the same region.</span>
   <span style="color:#66d9ef">ami_owner</span>: self <span style="color:#75715e"># Default to self-created image.</span>
-  <span style="color:#66d9ef">vpc_subnet_id</span>: subnet-xxx
+  <span style="color:#75715e"># vpc_subnet_id: subnet-xxx # One of vpc_subnet_id or vpc_name + vpc_subnet_profile is mandatory.</span>
+  <span style="color:#66d9ef">vpc_name</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}&#34;</span>
+  <span style="color:#66d9ef">vpc_subnet_profile</span>: core <span style="color:#75715e"># if you are looking up subnets we need a Profile tag to search against</span>
   <span style="color:#75715e"># An IAM Role name to associate with the instance.</span>
   <span style="color:#66d9ef">iam_role_name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
-  <span style="color:#66d9ef">state</span>: present
+  <span style="color:#66d9ef">state</span>: started
+  <span style="color:#66d9ef">termination_protection</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to disable termination and avoid accidents</span>
   <span style="color:#66d9ef">instance_name</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
   <span style="color:#66d9ef">root_volume_size</span>: <span style="color:#ae81ff">80</span>
   <span style="color:#66d9ef">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
@@ -34,6 +37,7 @@
   <span style="color:#75715e"># Add an A record tied to the EIP.</span>
   <span style="color:#75715e"># Set the zone to empty to skip.</span>
   <span style="color:#66d9ef">route_53</span>:
+    <span style="color:#66d9ef">state</span>: present
     <span style="color:#66d9ef">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
     <span style="color:#66d9ef">record</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
     <span style="color:#66d9ef">aws_profile</span>: another <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
@@ -47,7 +51,7 @@
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#ami-debian-buster">AMI Debian Buster</a>
+    <li><a href="#ec2-instance-with-eip">EC2 instance with EIP</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>
@@ -63,20 +67,13 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
 <li><a href="roles">Roles</a>
 <ul>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
-<ul>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
-</ul>
-</li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/ami_debian_buster">AMI Debian Buster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm">AWS Certificate Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami">AWS AMI</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup">AWS Backup</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
@@ -84,9 +81,9 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">AMI Debian Buster</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
@@ -98,32 +95,40 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
 </ul>
 </li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
-<li>[<a href="#openvpn">openvpn</a>](/roles/openvpn)</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>

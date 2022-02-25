@@ -7,41 +7,23 @@
   
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
-        <h1 id="lhci">LHCI</h1>
-<p>Installs the LHCI CLI for automated accessibility and performance testing. See <a href="https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/getting-started.md">https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/getting-started.md</a></p>
-<p>The role installs <code>Xvfb</code> for &lsquo;headful&rsquo; running of Google Chome. This is preconfigured to run in the background with a display ID of 99, so you should run this command before running any <code>lhci</code> tests to ensure Chrome has an X session to run in:</p>
-<pre><code>export DISPLAY=:99
-</code></pre><p>Here is an example <code>lighthouserc.yml</code> file for running <code>lhci</code> in a local <code>ce-dev</code> container on a project called &lsquo;example&rsquo;:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">ci</span>:
-  <span style="color:#66d9ef">collect</span>:
-    <span style="color:#66d9ef">url</span>:
-      - https://www.example.local/
-    <span style="color:#66d9ef">settings</span>:
-      <span style="color:#66d9ef">chromeFlags</span>:
-        - <span style="color:#e6db74">&#34;--no-sandbox&#34;</span>
-        - <span style="color:#e6db74">&#34;--ignore-certificate-errors&#34;</span>
-      <span style="color:#66d9ef">output</span>: <span style="color:#e6db74">&#34;html&#34;</span>
-    <span style="color:#66d9ef">numberOfRuns</span>: <span style="color:#ae81ff">1</span>
-    <span style="color:#66d9ef">headful</span>: <span style="color:#66d9ef">true</span>
-  <span style="color:#66d9ef">upload</span>:
-    <span style="color:#66d9ef">outputDir</span>: <span style="color:#e6db74">&#34;./reports&#34;</span>
-    <span style="color:#66d9ef">target</span>: <span style="color:#e6db74">&#34;filesystem&#34;</span>
-</code></pre></div><p>Using this example and executing <code>lhci collect &amp;&amp; lhci upload</code> in the same directory will make it run a test against <a href="https://www.example.local/">https://www.example.local/</a> and store the report files in <code>./reports</code> relative to <code>lighthouserc.yml</code>.</p>
-<p>You can enable VNC support for an environment by setting the <code>lhci.enable_vnc</code> variable to <code>true</code> which will install the <code>x11vnc</code> package on the target machine. Once this is installed, you can either manually or with CI export your <code>Xvfb</code> display from that machine like so:</p>
-<pre><code>x11vnc -display :99 &amp;
-</code></pre><p>Note, this is not protected and should not be enabled in general. See also the ce-deploy CI counterpart: <a href="https://github.com/codeenigma/ce-deploy/tree/1.x/roles/lhci_run">https://github.com/codeenigma/ce-deploy/tree/1.x/roles/lhci_run</a></p>
+        <h1 id="automated-patching">Automated patching</h1>
+<p>Runs automated patching for apt-based package management systems.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-<span style="color:#66d9ef">lhci</span>:
-  <span style="color:#66d9ef">enable_vnc</span>: <span style="color:#66d9ef">false</span>
+<span style="color:#66d9ef">ce_patcher</span>:
+  <span style="color:#66d9ef">username</span>: controller
+  <span style="color:#66d9ef">reboot</span>: <span style="color:#66d9ef">false</span>
 </code></pre></div><!-- raw HTML omitted -->
 
     </article>
     <aside>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#lhci">LHCI</a>
+    <li><a href="#automated-patching">Automated patching</a>
       <ul>
         <li><a href="#default-variables">Default variables</a></li>
       </ul>
