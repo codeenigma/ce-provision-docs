@@ -79,6 +79,16 @@ Default variables --- _overrides: # A list of files to override. files: [] # fil
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache/</guid>
+      <description>APACHE Install and configure the apache webserver.
+Default variables --- php: version: - 7.2 symfony_env: &amp;#34;{{ _env_type }}&amp;#34; apache: # Global default config for apache2.conf. user: www-data mods_enabled: - rewrite - ssl - proxy - proxy_fcgi - fcgid http: server_names_hash_bucket_size: 256 access_log: /var/log/apache2-access.log error_log: /var/log/apache2-error.log error_log_level: &amp;#34;notice&amp;#34; # Group prefix. Useful for grouping by environments. log_group_prefix: &amp;#34;&amp;#34; # Main log stream for apache (Cloudwatch). log_stream_name: example # We can only have one backend, due to the way we use &amp;#34;common&amp;#34; templates.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -115,7 +125,8 @@ Creates AWS certificate requests. Allows for passing a validation domain. From t
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami/</guid>
       <description>AWS AMI Creates an image from a selected base with Packer, provisioned with an Ansible Playbook.
 Dependencies This requires boto and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.
-Default variables --- aws_ami: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t2.micro virtualization_type: hvm root_device_type: ebs name_filter: &amp;#34;debian-10-amd64-*&amp;#34; ami_name: &amp;#34;example&amp;#34; owner: &amp;#34;136693071363&amp;#34; # Global AWS account ID of owner, defaults to Debian official encrypt_boot: false playbook_file: &amp;#34;{{ playbook_dir }}/base-playbook.yml&amp;#34; # Path to a playbook used to provision the image.</description>
+If using the &amp;lsquo;repack&amp;rsquo; operation, so your new AMI gets created from a temporary EC2 instance instead built by Packer, your playbook hosts line will need to look like this:
+- hosts: &amp;#34;{{ _aws_ami_host | default(&amp;#39;default&amp;#39;) }}&amp;#34; become: true Like that it will use _aws_ami_host if available and default to default if not, which is the value expected by Packer for the &amp;lsquo;create&amp;rsquo; operation.</description>
     </item>
     
     <item>
@@ -174,7 +185,7 @@ Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
-      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.0.3.0/26&amp;#34; - az: b cidr_block: &amp;#34;10.0.3.64/26&amp;#34; # Name of a public subnet in the same AZ. public_subnet: public-b - az: c cidr_block: &amp;#34;10.0.3.128/26&amp;#34; public_subnet: public-c instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
+      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; state: present acm: create_cert: false extra_domains: [] # list of Subject Alternative Name domains and zones # - domain: www2.example.com # zone: example.com # aws_profile: us-east-1 route_53: aws_profile: another # the zone might not be in the same account as the certificate zone: example.com vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.</description>
     </item>
     
     <item>
@@ -194,7 +205,7 @@ Default variables --- aws_ec2_metric_alarm: aws_profile: &amp;#34;{{ _aws_profil
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</guid>
       <description>EC2 instance with EIP Creates a new EC2 instance at AWS with a static IP address.
-Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t2.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ _domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
+Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t3.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ _domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
     </item>
     
     <item>
@@ -395,7 +406,7 @@ Default variables --- frontail: error_log: &amp;#34;/var/log/nginx-error.log&amp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</guid>
       <description>Gitlab Configuration Because of the size of the gitlab.rb file, it is impractical to try to parameterized it. Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &amp;ldquo;override&amp;rdquo; system and provide a custom template.
-Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ _domain_name }}&amp;#34; ssl: # @see the &amp;#39;ssl&amp;#39; role. Note that domain is autopopulated from server_name above.</description>
+Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ _domain_name }}&amp;#34; letsencrypt: &amp;#34;true&amp;#34; # use built-in GitLab LetsEncrypt support by default ssl: # @see the &amp;#39;ssl&amp;#39; role.</description>
     </item>
     
     <item>
@@ -485,7 +496,7 @@ export DISPLAY=:99 Here is an example lighthouserc.yml file for running lhci in 
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync/</guid>
       <description>Mount sync Syncronize some &amp;ldquo;mounted&amp;rdquo; filesystems with the local one. Typically used for EFS/NFS mounts on autoscale clusters. It will:
- perform an initial rsync using a cloud-init script use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment)   Default variables --- mount_sync: # A list of target/destination definitions. sync_pairs: - src: /my/path/to/sync dest: /another/path/to/sync minute: &amp;#34;*/10&amp;#34; name: example owner: root group: root tarballs: - /path/to/initial/seed.</description>
+ perform an initial rsync using a cloud-init script use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment)   Default variables --- mount_sync: # A list of target/destination definitions. sync_pairs: - src: /my/path/to/sync dest: /another/path/to/sync minute: &amp;#34;*/10&amp;#34; name: example owner: root group: root deploy_dir: &amp;#34;/home/{{ user_deploy.</description>
     </item>
     
     <item>
@@ -524,7 +535,7 @@ Default variables --- nodejs: version: 12.x </description>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</guid>
       <description>opcache Installs and configures gordalina&amp;rsquo;s cache tool: https://github.com/gordalina/cachetool
-Default variables --- # defaults file for opcache opcache: host: &amp;#34;&amp;#34; port: &amp;#34;&amp;#34; </description>
+Default variables --- # defaults file for opcache opcache: cachetool_version: latest # enter three-digit version number, e.g. &amp;#34;7.0.0&amp;#34;, to install a specific version host: &amp;#34;&amp;#34; port: &amp;#34;&amp;#34; </description>
     </item>
     
     <item>
@@ -622,7 +633,8 @@ Default variables --- rsyslog: listen_port: 514 # Either client or server. role:
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl/</guid>
       <description>SSL Manages SSL certificates.
-Default variables --- ssl: domain: www.example.com # Handling for certs, can be one of: # - letsencrypt: Generates individual LetsEncrypt certificate using the HTTP challenge # - selfsigned: Generates self-signed certificates # - manual: Use provided certificates. Requires key/cert. # - unmanaged: Doesn&amp;#39;t do anything. Note that for consistency reasons, key/cert paths are still needed. handling: selfsigned # For &amp;#34;manual&amp;#34; handling, this is the content of the certificate.</description>
+If you are using LetsEncrypt for handling it assume standalone mode. If you want to do DNS validation, please do not use this role at this time. There are a few pre-requisites for standalone mode to work:
+ You must have firewalls open to allow traffic to ports 80 and/or 443, regardless of your configuration LetsEncrypt&amp;rsquo;s certbot application will try to use port 80, if this will not be possible you can either:  change ssl.</description>
     </item>
     
     <item>

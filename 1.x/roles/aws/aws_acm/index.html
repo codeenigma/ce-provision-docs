@@ -16,6 +16,7 @@
 <p>To ensure that email is sent to the administrative addresses for an apex domain, such as example.com, rather than to the administrative addresses for a subdomain, such as test.example.com, specify the ValidationDomain option in the RequestCertificate API or the request-certificate AWS CLI command. This feature is not currently supported in the console.</p>
 </blockquote>
 <p>Additionally, this role attempts to be idempotent by running <code>aws acm list-certificates</code> and ensuring that the domain of the cert being requested is not included in the current list of certificates.</p>
+<p>Whenever this role runs it will set the <code>aws_acm_certificate_arn</code> variable so you have the ARN of the certificate, whether it exists already or it is newly created.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
@@ -25,12 +26,15 @@
   <span style="color:#66d9ef">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
   <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
   <span style="color:#66d9ef">tags</span>: <span style="color:#e6db74">&#34;{{ _aws_tags }}&#34;</span>
-  <span style="color:#66d9ef">domain_name</span>: subdomain.example.com
+  <span style="color:#66d9ef">domain_name</span>: www.example.com
+  <span style="color:#66d9ef">extra_domains</span>: [] <span style="color:#75715e"># list of Subject Alternative Name domains and zones</span>
+  <span style="color:#75715e">#  - domain: www2.example.com</span>
+  <span style="color:#75715e">#    zone: example.com</span>
+  <span style="color:#75715e">#    aws_profile: us-east-1</span>
   <span style="color:#66d9ef">validate</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># you need to set this to false if the validation zone is not in Route 53 or you do not have CLI access</span>
   <span style="color:#66d9ef">export</span>: <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">route_53</span>:
     <span style="color:#66d9ef">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span> <span style="color:#75715e"># the zone might not be in the same account as the certificate</span>
-    <span style="color:#66d9ef">state</span>: present
     <span style="color:#66d9ef">zone</span>: example.com
 
 </code></pre></div><!-- raw HTML omitted -->
@@ -55,17 +59,10 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
 <li><a href="roles">Roles</a>
 <ul>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
-<ul>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
-</ul>
-</li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm">AWS Certificate Manager</a></li>
@@ -80,7 +77,6 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
@@ -92,26 +88,31 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
 </ul>
 </li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_clamscan">ClamAV Clamscan</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav_daemon">ClamAV Daemon</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall">UFW Firewall</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
@@ -119,6 +120,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
