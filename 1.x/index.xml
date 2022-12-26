@@ -386,7 +386,7 @@ Default variables --- aws_ssm_agent: region: &amp;#34;{{ _aws_region }}&amp;#34;
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy/</guid>
       <description>ce-deploy Installs Code Enigma&amp;rsquo;s deploy stack on a server.
-Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-deploy.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; local_dir: &amp;#34;/home/{{ _ce_deploy.username }}/ce-deploy&amp;#34; # List of additional groups to add the user to. groups: [] </description>
+Default variables --- _ce_deploy: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: new_user: true # set to false if user already exists or is ephemeral, e.g. an LDAP user key_name: id_rsa.pub # existing users may have a key of a different name username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; own_repository: &amp;#34;https://github.com/codeenigma/ce-deploy.git&amp;#34; own_repository_branch: &amp;#34;master&amp;#34; config_repository: &amp;#34;&amp;#34; config_repository_branch: &amp;#34;master&amp;#34; local_dir: &amp;#34;/home/{{ _ce_deploy.</description>
     </item>
     
     <item>
@@ -624,7 +624,7 @@ Default variables --- xdebug: cli: false fpm: false scream: 0 max_nesting_level:
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix/</guid>
       <description>Postfix Installs and configures Postfix for sending mail. Mail sending is disabled by default.
-Default variables --- postfix: dest_hosts: &amp;#34;mail.host1.com,mail.host2.com&amp;#34; disable_vrfy: false forward_domains: - another.com - lalala.com forward_from: &amp;#34;admin@example.com&amp;#34; forward_to: &amp;#34;admin@example.com&amp;#34; forward: false hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; interfaces: all # ce_dev_delivery_mode is only used when is_local == true, which means you&amp;#39;re probably using ce-dev locally. Valid modes are host, local and discard. ce_dev_delivery_mode: &amp;#34;host&amp;#34; message_size: 10240000 networks: - &amp;#34;[::1]/128&amp;#34; - &amp;#34;[::ffff:127.</description>
+Default variables --- postfix: hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; # if you set this to something else you may have to create PTR records to avoid bouncing dest_hosts: &amp;#34;mail.host1.com,mail.host2.com&amp;#34; disable_vrfy: false interfaces: all # ce_dev_delivery_mode is only used when is_local == true, which means you&amp;#39;re probably using ce-dev locally. Valid modes are host, local and discard. ce_dev_delivery_mode: &amp;#34;host&amp;#34; message_size: 10240000 networks: - &amp;#34;[::1]/128&amp;#34; - &amp;#34;[::ffff:127.</description>
     </item>
     
     <item>

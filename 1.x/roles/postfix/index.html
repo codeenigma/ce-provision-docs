@@ -16,15 +16,9 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 
 <span style="color:#66d9ef">postfix</span>:
+  <span style="color:#66d9ef">hostname</span>: <span style="color:#e6db74">&#34;{{ ansible_fqdn }}&#34;</span> <span style="color:#75715e"># if you set this to something else you may have to create PTR records to avoid bouncing</span>
   <span style="color:#66d9ef">dest_hosts</span>: <span style="color:#e6db74">&#34;mail.host1.com,mail.host2.com&#34;</span>
   <span style="color:#66d9ef">disable_vrfy</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">forward_domains</span>:
-    - another.com
-    - lalala.com
-  <span style="color:#66d9ef">forward_from</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
-  <span style="color:#66d9ef">forward_to</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
-  <span style="color:#66d9ef">forward</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">hostname</span>: <span style="color:#e6db74">&#34;{{ ansible_fqdn }}&#34;</span>
   <span style="color:#66d9ef">interfaces</span>: all
   <span style="color:#75715e"># ce_dev_delivery_mode is only used when is_local == true, which means you&#39;re probably using ce-dev locally. Valid modes are host, local and discard.</span>
   <span style="color:#66d9ef">ce_dev_delivery_mode</span>: <span style="color:#e6db74">&#34;host&#34;</span>
@@ -35,11 +29,19 @@
     - <span style="color:#ae81ff">127.0.0.0</span>/<span style="color:#ae81ff">8</span>
   <span style="color:#66d9ef">protocols</span>: all
   <span style="color:#66d9ef">relayhost</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">ses_creds</span>: <span style="color:#e6db74">&#34;fwefe&#34;</span>
   <span style="color:#66d9ef">transport_maps</span>:
     - <span style="color:#e6db74">&#34;* discard :&#34;</span>
   <span style="color:#66d9ef">use_dkim</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#75715e"># AWS SES config - to authenticate with an IAM user see https://docs.aws.amazon.com/ses/latest/dg/smtp-credentials.html</span>
   <span style="color:#66d9ef">use_ses</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">ses_creds</span>: ACCESSKEY:sEcreTkEY <span style="color:#75715e"># encrypt with SOPS - you must use SMTP credentials, *not* IAM credentials</span>
+  <span style="color:#75715e"># Forwarding config</span>
+  <span style="color:#66d9ef">forward</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">forward_domains</span>:
+    - another.com
+    - lalala.com
+  <span style="color:#66d9ef">forward_from</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+  <span style="color:#66d9ef">forward_to</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
 
 </code></pre></div><!-- raw HTML omitted -->
 

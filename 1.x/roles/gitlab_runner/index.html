@@ -45,9 +45,9 @@
     <span style="color:#75715e">#  cleanup_args: &#39;[&#34;--config&#34;, &#34;/etc/gitlab-runner/fargate.toml&#34;, &#34;custom&#34;, &#34;cleanup&#34;]&#39;</span>
   <span style="color:#66d9ef">install_fargate</span>: <span style="color:#66d9ef">false</span>
   <span style="color:#66d9ef">restart</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if you&#39;re applying settings to a server responsible for its own runners</span>
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_deploy.username }}&#34;</span>
+  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ ce_deploy.username }}&#34;</span>
   <span style="color:#66d9ef">docker_group</span>: <span style="color:#e6db74">&#34;docker&#34;</span>
-  <span style="color:#66d9ef">runner_workingdir</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_deploy.username }}/build&#34;</span>
+  <span style="color:#66d9ef">runner_workingdir</span>: <span style="color:#e6db74">&#34;/home/{{ ce_deploy.username }}/build&#34;</span>
   <span style="color:#66d9ef">runner_config</span>: <span style="color:#e6db74">&#34;/etc/gitlab-runner/config.toml&#34;</span>
   <span style="color:#75715e"># see https://gitlab.com/gitlab-org/ci-cd/custom-executor-drivers/fargate/-/tree/master/docs</span>
   <span style="color:#66d9ef">fargate</span>:

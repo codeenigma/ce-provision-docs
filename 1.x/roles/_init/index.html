@@ -27,6 +27,8 @@
 
 <span style="color:#66d9ef">ce_provision</span>:
   <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_provision.username }}&#34;</span>
+  <span style="color:#66d9ef">new_user</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if user already exists or is ephemeral, e.g. an LDAP user</span>
+  <span style="color:#66d9ef">key_name</span>: id_rsa.pub <span style="color:#75715e"># existing users may have a key of a different name</span>
   <span style="color:#75715e"># Main repo.</span>
   <span style="color:#66d9ef">own_repository</span>: <span style="color:#e6db74">&#34;https://github.com/codeenigma/ce-provision.git&#34;</span>
   <span style="color:#66d9ef">own_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
