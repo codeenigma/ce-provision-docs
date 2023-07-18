@@ -17,6 +17,8 @@
   <span style="color:#66d9ef">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
   <span style="color:#66d9ef">name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#66d9ef">state</span>: present
+  <span style="color:#66d9ef">type</span>: <span style="color:#e6db74">&#34;ec2&#34;</span> <span style="color:#75715e"># can also be &#34;ecs&#34;</span>
+  <span style="color:#66d9ef">deploy_cluster</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># setting this to false will make Ansible prepare the way for a cluster without actually building it, so deployment can be deferred to the code pipeline</span>
   <span style="color:#66d9ef">acm</span>:
     <span style="color:#66d9ef">create_cert</span>: <span style="color:#66d9ef">false</span>
     <span style="color:#66d9ef">extra_domains</span>: [] <span style="color:#75715e"># list of Subject Alternative Name domains and zones</span>
@@ -38,7 +40,12 @@
     - <span style="color:#66d9ef">az</span>: c
       <span style="color:#66d9ef">cidr_block</span>: <span style="color:#e6db74">&#34;10.0.3.128/26&#34;</span>
       <span style="color:#66d9ef">public_subnet</span>: public-c
+  <span style="color:#66d9ef">instance_nic_delete_on_termination</span>: <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">instance_type</span>: t3.micro
+  <span style="color:#66d9ef">instance_disable_api_termination</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># Only valid for t2/3 instances, omit for other types.</span>
+  <span style="color:#75715e">#instance_credit_specification:</span>
+  <span style="color:#75715e">#  cpu_credits: unlimited # unlimited or standard</span>
   <span style="color:#66d9ef">assign_public_ip</span>: <span style="color:#66d9ef">false</span>
   <span style="color:#66d9ef">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span> <span style="color:#75715e"># This needs to match your &#34;provision&#34; user SSH key.</span>
   <span style="color:#66d9ef">ami_owner</span>: self <span style="color:#75715e"># Default to self-created image.</span>
@@ -48,6 +55,25 @@
   <span style="color:#66d9ef">device_name</span>: /dev/xvda
   <span style="color:#66d9ef">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
   <span style="color:#66d9ef">encrypt_boot</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EBS volumes or not, passed to the aws_ami role and to EBS volumes when instances are built</span>
+  <span style="color:#75715e"># Container variables - if type is &#34;ecs&#34;</span>
+  <span style="color:#66d9ef">container_repo_name</span>: example/project
+  <span style="color:#75715e"># ElastiCache variables</span>
+  <span style="color:#66d9ef">elasticache</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">elasticache_engine</span>: memcached
+  <span style="color:#75715e">#cache_engine_version: 1.4.14</span>
+  <span style="color:#75715e">#cache_parameter_group: my_custom_parameters</span>
+  <span style="color:#66d9ef">elasticache_node_type</span>: cache.t3.medium
+  <span style="color:#66d9ef">elasticache_nodes</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#66d9ef">elasticache_port</span>: <span style="color:#ae81ff">11211</span>
+  <span style="color:#75715e"># ECS variables - role assumes container, service and task creation will be done by code pipelines</span>
+  <span style="color:#66d9ef">ecs_capacity_providers</span>:
+    - FARGATE
+  <span style="color:#66d9ef">ecs_capacity_provider_strategy</span>:
+    - <span style="color:#66d9ef">capacity_provider</span>: FARGATE
+      <span style="color:#66d9ef">base</span>: <span style="color:#ae81ff">1</span>
+      <span style="color:#66d9ef">weight</span>: <span style="color:#ae81ff">1</span>
+  <span style="color:#66d9ef">ecs_purge_capacity_providers</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># EC2 variables</span>
   <span style="color:#66d9ef">ami_playbook_file</span>: <span style="color:#e6db74">&#34;{{ playbook_dir }}/ami.yml&#34;</span>
   <span style="color:#66d9ef">ami_operation</span>: create <span style="color:#75715e"># see aws_ami for details, use &#39;repack&#39; to build AMIs from running instances, use &#39;create&#39; to force a new Packer image each time</span>
   <span style="color:#75715e"># Overrides extra_vars in the aws_ami role.</span>
@@ -64,6 +90,8 @@
   <span style="color:#66d9ef">packer_subnet_filter_az</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># see aws_ami for details</span>
   <span style="color:#66d9ef">ami_refresh</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to build a new AMI or not.</span>
   <span style="color:#66d9ef">asg_refresh</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to build a new ASG or not.</span>
+  <span style="color:#75715e"># Define if you want to launch config to use a specific AMI, e.g. to pack a new AMI but not use it right away for QA reasons.</span>
+  <span style="color:#75715e">#image_id: ami-0123456789abcdefg</span>
   <span style="color:#66d9ef">asg_cloudwatch_policy_scale_up_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-up-policy&#34;</span>
   <span style="color:#66d9ef">asg_cloudwatch_policy_scale_down_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-down-policy&#34;</span>
   <span style="color:#66d9ef">asg_scaling_policies</span>: <span style="color:#75715e"># List of AutoScale policies. See ec2_scaling_policy module docs for options and details.</span>
@@ -107,14 +135,16 @@
   <span style="color:#66d9ef">max_size</span>: <span style="color:#ae81ff">8</span>
   <span style="color:#75715e"># Security groups for the instances cluster.</span>
   <span style="color:#75715e"># An internal one will be created automatically, use these vars to provide additional groups</span>
-  <span style="color:#66d9ef">cluster_security_groups</span>: []
-  <span style="color:#66d9ef">alb_security_groups</span>: []
-  <span style="color:#66d9ef">efs_security_groups</span>: []
-  <span style="color:#66d9ef">rds_security_groups</span>: []
+  <span style="color:#66d9ef">cluster_security_groups</span>: [] <span style="color:#75715e"># used in launch template, must be SG IDs</span>
+  <span style="color:#66d9ef">alb_security_groups</span>: [] <span style="color:#75715e"># edge case, the module supports SG names or IDs</span>
+  <span style="color:#66d9ef">efs_security_groups</span>: [] <span style="color:#75715e"># must be SG names because the role uses the name to find the ID</span>
+  <span style="color:#66d9ef">rds_security_groups</span>: [] <span style="color:#75715e"># must be SG names because the role uses the name to find the ID</span>
+  <span style="color:#66d9ef">elasticache_security_groups</span>: [] <span style="color:#75715e"># must be SG IDs</span>
   <span style="color:#75715e"># ALB health checks - these are health check settings applied to the load balancer</span>
   <span style="color:#66d9ef">alb_health_check_type</span>: ELB <span style="color:#75715e"># Uses ALB health checks, set to EC2 to use default AWS instance status checks</span>
   <span style="color:#66d9ef">alb_health_check_period</span>: <span style="color:#ae81ff">1200</span> <span style="color:#75715e"># Length of time in seconds after a new EC2 instance comes into service that Auto Scaling starts checking its health</span>
-  <span style="color:#75715e"># Target Group health checks - these are distinct and separate checks carried out by the Target Group for the ASG</span>
+  <span style="color:#75715e"># Target Group health checks - these are distinct and separate checks carried out by the Target Group for the cluster</span>
+  <span style="color:#66d9ef">target_group_http_port</span>: <span style="color:#ae81ff">80</span>
   <span style="color:#66d9ef">deregistration_delay_timeout</span>: <span style="color:#ae81ff">60</span> <span style="color:#75715e"># seconds to wait before removing instance from Target Group</span>
   <span style="color:#66d9ef">health_check_protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
   <span style="color:#66d9ef">health_check_path</span>: <span style="color:#e6db74">&#34;/&#34;</span>
@@ -125,7 +155,10 @@
   <span style="color:#66d9ef">health_check_healthy_count</span>: <span style="color:#ae81ff">5</span>
   <span style="color:#66d9ef">health_check_unhealthy_count</span>: <span style="color:#ae81ff">2</span>
   <span style="color:#75715e"># ALB settings</span>
+  <span style="color:#66d9ef">create_elb</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># determines whether an ELB (currently, this is an ALB) is created as part of the ASG. This needs to be `true` in order to create a CloudFront distribution.</span>
   <span style="color:#66d9ef">alb_idle_timeout</span>: <span style="color:#ae81ff">60</span>
+  <span style="color:#66d9ef">alb_http_port</span>: <span style="color:#ae81ff">80</span>
+  <span style="color:#66d9ef">alb_https_port</span>: <span style="color:#ae81ff">443</span>
   <span style="color:#66d9ef">tags</span>:
     <span style="color:#66d9ef">Name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
   <span style="color:#75715e"># An IAM Role name to associate with instances.</span>
@@ -263,6 +296,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
@@ -278,8 +312,11 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
@@ -294,9 +331,9 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
@@ -316,21 +353,27 @@
 </li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
 </ul>
 </li>
 </ul>

@@ -8,9 +8,23 @@
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
         <h1 id="efs-client">EFS client</h1>
-<p>Mounts EFS volume(s) to specific mount point(s).
-It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume path.</p>
-<!-- raw HTML omitted -->
+<p>Mounts EFS volume(s) to specific mount point(s).</p>
+<p>The 
+<a href="https://docs.ansible.com/ansible/latest/collections/community/aws/efs_info_module.html"  target="_blank" rel="noopener"><code>efs_info</code> role for Ansible</a>
+ searches based on the <code>creation_token</code> attribute of a file system. This is usually the same as <code>name</code> <strong>but not always!</strong></p>
+<p>If your EFS volume was not created by Ansible or via the console but was created automatically, for example by setting up replication to another region, no matter what you set the human-readable <code>name</code> to the <code>creation_token</code> will remain a dynamically generated value, such as <code>destination-5e6b763c-0f8b-4e90-9392-8c83b2453553</code>. It is the <code>creation_token</code> value that matters, <strong>not</strong> <code>name</code>, so in this case your mount will need to look like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  <span style="color:#66d9ef">mounts</span>:
+    - <span style="color:#66d9ef">path</span>: /mnt/shared
+      <span style="color:#66d9ef">src</span>: destination-5e6b763c-0f8b<span style="color:#ae81ff">-4e90-9392</span>-8c83b2453553
+      <span style="color:#66d9ef">opts</span>: _netdev
+      <span style="color:#66d9ef">state</span>: present
+      <span style="color:#66d9ef">owner</span>: root
+      <span style="color:#66d9ef">group</span>: root
+</code></pre></div><p>You cannot retrieve the <code>creation_token</code> from the console, you need to use the API, for example:</p>
+<pre><code>aws efs describe-file-systems --profile myaccount --region eu-west-1
+</code></pre><p>In the output of listed file systems, for each one you will find an entry like this:</p>
+<pre><code>    &quot;CreationToken&quot;: &quot;destination-fba829fc-3680-4b7d-be6a-147d02c357b3&quot;
+</code></pre><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="default-variables">Default variables</h2>
@@ -22,7 +36,7 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
   <span style="color:#75715e"># See https://docs.ansible.com/ansible/latest/modules/mount_module.html</span>
   <span style="color:#66d9ef">mounts</span>:
     - <span style="color:#66d9ef">path</span>: /mnt/shared
-      <span style="color:#66d9ef">src</span>: example-efs <span style="color:#75715e"># This will be translated from the &#34;name&#34;</span>
+      <span style="color:#66d9ef">src</span>: example-efs <span style="color:#75715e"># This is the EFS &#34;creation_token&#34; which is not always &#34;name&#34; - read the role docs carefully!</span>
       <span style="color:#66d9ef">opts</span>: _netdev <span style="color:#75715e"># _netdev tells OS to wait for network before attempting to mount</span>
       <span style="color:#66d9ef">state</span>: present
       <span style="color:#66d9ef">owner</span>: root
@@ -53,6 +67,7 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
@@ -68,8 +83,11 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
@@ -84,9 +102,9 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
@@ -106,21 +124,27 @@ It uses the &ldquo;Name&rdquo; tag for a given volume to retrieve the volume pat
 </li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
 </ul>
 </li>
 </ul>

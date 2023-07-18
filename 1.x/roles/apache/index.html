@@ -16,7 +16,7 @@
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
 <span style="color:#66d9ef">php</span>:
   <span style="color:#66d9ef">version</span>:
-    - <span style="color:#ae81ff">7.2</span>
+    - <span style="color:#ae81ff">8.1</span> <span style="color:#75715e"># see https://www.php.net/supported-versions.php</span>
 <span style="color:#66d9ef">symfony_env</span>: <span style="color:#e6db74">&#34;{{ _env_type }}&#34;</span>
 <span style="color:#66d9ef">apache</span>:
   <span style="color:#75715e"># Global default config for apache2.conf.</span>
@@ -38,7 +38,7 @@
   <span style="color:#66d9ef">log_stream_name</span>: example
   <span style="color:#75715e"># We can only have one backend, due to the way we use &#34;common&#34; templates.</span>
   <span style="color:#75715e"># Moving this per domain means instead having templates per project type.</span>
-  <span style="color:#66d9ef">php_fastcgi_backend</span>: <span style="color:#e6db74">&#34;127.0.0.1:90{{ php.version[-1] | replace(&#39;.&#39;,&#39;&#39;) }}&#34;</span>
+  <span style="color:#66d9ef">php_fastcgi_backend</span>: <span style="color:#e6db74">&#34;127.0.0.1:90{{ php.version[-1] | replace(&#39;.&#39;, &#39;&#39;) }}&#34;</span>
   <span style="color:#66d9ef">limit_request_body</span>: <span style="color:#e6db74">&#34;734003200&#34;</span> <span style="color:#75715e">#700M</span>
   <span style="color:#66d9ef">timeout</span>: <span style="color:#ae81ff">120</span>
   <span style="color:#66d9ef">max_clients</span>: <span style="color:#ae81ff">256</span>
@@ -57,6 +57,18 @@
       <span style="color:#66d9ef">ssl</span>: <span style="color:#75715e"># @see the &#39;ssl&#39; role.</span>
         <span style="color:#66d9ef">domain</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
         <span style="color:#66d9ef">handling</span>: selfsigned
+        <span style="color:#75715e"># Sample LetsEncrypt config, because include_role will not merge defaults these all need providing:</span>
+        <span style="color:#75715e"># handling: letsencrypt</span>
+        <span style="color:#75715e"># http_01_port: 5000</span>
+        <span style="color:#75715e"># autorenew: true</span>
+        <span style="color:#75715e"># email: sysadm@codeenigma.com</span>
+        <span style="color:#75715e"># services: []</span>
+        <span style="color:#75715e"># web_server: standalone</span>
+        <span style="color:#75715e"># certbot_register_command: &#34;/usr/bin/certbot certonly --agree-tos --preferred-challenges http -n&#34;</span>
+        <span style="color:#75715e"># certbot_renew_command: &#34;/usr/bin/certbot certonly --agree-tos --force-renew&#34;</span>
+        <span style="color:#75715e"># reload_command: reload</span>
+        <span style="color:#75715e"># reload:</span>
+        <span style="color:#75715e">#   - apache</span>
       <span style="color:#66d9ef">is_default</span>: <span style="color:#66d9ef">true</span>
       <span style="color:#66d9ef">basic_auth</span>:
         <span style="color:#66d9ef">auth_enabled</span>: <span style="color:#66d9ef">false</span>
@@ -95,6 +107,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
@@ -110,8 +123,11 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
@@ -126,9 +142,9 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
@@ -148,21 +164,27 @@
 </li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
 </ul>
 </li>
 </ul>

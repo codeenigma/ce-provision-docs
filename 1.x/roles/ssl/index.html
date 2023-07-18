@@ -74,22 +74,28 @@ location /.well-known/acme-challenge/ {
 </span><span style="color:#e6db74">
 </span><span style="color:#e6db74">  # For &#34;letsencrypt&#34; handling.</span>
   <span style="color:#66d9ef">email</span>: admin@example.com
-  <span style="color:#66d9ef">certbot_register_command</span>: <span style="color:#e6db74">&#34;/usr/bin/certbot certonly --standalone --agree-tos --preferred-challenges http -n&#34;</span> <span style="color:#75715e"># root of the command to register a new cert</span>
+  <span style="color:#66d9ef">certbot_register_command</span>: <span style="color:#e6db74">&#34;/usr/bin/certbot certonly --agree-tos --preferred-challenges http -n&#34;</span> <span style="color:#75715e"># root of the command to register a new cert</span>
   <span style="color:#66d9ef">http_01_port</span>: <span style="color:#ae81ff">80</span> <span style="color:#75715e"># you can set a non-standard port to listen on, but certbot still needs port 80 - see https://letsencrypt.org/docs/challenge-types/#http-01-challenge</span>
   <span style="color:#75715e"># For &#34;letsencrypt&#34; auto renewal</span>
   <span style="color:#66d9ef">autorenew</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to create a cron job to renew LE certs</span>
-  <span style="color:#66d9ef">certbot_renew_command</span>: <span style="color:#e6db74">&#34;/usr/bin/certbot certonly --standalone --agree-tos --force-renew&#34;</span> <span style="color:#75715e"># root of the command used in the cron job</span>
+  <span style="color:#66d9ef">certbot_renew_command</span>: <span style="color:#e6db74">&#34;/usr/bin/certbot certonly --agree-tos --force-renew&#34;</span> <span style="color:#75715e"># root of the command used in the cron job</span>
   <span style="color:#75715e"># renewal_minute: &#34;0&#34; # minute to run renewal cron job</span>
   <span style="color:#75715e"># renewal_hour: &#34;0&#34; # hour to run renewal cron job</span>
-  <span style="color:#75715e"># renewal_day: &#34;7&#34; # day to run renewal cron job</span>
-  <span style="color:#66d9ef">web_server</span>: none <span style="color:#75715e"># values are none, nginx or apache - warning, will attempt to manipulate your vhosts!</span>
+  <span style="color:#75715e"># renewal_day: &#34;7&#34; # day of month to run renewal cron job</span>
+  <span style="color:#75715e"># renewal_weekday: &#34;0&#34; # day of week to run renewal cron job</span>
+  <span style="color:#66d9ef">web_server</span>: standalone <span style="color:#75715e"># values are standalone, nginx or apache - warning, nginx and apache will attempt to manipulate your vhosts!</span>
 
   <span style="color:#75715e"># For &#34;letsencrypt&#34; handling, a list of service to stop while creating the certificate.</span>
   <span style="color:#75715e"># This is because we need port 80 to be free.</span>
-  <span style="color:#75715e"># eg;</span>
+  <span style="color:#75715e"># List of services to be stopped during renewal, e.g.</span>
   <span style="color:#75715e"># services:</span>
   <span style="color:#75715e">#   - nginx</span>
   <span style="color:#66d9ef">services</span>: []
+  <span style="color:#75715e"># When certificates get renewed on a schedule you also need to reload any dependent services, such as your web server.</span>
+  <span style="color:#75715e"># List of services to reload:</span>
+  <span style="color:#66d9ef">reload</span>: []
+  <span style="color:#66d9ef">reload_command</span>: reload <span style="color:#75715e"># if &#39;reload&#39; is not strong enough you could change this to &#39;restart&#39;</span>
+
 <span style="color:#75715e">############ Facts</span>
 <span style="color:#75715e"># ssl_facts</span>
 <span style="color:#75715e"># A dict of domain names with key/cert destination paths.</span>
@@ -120,6 +126,7 @@ location /.well-known/acme-challenge/ {
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
@@ -135,8 +142,11 @@ location /.well-known/acme-challenge/ {
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
@@ -151,9 +161,9 @@ location /.well-known/acme-challenge/ {
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
@@ -173,21 +183,27 @@ location /.well-known/acme-challenge/ {
 </li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
 </ul>
 </li>
 </ul>

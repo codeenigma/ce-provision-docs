@@ -64,7 +64,15 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info/</loc>
   </url>
   
   <url>
@@ -116,11 +124,19 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role/</loc>
   </url>
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch/</loc>
   </url>
   
   <url>
@@ -176,6 +192,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config/</loc>
   </url>
   
@@ -228,6 +248,10 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx/</loc>
   </url>
   
@@ -236,15 +260,15 @@
   </url>
   
   <url>
-    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</loc>
-  </url>
-  
-  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config/</loc>
   </url>
   
   <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer/</loc>
   </url>
   
   <url>
@@ -264,6 +288,18 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog/</loc>
   </url>
   
@@ -280,7 +316,15 @@
   </url>
   
   <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config/</loc>
+  </url>
+  
+  <url>
     <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config/</loc>
+  </url>
+  
+  <url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh/</loc>
   </url>
   
   <url>

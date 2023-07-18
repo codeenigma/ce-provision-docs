@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
+</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
+        <h1 id="apt-unattended-upgrades">APT Unattended Upgrades</h1>
+<p>Provides a wrapper for managing the APT <code>unattended-upgrades</code> configuration.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="overview">Overview</h2>
+<p>Since Debian 9 the <code>unattended-upgrades</code> package and service have been enabled by default. This role allows you to configure that by replacing the standard config with a templated copy. By default we enable <code>unattended-upgrades</code> with standard Debian updates and Debian security patches, plus emailing of results in the case of an upgrade error.</p>
+<h2 id="general-settings">General settings</h2>
+<p>You should make sure you set <code>apt_unattended_upgrades.mail</code> in your implementation to get emails from your server when the service runs.</p>
+<p>If you do not want to enable the <code>unattended-upgrades</code> service, set <code>enable: false</code>. <em>However</em>, please note your Debian server will probably have it installed as standard and the role will not <em>remove</em> <code>unattended-upgrades</code> if it is already installed, you will need to do that manually.</p>
+<p>Please review the <code>50unattended-upgrades.j2</code> file that ships with this role for inline documentation for all options. You can also see what options are supported by the role by reviewing where variables are inserted into that template.</p>
+<h2 id="adding-origins-and-blocked-packages">Adding origins and blocked packages</h2>
+<p>Please review the <code>50unattended-upgrades.j2</code> file that ships with this role for detailed inline documentation on how to use <code>apt_unattended_upgrades.origins</code> and <code>apt_unattended_upgrades.blocked_packages</code>.</p>
+<p>The best way to handle <em>adding</em> origins to a server is to do something like this in your variables:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apt_unattended_upgrades</span>:
+  <span style="color:#66d9ef">origins</span>: <span style="color:#e6db74">&#34;{{ _apt_unattended_upgrades_default_origins + [ &#34;</span>origin=MyRepo,codename=bullseye<span style="color:#e6db74">&#34;, &#34;</span>origin=MyOtherRepo,codename=bullseye,label=stable<span style="color:#e6db74">&#34; ] }}&#34;</span>
+</code></pre></div><p>Alternatively you can simply replace the list like so, however this will <em>remove</em> the Debian defaults unless you re-add them to your list:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apt_unattended_upgrades</span>:
+  <span style="color:#66d9ef">origins</span>:
+    - <span style="color:#e6db74">&#34;origin=MyRepo,codename=bullseye&#34;</span>
+    - <span style="color:#e6db74">&#34;origin=MyOtherRepo,codename=bullseye,label=stable&#34;</span>
+</code></pre></div><p>To find out what the origin string should look like, you can read the top of the InRelease files to see the components. These files are typically found in <code>/var/lib/apt/lists/</code>.</p>
+<p>There are no <code>blocked_packages</code> by default, but you can define a list of names or patterns to skip unattended upgrades.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">apt_unattended_upgrades</span>:
+  <span style="color:#66d9ef">blocked_packages</span>:
+    - <span style="color:#e6db74">&#34;php*&#34;</span>
+</code></pre></div><!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+<span style="color:#66d9ef">_apt_unattended_upgrades_default_origins</span>:
+    - <span style="color:#e6db74">&#34;origin=Debian,codename=${distro_codename},label=Debian&#34;</span>
+    - <span style="color:#e6db74">&#34;origin=Debian,codename=${distro_codename},label=Debian-Security&#34;</span>
+
+<span style="color:#66d9ef">apt_unattended_upgrades</span>:
+  <span style="color:#66d9ef">enable</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># unattended-upgrades template vars.</span>
+  <span style="color:#75715e"># booleans must be strings to avoid Jinja2 interpretting.</span>
+  <span style="color:#66d9ef">origins</span>: <span style="color:#e6db74">&#34;{{ _apt_unattended_upgrades_default_origins }}&#34;</span>
+  <span style="color:#66d9ef">blocked_packages</span>: [] <span style="color:#75715e"># list of package patterns to not upgrade</span>
+  <span style="color:#66d9ef">mail</span>: <span style="color:#e6db74">&#34;sysadmins@example.com&#34;</span> <span style="color:#75715e"># email to send upgrade notifications to</span>
+  <span style="color:#66d9ef">mail_on_error</span>: <span style="color:#e6db74">&#34;true&#34;</span> <span style="color:#75715e"># send mail on error only</span>
+  <span style="color:#66d9ef">remove_unused_dependencies</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+  <span style="color:#66d9ef">automatic_reboot</span>: <span style="color:#e6db74">&#34;false&#34;</span>
+  <span style="color:#66d9ef">automatic_reboot_with_users</span>: <span style="color:#e6db74">&#34;false&#34;</span> <span style="color:#75715e"># reboot even if users are logged in</span>
+  <span style="color:#66d9ef">automatic_reboot_time</span>: <span style="color:#e6db74">&#34;02:00&#34;</span>
+  <span style="color:#66d9ef">enable_syslog</span>: <span style="color:#e6db74">&#34;false&#34;</span> <span style="color:#75715e"># make apt log upgrades to syslog as well as apt history</span>
+
+</code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#apt-unattended-upgrades">APT Unattended Upgrades</a>
+      <ul>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#general-settings">General settings</a></li>
+        <li><a href="#adding-origins-and-blocked-packages">Adding origins and blocked packages</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/">Home</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/install">Install</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/scripts">Usage</a></li>
+<li><a href="roles">Roles</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_acm">AWS Certificate Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ami">AWS AMI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_backup">AWS Backup</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli">AWS CLI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudfront_distribution">AWS CloudFront distribution</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cloudwatch_log_group">Cloudwatch log group</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_credentials">Amazon credentials</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster">Autoscale cluster</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_metric_alarm">EC2 CloudWatch Metric Alarm</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_sns">AWS SNS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc">VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_route">Update main route for a given VPC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet">VPC</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_ssm_agent">AWS SSM agent</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_deploy">ce-deploy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/haproxy">HA Proxy</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts">Managed /etc/hosts</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init">Init role</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jenkins">Jenkins</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/jitsi">Jitsi</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ldap_server">LDAP Server</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/lhci">LHCI</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta">&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+<ul>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_account">AWS account</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_client_instance">AWS client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_meta/aws_region">AWS region</a></li>
+</ul>
+</li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</aside>
+    </body>
+</html>

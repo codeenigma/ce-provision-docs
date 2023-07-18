@@ -16,8 +16,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/_init/</guid>
-      <description>Init role This is meant to ALWAYS be included as the first task of a play.
-Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not. vars_dirs: [] force_play: false # ce_provision vars are sometimes needed even when the role isn&amp;#39;t used so we define them here. # If you are using ce_provision and *not* using _init you can copy these vars to your playbook.</description>
+      <description>Init role This is meant to ALWAYS be included as the first task of a play. If you include this role, as you will in the vast majority of cases, be sure to also include the _exit role as the last task of the play.
+Default variables --- _init: # A list of var directories to include. We only support .yml extensions. # This is used to detect if the playbook must re-run or not.</description>
     </item>
     
     <item>
@@ -74,7 +74,8 @@ Default variables --- _overrides: # A list of files to override. files: [] # fil
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible/</guid>
-      <description>Ansible (Re-)install Ansible from the official repository</description>
+      <description>Ansible (Re-)install Ansible from the official repository.
+Default variables --- ce_ansible: upgrade: enabled: true # create cron job to auto-upgrade Ansible command: &amp;#34;/usr/bin/python -m pip install --upgrade ansible&amp;#34; # cron variables - see https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html minute: 10 hour: 1 # day: 1 # weekday: 7 # month: 12 # disabled: true linters: enabled: true # will not install linters if false, installing linters breaks cloud-init </description>
     </item>
     
     <item>
@@ -84,7 +85,7 @@ Default variables --- _overrides: # A list of files to override. files: [] # fil
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache/</guid>
       <description>APACHE Install and configure the apache webserver.
-Default variables --- php: version: - 7.2 symfony_env: &amp;#34;{{ _env_type }}&amp;#34; apache: # Global default config for apache2.conf. user: www-data mods_enabled: - rewrite - ssl - proxy - proxy_fcgi - fcgid http: server_names_hash_bucket_size: 256 access_log: /var/log/apache2-access.log error_log: /var/log/apache2-error.log error_log_level: &amp;#34;notice&amp;#34; # Group prefix. Useful for grouping by environments. log_group_prefix: &amp;#34;&amp;#34; # Main log stream for apache (Cloudwatch). log_stream_name: example # We can only have one backend, due to the way we use &amp;#34;common&amp;#34; templates.</description>
+Default variables --- php: version: - 8.1 # see https://www.php.net/supported-versions.php symfony_env: &amp;#34;{{ _env_type }}&amp;#34; apache: # Global default config for apache2.conf. user: www-data mods_enabled: - rewrite - ssl - proxy - proxy_fcgi - fcgid http: server_names_hash_bucket_size: 256 access_log: /var/log/apache2-access.log error_log: /var/log/apache2-error.log error_log_level: &amp;#34;notice&amp;#34; # Group prefix. Useful for grouping by environments. log_group_prefix: &amp;#34;&amp;#34; # Main log stream for apache (Cloudwatch). log_stream_name: example # We can only have one backend, due to the way we use &amp;#34;common&amp;#34; templates.</description>
     </item>
     
     <item>
@@ -99,11 +100,32 @@ Default variables --- apt_extra_packages: [] </description>
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades/</guid>
+      <description>APT Unattended Upgrades Provides a wrapper for managing the APT unattended-upgrades configuration.
+Overview Since Debian 9 the unattended-upgrades package and service have been enabled by default. This role allows you to configure that by replacing the standard config with a templated copy. By default we enable unattended-upgrades with standard Debian updates and Debian security patches, plus emailing of results in the case of an upgrade error.
+General settings You should make sure you set apt_unattended_upgrades.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/</guid>
       <description>AWS Infrastructure </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info/</guid>
+      <description>AWS Network Info Helper role that returns AWS VPC network information, such as VPC and subnet IDs, in a consistent format to be used in other roles.
+Default variables </description>
     </item>
     
     <item>
@@ -146,7 +168,7 @@ Default variables --- aws_backup: vault: name: &amp;#34;Default&amp;#34; # Set t
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_cli/</guid>
       <description>AWS CLI Installs the AWS client for Linux.
-Default variables --- aws_cli: refresh: false # Set to true to upgrade the AWS client </description>
+Default variables --- aws_cli: version: latest # Specify a particular version number in X.X.X format to override refresh: false # Set to true to upgrade or downgrade the AWS client, which also clears out install files in /opt/aws-cli </description>
     </item>
     
     <item>
@@ -185,7 +207,7 @@ Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
-      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; state: present acm: create_cert: false extra_domains: [] # list of Subject Alternative Name domains and zones # - domain: www2.example.com # zone: example.com # aws_profile: us-east-1 route_53: aws_profile: another # the zone might not be in the same account as the certificate zone: example.com vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc subnets: # - az: a # cidr: &amp;#34;10.</description>
+      <description>Autoscale cluster Default variables aws_ec2_autoscale_cluster: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; state: present type: &amp;#34;ec2&amp;#34; # can also be &amp;#34;ecs&amp;#34; deploy_cluster: true # setting this to false will make Ansible prepare the way for a cluster without actually building it, so deployment can be deferred to the code pipeline acm: create_cert: false extra_domains: [] # list of Subject Alternative Name domains and zones # - domain: www2.</description>
     </item>
     
     <item>
@@ -205,7 +227,7 @@ Default variables --- aws_ec2_metric_alarm: aws_profile: &amp;#34;{{ _aws_profil
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip/</guid>
       <description>EC2 instance with EIP Creates a new EC2 instance at AWS with a static IP address.
-Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; instance_type: t3.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key. ami_name: &amp;#34;{{ _domain_name }}&amp;#34; # The name of an AMI image to use. Image must exists in the same region. ami_owner: self # Default to self-created image.</description>
+Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; hostname: &amp;#34;{{ _domain_name }}&amp;#34; # The hostname is used to check if the machine exists already. force: false # Force a new EC2 machine to be created if a new AMI is packed. instance_type: t3.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
     </item>
     
     <item>
@@ -215,7 +237,7 @@ Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs/</guid>
       <description>AWS EFS Creates or update an EFS volume.
-Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not. encrypt: false backup: &amp;#34;{{ _infra_name }}-{{ _env_type }}&amp;#34; # Name of the AWS Backup plan to use to backup the instance.</description>
+Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] # SG names - ID lookup is automatic. Note, the assumption is that all subnets have the same SGs. security_groups: [] # Whether to encrypt the volume or not.</description>
     </item>
     
     <item>
@@ -224,8 +246,18 @@ Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; reg
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client/</guid>
-      <description>EFS client Mounts EFS volume(s) to specific mount point(s). It uses the &amp;ldquo;Name&amp;rdquo; tag for a given volume to retrieve the volume path.
-Default variables --- aws_efs_client: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; version: 1.26.2 # Version of AWS EFS utils to use. # See https://docs.ansible.com/ansible/latest/modules/mount_module.html mounts: - path: /mnt/shared src: example-efs # This will be translated from the &amp;#34;name&amp;#34; opts: _netdev # _netdev tells OS to wait for network before attempting to mount state: present owner: root group: root </description>
+      <description>EFS client Mounts EFS volume(s) to specific mount point(s).
+The efs_info role for Ansible searches based on the creation_token attribute of a file system. This is usually the same as name but not always!
+If your EFS volume was not created by Ansible or via the console but was created automatically, for example by setting up replication to another region, no matter what you set the human-readable name to the creation_token will remain a dynamically generated value, such as destination-5e6b763c-0f8b-4e90-9392-8c83b2453553.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache/</guid>
+      <description>AWS ElastiCache Default variables --- aws_elasticache: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example description: example state: present subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb elasticache_engine: memcached #cache_engine_version: 1.4.14 #cache_parameter_group: my_custom_parameters elasticache_node_type: cache.t3.medium elasticache_nodes: 1 elasticache_port: 11211 elasticache_security_groups: [] # list of security group IDs, @TODO - support names like the EFS role #zone: eu-west-1a # AZ where the cluster will reside </description>
     </item>
     
     <item>
@@ -247,6 +279,16 @@ Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &am
       <description>AWS IAM SAML Creates the necessary policies and roles for SAML-based SSO in AWS and optionally creates Service Provider (SP) includes for SimpleSAMLphp .
 All tasks in this role are optional and can be skipped by simply not presenting a variable.
 Variables are generic for AWS SAML configuration up until the saml_metadata_document variable. Groups are intended to be LDAP groups, but in reality they can be any array of values you wish to pass to AWS to match against the eduPersonAffiliation SAML attribute on login.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch/</guid>
+      <description>AWS OpenSearch Creates an OpenSearch or Elasticsearch domain using the AWS OpenSearch Service .
+Default variables aws_opensearch: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; domain_name: example tags: {} engine_version: OpenSearch_2.5 # e.g. OpenSearch_1.0 or Elasticsearch_6.8 instance_type: t3.medium.search instance_count: 1 zone_awareness: false dedicated_master: false availability_zone_count: 1 warm_enabled: false cold_storage: false volume_type: &amp;#34;gp2&amp;#34; volume_size: 10 subnets: - &amp;#34;subnet-aaaaaaaa&amp;#34; - &amp;#34;subnet-bbbbbbbb&amp;#34; security_groups: [] automated_snapshot_start_hour: 3 auto_tune: false # boolean; true or false - not supported when t3&amp;#39;s are used # List of maintenance schedules to use if auto_tune is set to true: #auto_tune_maintenance_schedules: # - start_at: &amp;#34;2022-08-10&amp;#34; # duration: # value: 2 # unit: &amp;#34;HOURS&amp;#34; # cron_expression_for_recurrence: &amp;#34;cron(0 2 * * *)&amp;#34; </description>
     </item>
     
     <item>
@@ -297,7 +339,7 @@ Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topi
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; tags: {} #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.0.0.0/0 # rule_desc: Allow all incoming traffic on ports 80 and 443 </description>
+Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; # ipv6_cidr: true # uncomment to request an Amazon-provided IPv6 CIDR block with /56 prefix length. tags: {} #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.</description>
     </item>
     
     <item>
@@ -317,7 +359,7 @@ Default variables # @todo Support associating route with several subnets. aws_vp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_vpc_subnet/</guid>
       <description>VPC Creates a VPC and associated subnets.
-Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; az: b assign_instances_ipv6: false # A NAT gateway to associate with the subnets. # @todo IPV6 nat_ipv4: false name: example. # Wether to create a dedicated security group allowing internal traffic. security_group: false tags: {} #Type: &amp;#34;util&amp;#34; state: present </description>
+Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; # ipv6_cidr_block: &amp;#34;1&amp;#34; # This will create something like xxxx:xxxx:xxxx:xxyy::/64 where yy is created using the ansible.utils.ipsubnet filter automatically - DO NOT DEFINE IF IPV6 IS NOT REQUIRED az: b assign_instances_ipv6: false # if true, need to specify an ipv6_cidr_block value.</description>
     </item>
     
     <item>
@@ -326,7 +368,7 @@ Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name i
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent/</guid>
-      <description>AWS Cloudwatch agent Install and configure the cloudwatch agent. Note that retention policies can not be set here, you will have to use the community.aws.cloudwatchlogs_log_group module in your playbooks.
+      <description>AWS Cloudwatch agent Install and configure the cloudwatch agent. Note that retention policies can not be set here, you will have to use the amazon.aws.cloudwatchlogs_log_group module in your playbooks.
 Default variables --- aws_cloudwatch_agent: # Stream name. log_stream_name: &amp;#34;example&amp;#34; # Namespace for metrics. Leave empty to use the default CWAgent. metrics_namespace: &amp;#34;example&amp;#34; # Group prefix. Useful for grouping by environments. # Eg. instead of &amp;#34;syslog&amp;#34;, you can have &amp;#34;dev syslog&amp;#34;, &amp;#34;prod syslog&amp;#34;, etc.</description>
     </item>
     
@@ -376,7 +418,18 @@ Default variables --- ce_patcher: username: controller reboot: false </descripti
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision/</guid>
       <description>ce-provision Installs Code Enigma&amp;rsquo;s infrastructure management stack on a server.
-Default variables --- # See roles/_init/defaults/main.yml for variables # All ce_provision variables should be set in _init </description>
+Default variables --- # See roles/_init/defaults/main.yml for extra variables repo settings. _ce_provision: username: &amp;#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&amp;#34; ce_provision: username: &amp;#34;{{ _ce_provision.username }}&amp;#34; new_user: true # set to false if user already exists or is ephemeral, e.g. an LDAP user key_name: id_rsa.pub # existing users may have a key of a different name # Main repo.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav/</guid>
+      <description>ClamAV This role provides a wrapper for Jeff Geerling&amp;rsquo;s Ansible role for ClamAV .
+This role optionally provides cron scripts for routine scanning if you are not running ClamAV in daemon mode.
+Default variables --- clamav: provide_cron: false server_name: &amp;#34;{{ inventory_hostname }}&amp;#34; # for identification via email, defaults to Ansible inventory name. cron_minute: &amp;#34;0&amp;#34; # Runs daily at midnight by default. cron_hour: &amp;#34;0&amp;#34; # cron_day: &amp;#34;*&amp;#34; # cron_weekday: &amp;#34;0&amp;#34; # 0-6 for Sunday-Saturday scripts_location: /usr/local/clamav/script log_location: /usr/local/clamav/log send_mail: false # Important: will not send any emails by default.</description>
     </item>
     
     <item>
@@ -406,7 +459,7 @@ Default variables --- frontail: error_log: &amp;#34;/var/log/nginx-error.log&amp
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab/</guid>
       <description>Gitlab Configuration Because of the size of the gitlab.rb file, it is impractical to try to parameterized it. Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &amp;ldquo;override&amp;rdquo; system and provide a custom template.
-Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: server_name: &amp;#34;gitlab.{{ _domain_name }}&amp;#34; letsencrypt: &amp;#34;true&amp;#34; # use built-in GitLab LetsEncrypt support by default ssl: # @see the &amp;#39;ssl&amp;#39; role.</description>
+Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: apt_origin: &amp;#34;origin=packages.gitlab.com/gitlab/gitlab-ce,codename=${distro_codename},label=gitlab-ce&amp;#34; # used by apt_unattended_upgrades server_name: &amp;#34;gitlab.{{ _domain_name }}&amp;#34; # Add a record for GitLab in AWS Route 53 # If you use the aws_ec2_with_eip role to create your server this will not be necessary gitlab_route_53: state: present zone: &amp;#34;&amp;#34; # empty zone skips DNS creation record: &amp;#34;{{ _domain_name }}&amp;#34; type: A # change to CNAME if required value: 1.</description>
     </item>
     
     <item>
@@ -445,7 +498,7 @@ Default variables --- gpg_key_servers: - hkps://pgp.mit.edu - hkps://keys.openpg
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/hosts/</guid>
       <description>Managed /etc/hosts Forked from https://github.com/bertvv/ansible-role-hosts
-Default variables --- hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set to true, an entry for `ansible_hostname`, bound to the host&amp;#39;s default IPv4 address is added added. hosts_add_default_ipv4: true # If set to true, basic IPv6 entries (localhost6, ip6-localnet, etc) are added. hosts_add_basic_ipv6: true # If set to true, an entry for every host managed by Ansible is added. Remark that this makes `hosts_add_default_ipv4` unnecessary, as it will be added as wel by this setting.</description>
+Default variables --- hosts_hostname: &amp;#34;&amp;#34; # provide a hostname to manage the system hostname value. hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set to true, an entry for `ansible_hostname`, bound to the host&amp;#39;s default IPv4 address is added added. hosts_add_default_ipv4: true # If set to true, basic IPv6 entries (localhost6, ip6-localnet, etc) are added. hosts_add_basic_ipv6: true # If set to true, an entry for every host managed by Ansible is added.</description>
     </item>
     
     <item>
@@ -505,7 +558,17 @@ export DISPLAY=:99 Here is an example lighthouserc.yml file for running lhci in 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client/</guid>
-      <description>MariaDB Client Default variables --- # @todo do we want to support percona client ? mysql_client: client: &amp;#34;mysql-client&amp;#34; host: &amp;#34;rds.example.com&amp;#34; user: &amp;#34;user&amp;#34; password: &amp;#34;password&amp;#34; creds_file_dest: &amp;#34;/home/{{ user_deploy.username }}/.mysql.creds&amp;#34; creds_file_owner: &amp;#34;{{ user_deploy.username }}&amp;#34; creds_file_group: &amp;#34;{{ user_deploy.username }}&amp;#34; </description>
+      <description>MariaDB Client Default variables --- mysql_client: client: &amp;#34;mariadb-client&amp;#34; # package name of the MySQL client to install host: &amp;#34;localhost&amp;#34; user: &amp;#34;root&amp;#34; password: &amp;#34;password&amp;#34; creds_file_dest: &amp;#34;/home/{{ user_deploy.username }}/.mysql.creds&amp;#34; creds_file_owner: &amp;#34;{{ user_deploy.username }}&amp;#34; creds_file_group: &amp;#34;{{ user_deploy.username }}&amp;#34; </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce/</guid>
+      <description>MySQL Server - Oracle Community Edition Installs MySQL Server 5.7.
+Default variables --- mysql_long_query_time: 4 mysql_server_oracle_ce_key: &amp;#34;8C718D3B5072E1F5&amp;#34; # archive key - see https://dev.mysql.com/doc/refman/8.0/en/gpg-key-archived-packages.html mysql_server_oracle_ce_key_server: pgp.mit.edu </description>
     </item>
     
     <item>
@@ -515,7 +578,8 @@ export DISPLAY=:99 Here is an example lighthouserc.yml file for running lhci in 
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx/</guid>
       <description>NGINX Install and configure the nginx webserver.
-Default variables --- php: version: - 7.3 symfony_env: &amp;#34;{{ _env_type }}&amp;#34; nginx: # Global default config for nginx.conf. user: www-data worker_processes: auto events: worker_connections: 768 http: server_names_hash_bucket_size: 256 access_log: /var/log/nginx-access.log error_log: /var/log/nginx-error.log # Group prefix. Useful for grouping by environments. log_group_prefix: &amp;#34;&amp;#34; # Main log stream for nginx (Cloudwatch). log_stream_name: example # We can only have one backend, due to the way we use &amp;#34;common&amp;#34; templates.</description>
+Note, the directives are mostly DENY FIRST so if you&amp;rsquo;re expecting to find config that blocks a certain file extension or pattern you should consider it the other way and ensure that pattern is not allowed anywhere.
+Default variables --- # We might not want to install PHP, but we do need the version variable for templates, hence including this. # Default version should track the php-common role.</description>
     </item>
     
     <item>
@@ -525,17 +589,7 @@ Default variables --- php: version: - 7.3 symfony_env: &amp;#34;{{ _env_type }}&
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs/</guid>
       <description>NodeJS Installs NodeJS from official repos.
-Default variables --- nodejs: version: 12.x </description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache/</guid>
-      <description>opcache Installs and configures gordalina&amp;rsquo;s cache tool: https://github.com/gordalina/cachetool
-Default variables --- # defaults file for opcache opcache: cachetool_version: latest # enter three-digit version number, e.g. &amp;#34;7.0.0&amp;#34;, to install a specific version host: &amp;#34;&amp;#34; port: &amp;#34;&amp;#34; </description>
+Default variables --- nodejs: # Used by apt_unattended_upgrades apt_origin_nodejs: &amp;#34;origin=Node Source,codename=${distro_codename},label=Node Source&amp;#34; # nodejs repo apt_origin_yarn: &amp;#34;origin=yarn,codename=stable,label=yarn-stable&amp;#34; # yarn repo version: 18.x # LTS - see https://nodejs.dev/en/about/releases/ npm_packages: [] #npm_packages: # - name: coffee-script # required # version: &amp;#34;1.6.1&amp;#34; # path: /path/to/node/app # omit to install globally </description>
     </item>
     
     <item>
@@ -560,12 +614,22 @@ Default variables --- # defaults file for ossec ossec: client: true serverip: &a
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer/</guid>
+      <description>Packer Role to install Hashicorp&amp;rsquo;s Packer binary.
+Default variables --- packer: version: &amp;#34;1.9.1&amp;#34; # see https://releases.hashicorp.com/packer/ </description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer/</guid>
       <description>PHP Composer This role is used to install the Composer package manager for PHP. It wraps the Galaxy role from Jeff Geerling which can be found here:
- https://github.com/geerlingguy/ansible-role-composer  Default variables php_composer: # Abstractions of default variables which can be found here: # https://github.com/geerlingguy/ansible-role-composer/blob/master/defaults/main.yml version: &amp;#39;1.8.4&amp;#39; # Buster apt package is &amp;#39;Composer 1.8.4 2019-02-11 10:52:10&amp;#39; keep_updated: false version_branch: &amp;#39;&amp;#39; github_oauth_token: &amp;#39;&amp;#39; </description>
+ https://github.com/geerlingguy/ansible-role-composer  Default variables php_composer: # Abstractions of default variables which can be found here: # https://github.com/geerlingguy/ansible-role-composer/blob/master/defaults/main.yml version: &amp;#39;&amp;#39; keep_updated: true version_branch: &amp;#39;&amp;#39; # empty installs latest version by default github_oauth_token: &amp;#39;&amp;#39; </description>
     </item>
     
     <item>
@@ -585,7 +649,7 @@ Default variables --- xdebug: cli: false fpm: false scream: 0 max_nesting_level:
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix/</guid>
       <description>Postfix Installs and configures Postfix for sending mail. Mail sending is disabled by default.
-Default variables --- postfix: hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; # if you set this to something else you may have to create PTR records to avoid bouncing dest_hosts: &amp;#34;mail.host1.com,mail.host2.com&amp;#34; disable_vrfy: false interfaces: all # ce_dev_delivery_mode is only used when is_local == true, which means you&amp;#39;re probably using ce-dev locally. Valid modes are host, local and discard. ce_dev_delivery_mode: &amp;#34;host&amp;#34; message_size: 10240000 networks: - &amp;#34;[::1]/128&amp;#34; - &amp;#34;[::ffff:127.</description>
+Default variables --- postfix: hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; # if you set this to something else you may have to create PTR records to avoid bouncing dest_hosts: &amp;#34;mail.host1.com,mail.host2.com&amp;#34; disable_vrfy: &amp;#34;no&amp;#34; # leave as &amp;#39;no&amp;#39; for Postfix config, not a YAML boolean interfaces: all # ce_dev_delivery_mode is only used when is_local == true, which means you&amp;#39;re probably using ce-dev locally.</description>
     </item>
     
     <item>
@@ -596,6 +660,37 @@ Default variables --- postfix: hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; # 
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager/</guid>
       <description>Process Manager Although there is the ansible.builtin.service module for manipulating services, if services do not stop cleanly this can cause problems. This role attempts to first stop and disable a service with the proper module, but if that fails it follows up with pkill and kill -9 commands for any trailing processes, to ensure the service is truly stopped.
 Configuration This role expects only the service name as a variable, it has a concept of pluggable operations but for now only the stop operation exists.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto/</guid>
+      <description>Python Boto Role to install the boto3 library for Python integration with AWS services.
+Default variables python_boto: boto3_version: &amp;#34;1.22.13&amp;#34; # first version that works with &amp;#39;stable-6&amp;#39; AWS collections - empty string means latest </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip/</guid>
+      <description>Python Pip Role to install pip3.
+Note, the variables do not do anything for Debian 12 (bookworm) onwards, as pip3 is handled by apt from then on.
+Default variables --- # Variables only valid for Debian versions below 12 (bookworm). python_pip: python_binary_path: &amp;#34;/usr/bin/python3&amp;#34; pip_packages: - &amp;#34;python-pip&amp;#34; - &amp;#34;python3-pip&amp;#34; upgrade: enabled: true # create cron job to auto-upgrade pip command: &amp;#34;/usr/bin/python -m pip install --upgrade pip&amp;#34; # cron variables - see https://docs.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter/</guid>
+      <description>rkhunter Installs and configures the rkhunter malware scanner.
+Default variables --- rkhunter: apt_autogen: &amp;#34;yes&amp;#34; # automatically update the rkhunter database when apt has run - set to &amp;#34;false&amp;#34; to suppress report_email_recipient: system@example.com warning_email_recipient: &amp;#34;&amp;#34; mail_command: &amp;#39;mail -s &amp;#34;[rkhunter] Warnings found for ${HOST_NAME}&amp;#34;&amp;#39; web_command: &amp;#34;curl&amp;#34; bin_directory: &amp;#34;/bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin /usr/libexec /usr/local/libexec&amp;#34; log_file: /var/log/rkhunter.log append_log: &amp;#34;0&amp;#34; copy_log_on_error: &amp;#34;0&amp;#34; use_syslog: authpriv.warning allow_ssh_root_user: &amp;#34;{{ sshd.PermitRootLogin }}&amp;#34; disable_tests: &amp;#34;suspscan hidden_procs deleted_files packet_cap_apps apps os_specific&amp;#34; scriptwhitelist: - /bin/egrep - /bin/fgrep - /bin/which - /usr/bin/ldd # - /usr/bin/lwp-request - /usr/sbin/adduser # - /usr/sbin/prelink - /usr/sbin/unhide.</description>
     </item>
     
     <item>
@@ -623,7 +718,7 @@ Default variables --- rsyslog: listen_port: 514 # Either client or server. role:
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server/</guid>
-      <description>SSHD Default variables --- sshd: # Main options. Port: - 22 ListenAddress: - &amp;#34;0.0.0.0&amp;#34; - &amp;#34;::&amp;#34; AllowAgentForwarding: &amp;#34;yes&amp;#34; AllowGroups: &amp;#34;&amp;#34; AllowTcpForwarding: &amp;#34;yes&amp;#34; AuthenticationMethods: &amp;#34;&amp;#34; AuthorizedKeysCommand: &amp;#34;&amp;#34; AuthorizedKeysCommandUser: &amp;#34;nobody&amp;#34; ChallengeResponseAuthentication: &amp;#34;no&amp;#34; ClientAliveCountMax: 3 ClientAliveInterval: 60 Compression: &amp;#34;delayed&amp;#34; GatewayPorts: &amp;#34;no&amp;#34; HostKey: [] LoginGraceTime: &amp;#34;2m&amp;#34; LogLevel: &amp;#34;INFO&amp;#34; MaxAuthTries: 6 MaxSessions: 10 PasswordAuthentication: &amp;#34;no&amp;#34; PermitRootLogin: &amp;#34;prohibit-password&amp;#34; PermitTTY: &amp;#34;yes&amp;#34; PermitTunnel: &amp;#34;no&amp;#34; PermitUserEnvironment: &amp;#34;no&amp;#34; PrintLastLog: &amp;#34;yes&amp;#34; PrintMotd: &amp;#34;no&amp;#34; PubkeyAuthentication: &amp;#34;yes&amp;#34; RekeyLimit: &amp;#34;default none&amp;#34; StrictModes: &amp;#34;yes&amp;#34; Subsystem_sftp: &amp;#34;internal-sftp&amp;#34; SyslogFacility: &amp;#34;AUTH&amp;#34; TCPKeepAlive: &amp;#34;yes&amp;#34; UseDNS: &amp;#34;no&amp;#34; UsePAM: &amp;#34;yes&amp;#34; X11DisplayOffset: 10 X11Forwarding: &amp;#34;yes&amp;#34; X11UseLocalhost: &amp;#34;yes&amp;#34; # Define some defaults &amp;#34;special&amp;#34; groups.</description>
+      <description>SSHD Default variables --- sshd: # Main options. Port: - 22 ListenAddress: - &amp;#34;0.0.0.0&amp;#34; - &amp;#34;::&amp;#34; AllowAgentForwarding: &amp;#34;yes&amp;#34; AllowGroups: &amp;#34;&amp;#34; AllowTcpForwarding: &amp;#34;yes&amp;#34; AuthenticationMethods: &amp;#34;&amp;#34; AuthorizedKeysCommand: &amp;#34;&amp;#34; AuthorizedKeysCommandUser: &amp;#34;nobody&amp;#34; ChallengeResponseAuthentication: &amp;#34;no&amp;#34; ClientAliveCountMax: 3 ClientAliveInterval: 60 Compression: &amp;#34;delayed&amp;#34; GatewayPorts: &amp;#34;no&amp;#34; HostKey: [] LoginGraceTime: &amp;#34;2m&amp;#34; LogLevel: &amp;#34;INFO&amp;#34; MaxAuthTries: 6 MaxSessions: 10 PasswordAuthentication: &amp;#34;no&amp;#34; PermitRootLogin: &amp;#34;prohibit-password&amp;#34; PermitTTY: &amp;#34;yes&amp;#34; PermitTunnel: &amp;#34;no&amp;#34; PermitUserEnvironment: &amp;#34;no&amp;#34; PrintLastLog: &amp;#34;yes&amp;#34; PrintMotd: &amp;#34;no&amp;#34; Protocol: &amp;#34;2&amp;#34; PubkeyAuthentication: &amp;#34;yes&amp;#34; RekeyLimit: &amp;#34;default none&amp;#34; StrictModes: &amp;#34;yes&amp;#34; Subsystem_sftp: &amp;#34;internal-sftp&amp;#34; SyslogFacility: &amp;#34;AUTH&amp;#34; TCPKeepAlive: &amp;#34;yes&amp;#34; UseDNS: &amp;#34;no&amp;#34; UsePAM: &amp;#34;yes&amp;#34; X11DisplayOffset: 10 X11Forwarding: &amp;#34;yes&amp;#34; X11UseLocalhost: &amp;#34;yes&amp;#34; # Define some defaults &amp;#34;special&amp;#34; groups.</description>
     </item>
     
     <item>
@@ -639,12 +734,34 @@ If you are using LetsEncrypt for handling it assume standalone mode. If you want
     
     <item>
       <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config/</guid>
+      <description>sudo config Manages sudo permissions. Note, this role does not install any form of sudo package, it assumes the required packages are already installed and simply ensures the existance of /etc/sudoers.d and places a correctly formatted config file within. If sudo.entity_name is not set it will do nothing.
+There is good documentation on the sudoer format in the Ubuntu documentation, here:
+ https://help.ubuntu.com/community/Sudoers  Default variables --- sudo_config: entity_name: &amp;#34;&amp;#34; # comma separated list of users, sudo user alias or group name, not forgetting to prefix groups with a &amp;#39;%&amp;#39; symbol # Defaults compile the following string to give a user passwordless access to all commands on all hosts: # someuser ALL=(ALL) NOPASSWD: ALL hosts: &amp;#34;ALL&amp;#34; # can also be a comma separated list of hosts or sudo host alias operators: &amp;#34;(ALL)&amp;#34; # can also be a sudo user alias or an empty string tags: &amp;#34;NOPASSWD:&amp;#34; # colon separated list of valid sudo tags (NOEXEC, PASSWD, NOPASSWD) with trailing colon, can also be an empty string commands: &amp;#34;ALL&amp;#34; # can also be a sudo command alias or a comma separated list (see the `squashfs` role for an example) filename: &amp;#34;sudoer&amp;#34; # name of config file in /etc/sudoers.</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config/</guid>
       <description>varnish-config Installs and configures Varnish, with 6.4 being the default version. Depends on geerlingguy.varnish which does the setup bit, varnish-config handles the default.vcl file.
 Default variables --- # Defaults file for varnish_config, other variables exist from importing geerlingguy.varnish and can be overriden varnish_config: # List of IPs that are allowed to ask for content purge. allowed_purge_IP: [] # Paths that won&amp;#39;t be cached. bypass_cache_paths: install\.php|update\.php|cron\.php # Set this to the actual host you want to force instead of false.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh/</guid>
+      <description>wazuh Wraps the Wazuh Ansible roles to configure Wazuh in various different scenarios, based on the example configrations provided in the Wazuh documentation .
+Supports standalone managers, scaled out services and agent installation (default).
+Default variables --- wazuh: #roles_directory: &amp;#34;/path/to/roles&amp;#34; # defaults to /home/controller/.ansible/roles/wazuh-ansible branch: &amp;#34;4.3&amp;#34; # wazuh-ansible git branch to checkout - not to be confused with wazuh_version! # Agent variables, installed locally by default # Role defaults - https://github.</description>
     </item>
     
   </channel>

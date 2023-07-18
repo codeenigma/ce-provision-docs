@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/1.x/css/main.min.9c98165d1dd1f18e44902c88197986b800a6f81dad436c40e50a55817cd0f131.css">
 </head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/1.x/home">ce-provision</a></header><article>
         <h1 id="init-role">Init role</h1>
-<p>This is meant to ALWAYS be included as the first task of a play.</p>
+<p>This is meant to ALWAYS be included as the first task of a play. If you include this role, as you will in the vast majority of cases, be sure to also include the <code>_exit</code> role as the last task of the play.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
@@ -20,38 +20,16 @@
   <span style="color:#66d9ef">vars_dirs</span>: []
   <span style="color:#66d9ef">force_play</span>: <span style="color:#66d9ef">false</span>
 
-<span style="color:#75715e"># ce_provision vars are sometimes needed even when the role isn&#39;t used so we define them here.</span>
-<span style="color:#75715e"># If you are using ce_provision and *not* using _init you can copy these vars to your playbook.</span>
-<span style="color:#66d9ef">_ce_provision</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{% if is_local is defined and is_local %}ce-dev{% else %}controller{% endif %}&#34;</span>
-
-<span style="color:#66d9ef">ce_provision</span>:
-  <span style="color:#66d9ef">username</span>: <span style="color:#e6db74">&#34;{{ _ce_provision.username }}&#34;</span>
-  <span style="color:#66d9ef">new_user</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if user already exists or is ephemeral, e.g. an LDAP user</span>
-  <span style="color:#66d9ef">key_name</span>: id_rsa.pub <span style="color:#75715e"># existing users may have a key of a different name</span>
-  <span style="color:#75715e"># Main repo.</span>
-  <span style="color:#66d9ef">own_repository</span>: <span style="color:#e6db74">&#34;https://github.com/codeenigma/ce-provision.git&#34;</span>
-  <span style="color:#66d9ef">own_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">own_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#75715e"># Destination.</span>
-  <span style="color:#66d9ef">local_dir</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision.username }}/ce-provision&#34;</span>
-  <span style="color:#75715e"># Private config repo.</span>
-  <span style="color:#66d9ef">config_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">config_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">config_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#75715e"># Although these variables logically belong with ce_provision, the _init role needs to</span>
+  <span style="color:#75715e"># gather the extra variables if there are any, so there are _init variables.</span>
   <span style="color:#75715e"># Extra config repo.</span>
-  <span style="color:#66d9ef">extra_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
-  <span style="color:#66d9ef">extra_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
-  <span style="color:#66d9ef">extra_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">extra_repository_vars_file</span>: <span style="color:#e6db74">&#34;custom.yml&#34;</span>
-  <span style="color:#75715e"># Wether to commit back changes to extra repo.</span>
-  <span style="color:#66d9ef">extra_repository_push</span>: <span style="color:#66d9ef">false</span>
-  <span style="color:#66d9ef">extra_repository_allowed_vars</span>: []
-  <span style="color:#75715e"># List of additional groups to add the user to.</span>
-  <span style="color:#66d9ef">groups</span>: []
-  <span style="color:#75715e"># File containing default roles and collections to install via Ansible Galaxy.</span>
-  <span style="color:#75715e"># Roles will be installed to $HOME/.ansible/roles for the provision user. This roles path should be added to your ansible.cfg file.</span>
-  <span style="color:#66d9ef">galaxy_custom_requirements_file</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision.username }}/ce-provision/config/files/galaxy-requirements.yml&#34;</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository</span>: <span style="color:#e6db74">&#34;&#34;</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository_branch</span>: <span style="color:#e6db74">&#34;master&#34;</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository_skip_checkout</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository_vars_file</span>: <span style="color:#e6db74">&#34;custom.yml&#34;</span>
+  <span style="color:#75715e"># Whether to commit back changes to extra repo.</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository_push</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">ce_provision_extra_repository_allowed_vars</span>: []
 
 </code></pre></div><!-- raw HTML omitted -->
 
@@ -78,6 +56,7 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ansible">Ansible</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apache">APACHE</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_extra_packages">Extra packages</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/apt_unattended_upgrades">APT Unattended Upgrades</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws_cloudwatch_agent">AWS Cloudwatch agent</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws">AWS Infrastructure</a>
 <ul>
@@ -93,8 +72,11 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_ec2_with_eip">EC2 instance with EIP</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs_client">EFS client</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_efs">AWS EFS</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_elasticache">AWS ElastiCache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_role">AWS IAM EC2</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_iam_saml">AWS IAM SAML</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/_aws_network_info">AWS Network Info</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_opensearch">AWS OpenSearch</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_provision_ec2_keypair">AWS key pair.</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_rds">AWS RDS</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/aws/aws_s3_bucket">AWS S3 Bucket</a></li>
@@ -109,9 +91,9 @@
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_dev">Extra packages</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_patcher">Automated patching</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ce_provision">ce-provision</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/clamav">ClamAV</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/firewall_config">Firewall Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/frontail">Frontail</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/geerlingguy.solr">Ansible Role: Apache Solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab">Gitlab</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gitlab_runner">Gitlab Runner</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/gpg_key">GPG Key</a></li>
@@ -131,21 +113,27 @@
 </li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mount_sync">Mount sync</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_client">MariaDB Client</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/mysql_server_oracle_ce">MySQL Server - Oracle Community Edition</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nginx">NGINX</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/nodejs">NodeJS</a></li>
-<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/opcache">opcache</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/openvpn_config">OpenVPN Config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ossec">OSSEC</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/_overrides">_overrides.</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/packer">Packer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_composer">PHP Composer</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/php_xdebug">PHP XDebug</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/postfix">Postfix</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/process_manager">Process Manager</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_boto">Python Boto</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/python_pip">Python Pip</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rkhunter">rkhunter</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/rsyslog">Rsyslog</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/solr">solr</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssh_server">SSHD</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/ssl">SSL</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/sudo_config">sudo config</a></li>
 <li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/varnish_config">varnish-config</a></li>
+<li><a href="https://codeenigma.github.io/ce-provision-docs/1.x/roles/wazuh">wazuh</a></li>
 </ul>
 </li>
 </ul>
