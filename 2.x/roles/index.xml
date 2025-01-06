@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Roles on ce-provision</title>
+    <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/</link>
+    <description>Recent content in Roles on ce-provision</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_init/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_init/</guid>
+      <description>Init role This is meant to ALWAYS be included as the first task of a play. If you include this role, as you will in the vast majority of cases, be sure to also include the _exit role as the last task of the play.&#xA;Default variables --- # Set this variable to true to tell ce-provision it is running in a container. is_local: false _ce_provision_username: &amp;#34;{% if is_local %}ce-dev{% else %}controller{% endif %}&amp;#34; _venv_path: &amp;#34;/home/{{ _ce_provision_username }}/ce-python&amp;#34; _venv_command: /usr/bin/python3 -m venv _venv_install_username: &amp;#34;{{ _ce_provision_username }}&amp;#34; _ce_ansible_timer_name: upgrade_ansible # AWS variables - if you are using an AWS account, you can preset certain variables # Generally it is recommended to place these in your ce-provision-config repository under hosts/group_vars/all #_aws_profile: example # boto profile name #_aws_region: eu-west-1 _init: # A list of var directories to include.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/</guid>
+      <description>&amp;ldquo;Meta&amp;rdquo; roles that group individual roles together. </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_account/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_account/</guid>
+      <description>AWS account Configure an AWS account globally.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_client_instance/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_client_instance/</guid>
+      <description>AWS client Installs AWS tools (Cloudwatch, SSM, &amp;hellip;) on servers. Servers can theoretically be anywhere, they do not have to be AWS EC2 instances.&#xA;The server will need some IAM permissions, either through:&#xA;an IAM role (see aws/aws_iam_role), the standard for EC2 instances. an IAM user (see aws/aws_credentials), for non-AWS servers. </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_region/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_region/</guid>
+      <description>AWS region Configure an AWS region globally.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_overrides/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_overrides/</guid>
+      <description>_overrides. Allow some files and symlinks to be created or replaced on the target server. Usually not called by itself, but triggered by other roles relying on it.&#xA;Default variables --- _overrides: # A list of files to override. files: [] # files: # - src: &amp;#34;php/php.ini&amp;#34; # This is relative to the &amp;#34;extra&amp;#34; config, or to the playbook. # dest: &amp;#34;/etc/php7.4/fpm/php.ini&amp;#34; # mode: &amp;#34;0755&amp;#34; # owner: &amp;#34;root&amp;#34; # group: &amp;#34;root&amp;#34; links: [] # links: # - src: &amp;#34;/mnt/assets&amp;#34; # This is absolute, on the target.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/</guid>
+      <description>AWS Infrastructure These roles help you manage assets in AWS. Because these roles are AWS specific, you should not try to use them in a non-AWS environment. There are also some quite specific variables we expect to exist, specifically:&#xA;_aws_region _aws_profile _aws_resource_name Hosts and groups handling These roles assume you use the AWS EC2 inventory plugin to automatically build inventory:&#xA;https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html This can be loaded via your ansible.cfg file in your config repository.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/_aws_network_info/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/_aws_network_info/</guid>
+      <description>AWS Network Info Helper role that returns AWS VPC network information, such as VPC and subnet IDs, in a consistent format to be used in other roles.&#xA;Default variables </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acl/</guid>
+      <description>AWS ACL Creates an ACL to be attached to a CloudFront distribution or an Application Load Balancer (ALB).&#xA;Default variables --- aws_acl: - name: &amp;#34;{{ _infra_name }}_main_acl&amp;#34; description: &amp;#34;ACL rules from ce-provision-config&amp;#34; scope: CLOUDFRONT # Can be REGIONAL for ALBs region: &amp;#34;us-east-1&amp;#34; tags: &amp;#34;{{ _aws_tags }}&amp;#34; recreate: false # set to true to creating the ACL rules: rate_limit: value: 600 # set to 0 to skip rate limit rule, set to a value to set how many requests to allow in period before blocking priority: 2 # can be float with 1 decimal place ip_sets: - rule_name: &amp;#34;Allowed-IPs-rule&amp;#34; set_name: &amp;#34;Allowed-IPs-set&amp;#34; description: &amp;#34;List of IPs to whitelist - Ansible managed&amp;#34; action: allow priority: 1 list: - 1.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acm/</guid>
+      <description>AWS Certificate Manager Fork from https://github.com/FairwindsOps/ansible-acm Creates AWS certificate requests. Allows for passing a validation domain. From the AWS documentation :&#xA;To ensure that email is sent to the administrative addresses for an apex domain, such as example.com, rather than to the administrative addresses for a subdomain, such as test.example.com, specify the ValidationDomain option in the RequestCertificate API or the request-certificate AWS CLI command. This feature is not currently supported in the console.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami/</guid>
+      <description>&lt;h1 id=&#34;aws-ami&#34;&gt;AWS AMI&lt;/h1&gt;&#xA;&lt;p&gt;Creates an image from a selected base with Packer, provisioned with an Ansible Playbook.&lt;/p&gt;&#xA;&lt;h2 id=&#34;dependencies&#34;&gt;Dependencies&lt;/h2&gt;&#xA;&lt;p&gt;This requires boto and Packer on the &amp;ldquo;provisioning&amp;rdquo; server.&lt;/p&gt;&#xA;&lt;p&gt;If using the &amp;lsquo;repack&amp;rsquo; operation, so your new AMI gets created from a temporary EC2 instance instead built by Packer, your playbook &lt;code&gt;hosts&lt;/code&gt; line will need to look like this:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;- &lt;span style=&#34;color:#f92672&#34;&gt;hosts&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;{{ _aws_ami_host | default(&amp;#39;default&amp;#39;) }}&amp;#34;&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;become&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Like that it will use &lt;code&gt;_aws_ami_host&lt;/code&gt; if available and default to &lt;code&gt;default&lt;/code&gt; if not, which is the value expected by Packer for the &amp;lsquo;create&amp;rsquo; operation.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;h2 id=&#34;default-variables&#34;&gt;Default variables&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami_asg_cleanup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami_asg_cleanup/</guid>
+      <description>AWS AMI ASG Cleanup Creates an scheduler and lambda function to remove old AMIs&#xA;Default variables --- aws_ami_asg_cleanup: memory_size: 128 # Memory allocation for Lambda function in MB timeout: 40 # Time in seconds, max is 900 handler: &amp;#34;clean_up_ami.lambda_handler&amp;#34; # Change this only if the main_file.main_function name is changed runtime: &amp;#34;python3.12&amp;#34; # If the python version changes we need to update this as well keep_backups: 10 scheduler_cron: &amp;#34;cron(0 16 ? * SUN *)&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup/</guid>
+      <description>AWS Backup Creates AWS Backup vaults and plans. Resources are assigned to these plans, if the variable is set, in the other roles, such as aws/aws_efs and aws/aws_rds.&#xA;Default variables --- aws_backup: vault: name: &amp;#34;Default&amp;#34; # Set the vault name; if anything but &amp;#39;default&amp;#39;, a vault will be created with the name specified and the encryption key below. encryption_key: &amp;#34;Default&amp;#34; # An Amazon Resource Name (ARN) that identifies the encryption key to use in the copy region.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup_validation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup_validation/</guid>
+      <description>AWS Backup Validation Creates AWS Restore testing plan for EC2 and RDS, EventBridge rule that gets triggered by restore testing and Lambda backup validation that will check and notify about the restored instance.&#xA;Default variables --- aws_backup_validation: s3_bucket: &amp;#34;codeenigma-{{ _aws_profile }}-general-storage-{{ _aws_region }}&amp;#34; name: &amp;#34;RestoreValidation&amp;#34; description: &amp;#34;Restore validation is running every Sunday at 00:00AM, and validation reporting is triggered on Monday 00:00AM&amp;#34; timeout: 60 runtime: &amp;#34;python3.12&amp;#34; handler: &amp;#34;lambda_handler&amp;#34; resources: - EC2 - RDS #- EFS </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudfront_distribution/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudfront_distribution/</guid>
+      <description>AWS CloudFront distribution Creates a new AWS CloudFront distribution (CDN) for content delivery.&#xA;Default variables --- aws_cloudfront_distribution: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; tags: {} state: present aliases: # A list of aliases to serve on. - &amp;#34;{{ _domain_name }}&amp;#34; validate_certs: false viewer_certificate: cloudfront_default_certificate: false acm_certificate_arn: &amp;#34;&amp;#34; # The certificate must be in us-east-1 for CloudFront. ssl_support_method: &amp;#34;sni-only&amp;#34; # Do not include if cloudfront_default_certificate is true. minimum_protocol_version: &amp;#34;TLSv1.2_2019&amp;#34; # Allowed values here: https://docs.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudwatch_log_group/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudwatch_log_group/</guid>
+      <description>Cloudwatch log group Manage log groups states and retention policies.&#xA;Default variables --- aws_cloudwatch_log_group: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; tags: {} state: present # Number of days to keep logs, in days. # Valid values are: [1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653] retention: 365 # Group names to apply the policy to. log_group_names: - &amp;#34;syslog&amp;#34; - &amp;#34;auth&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_credentials/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_credentials/</guid>
+      <description>Amazon credentials Simple role generating credentials &amp;ldquo;profiles&amp;rdquo; in users $HOME/.aws/credentials.&#xA;Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1 access_key_id: XXX secret_access_key: XXXX - name: example access_key_id: XXX secret_access_key: XXXX - user: root profiles: - name: another access_key_id: XXX secret_access_key: XXXX - name: profile2 access_key_id: XXX secret_access_key: XXXX </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_autoscale_cluster/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_autoscale_cluster/</guid>
+      <description>Autoscale cluster Supports either AWS EC2 Autoscaling Groups (ASGs) or AWS ECS clusters. Note, this role only deals with setting up the config and surrounding services, it does not handle any deployment of code or containers. If you want to use Code Enigma complementary tools, see these two roles in our ce-deploy project:&#xA;https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_container (ECS) https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_code (EC2) Note also that the deploy_code role needs to be used in tandem with this ce-provision role, which ensures there is a cloud-init script in place to install the code in the event of an instance replacement:</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_metric_alarm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_metric_alarm/</guid>
+      <description>EC2 CloudWatch Metric Alarm Creates an EC2 alarm for CloudWatch. You can use this role to set any alarm, the EC2 AutoScale role uses it to set autoscaling alarms for autoscaling policies if you need an example.&#xA;Default variables --- aws_ec2_metric_alarm: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; state: present name: &amp;#34;&amp;#34; description: &amp;#34;Created by Ansible.&amp;#34; metric: &amp;#34;&amp;#34; namespace: &amp;#34;&amp;#34; # The CloudWatch namespace (category) the alarm will appear in.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_with_eip/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_with_eip/</guid>
+      <description>EC2 instance with EIP Creates a new EC2 instance at AWS with a static IP address.&#xA;Default variables --- aws_ec2_with_eip: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; hostname: &amp;#34;{{ _domain_name }}&amp;#34; # The hostname is used to check if the machine exists already. force: false # Force a new EC2 machine to be created if a new AMI is packed. instance_type: t3.micro key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; # This needs to match your &amp;#34;provision&amp;#34; user SSH key.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_efs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_efs/</guid>
+      <description>AWS EFS Creates or update an EFS volume.&#xA;Default variables aws_efs: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example # If false, we omit tags enterly and leave them as is. purge_tags: false tags: {} state: present wait: true # Subnets names. subnets: [] security_groups: [] # list of security group names, converted to IDs by aws_security_groups role # Whether to encrypt the volume or not. encrypt: false backup: &amp;#34;{{ _infra_name }}-{{ _env_type }}&amp;#34; # Name of the AWS Backup plan to use to backup the instance.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_elasticache/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_elasticache/</guid>
+      <description>AWS ElastiCache Default variables --- aws_elasticache: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example description: example state: present subnets: - subnet-aaaaaaaa - subnet-bbbbbbbb elasticache_engine: memcached #cache_engine_version: 1.4.14 #cache_parameter_group: my_custom_parameters elasticache_node_type: cache.t3.medium elasticache_nodes: 1 elasticache_port: 11211 elasticache_security_groups: [] # list of security group names, converted to IDs by aws_security_groups role #zone: eu-west-1a # AZ where the cluster will reside </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_role/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_role/</guid>
+      <description>AWS IAM EC2 Set up an IAM role, with basic document/trust policy.&#xA;Default variables aws_iam_role: name: &amp;#34;example&amp;#34; aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; # Pass either names or ARNs for the role. managed_policies: [] # Which document policy to apply. # Current options are &amp;#39;ec2&amp;#39;, &amp;#39;ecs&amp;#39; or &amp;#39;backup&amp;#39; policy_document: ec2 purge_policies: true # set to false if you want to add policies to an existing role tags: #Type: &amp;#34;util&amp;#34; state: present _result: {} </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_saml/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_saml/</guid>
+      <description>AWS IAM SAML Creates the necessary policies and roles for SAML-based SSO in AWS and optionally creates Service Provider (SP) includes for SimpleSAMLphp .&#xA;All tasks in this role are optional and can be skipped by simply not presenting a variable.&#xA;Variables are generic for AWS SAML configuration up until the saml_metadata_document variable. Groups are intended to be LDAP groups, but in reality they can be any array of values you wish to pass to AWS to match against the eduPersonAffiliation SAML attribute on login.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_opensearch/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_opensearch/</guid>
+      <description>AWS OpenSearch Creates an OpenSearch or Elasticsearch domain using the AWS OpenSearch Service .&#xA;Default variables aws_opensearch: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; aws_region: &amp;#34;{{ _aws_region }}&amp;#34; domain_name: example tags: {} engine_version: OpenSearch_2.5 # e.g. OpenSearch_1.0 or Elasticsearch_6.8 instance_type: t3.medium.search instance_count: 1 zone_awareness: false dedicated_master: false availability_zone_count: 1 warm_enabled: false cold_storage: false volume_type: &amp;#34;gp2&amp;#34; volume_size: 10 subnets: - &amp;#34;subnet-aaaaaaaa&amp;#34; - &amp;#34;subnet-bbbbbbbb&amp;#34; security_groups: [] # list of security group names, converted to IDs by aws_security_groups role automated_snapshot_start_hour: 3 auto_tune: &amp;#34;DISABLED&amp;#34; # not supported when t3&amp;#39;s are used # List of maintenance schedules to use if auto_tune is set to &amp;#34;ENABLED&amp;#34;: #auto_tune_maintenance_schedules: # - start_at: &amp;#34;2022-08-10&amp;#34; # duration: # value: 2 # unit: &amp;#34;HOURS&amp;#34; # cron_expression_for_recurrence: &amp;#34;cron(0 2 * * *)&amp;#34; wait: true wait_timeout: 1800 # Default is 300 seconds, but in fact the domain becomes available in about 30 minutes.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</guid>
+      <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;&#xA;Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_rds/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_rds/</guid>
+      <description>AWS RDS Creates an RDS instance and associated ressources.&#xA;If the engine variable is set to aurora-mysql, you&amp;rsquo;ll need to manually create the Aurora cluster first. Typically, a controller will already exist, so something like this can be run from the controller:&#xA;AWS_PROFILE=example aws rds create-db-cluster --db-cluster-identifier example-aurora-cluster --engine aurora-mysql --engine-version 5.7.mysql_aurora.2.10.2 --db-subnet-group-name example-aurora --vpc-security-group-ids sg-abcdefghijklmnop --storage-encrypted --master-username &amp;#34;auroradev&amp;#34; --master-user-password &amp;#34;aurora12345&amp;#34; You&amp;rsquo;ll need to have created the subnet group first as well as the security groups.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_resource_group/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_resource_group/</guid>
+      <description>AWS Resource Group. Creates a Resource Group based on Environment and resource that is getting built. Once the resource group is created, AWS will automatically add or remove resources from groups.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_s3_bucket/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_s3_bucket/</guid>
+      <description>AWS S3 Bucket Creates an S3 bucket and a matching policy.&#xA;Default variables aws_s3_bucket: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: &amp;#34;example&amp;#34; tags: Name: &amp;#34;example&amp;#34; state: &amp;#34;present&amp;#34; _result: {} </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_security_groups/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_security_groups/</guid>
+      <description>AWS Security Groups This is a helper role for managing AWS security groups. Security groups are created in the aws_vpc role, however different roles and modules require different data when working with security groups. This role allows you to feed in a list of security group names and get back, in private variables, the following data for later use in other places:&#xA;- name: Set up lists. ansible.builtin.set_fact: _aws_security_groups: [] # a list of all the security group data requested _aws_security_group_ids: [] # a list of security group IDs _aws_security_group_names: &amp;#34;{{ aws_security_groups.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sg_iptables/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sg_iptables/</guid>
+      <description>AWS SG/firewall role This role is used to define and set rules for SG and iptables so we have matching open ports on both ends&#xA;When this role is included in provision.yml it will override &amp;ldquo;_global_security_groups&amp;rdquo; and &amp;ldquo;firewall_config&amp;rdquo; rules and definitions If we use the same name as existing SG it will just attach it&amp;rsquo;s rules on top of current ones, to purge them either remove or set following 2 vars to true:</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sns/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sns/</guid>
+      <description>AWS SNS Creates an SNS topic and subscription.&#xA;Default variables --- aws_sns: name: &amp;#34;alarms&amp;#34; # Name of the topic. region: &amp;#34;{{ _aws_region }}&amp;#34; # The region to create the SNS topic. display_name: &amp;#34;&amp;#34; # Display name for the topic, for when the topic is owned by this AWS account. purge_subscriptions: true # Purge subscriptions not specified in the subscriptions list. policy: &amp;#34;&amp;#34; # A dictionary containing the policy to use when creating the topic delivery_policy_default_healthy_retry_policy_min_delay_target: 20 delivery_policy_default_healthy_retry_policy_max_delay_target: 20 delivery_policy_default_healthy_retry_policy_num_retries: 3 delivery_policy_default_healthy_retry_policy_num_max_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_no_delay_retries: 0 delivery_policy_default_healthy_retry_policy_num_min_delay_retries: 0 delivery_policy_default_healthy_retry_policy_backoff_function: &amp;#34;linear&amp;#34; delivery_policy_disable_subscription_overrides: false subscriptions: [] # A list of subscriptions.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc/</guid>
+      <description>VPC Creates a VPC and associated subnets.&#xA;Default variables aws_vpc: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; name: example-vpc-2 cidr_block: &amp;#34;10.0.0.0/16&amp;#34; # ipv6_cidr: true # uncomment to request an Amazon-provided IPv6 CIDR block with /56 prefix length. tags: {} #Type: &amp;#34;util&amp;#34; state: present assign_instances_ipv6: false security_groups: [] # - name: web - open # description: Allow all incoming traffic on ports 80 and 443 # rules: # - proto: tcp # ports: # - 80 # - 443 # cidr_ip: 0.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_route/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_route/</guid>
+      <description>Update main route for a given VPC This will add/update routes on the &amp;ldquo;main&amp;rdquo; route table for a given VPC, leaving existing routes for different CIDR blocks intact.&#xA;Default variables # @todo Support associating route with several subnets. aws_vpc_route: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; # Beware when calling this on &amp;#34;peering&amp;#34; routes, not to override tags with the target peer&amp;#39;s one. # tags: # Name: &amp;#34;example&amp;#34; vpc_id: vpc-XXX # subnet_id: subnet-XXX # Optional.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_subnet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_subnet/</guid>
+      <description>VPC Creates a VPC and associated subnets.&#xA;Default variables aws_vpc_subnet: vpc_id: vpc-XXXX # One of vpc_id or vpc_name is mandatory. # vpc_name: example-vpc aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; # If you intend to have RDS instances you must provide at least two subnets. subnets: - cidr_block: &amp;#34;10.0.0.0/24&amp;#34; # ipv6_cidr_block: &amp;#34;1&amp;#34; # This will create something like xxxx:xxxx:xxxx:xxyy::/64 where yy is created using the ansible.utils.ipsubnet filter automatically - DO NOT DEFINE IF IPV6 IS NOT REQUIRED az: b assign_instances_ipv6: false # if true, need to specify an ipv6_cidr_block value.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/contrib/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/contrib/</guid>
+      <description>Contributed roles This is a space for ce-provision to clone roles we use into. It is specifically for roles not available via Ansible Galaxy , which is always the preferred route for including other roles.&#xA;They will be installed from the ce_provision.contrib_roles variable .</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/</guid>
+      <description>Debian Packages This is a set of roles for installing packages on Debian Linux servers. We currently support Debian versions 11 (bullseye) and 12 (bookworm).</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible/</guid>
+      <description>Ansible Install Ansible in a Python virtual environment.&#xA;Note, it is vitally important that Ansible is not installed via apt or pip globally, or you will likely not get the correct version of Ansible when you try to run shell scripts. The role will try and take care of this for you, but for extra safety you could manually check prior to running ce-provision.&#xA;Default variables --- ce_ansible: # These are usually set in the _init role using _venv_path, _venv_command and _venv_install_username but can be overridden.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible_galaxy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible_galaxy/</guid>
+      <description>Ansible Galaxy Installs Ansible collections and roles with Ansible Galaxy.&#xA;Default variables --- ansible_galaxy: # Usually set in the _init role using _venv_path but can be overridden. #venv_path: &amp;#34;/home/controller/ce-python&amp;#34; username: controller # File containing default roles and/or collections to install via Ansible Galaxy. # Roles will be installed to the first path specified under roles_path in your ansible.cfg file. # Collections will be installed to collections_path in your ansible.cfg file. galaxy_requirements_file: &amp;#34;/home/{{ _ce_provision_username }}/ce-provision/config/files/galaxy-requirements.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apache/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apache/</guid>
+      <description>APACHE Install and configure the apache webserver.&#xA;Default variables --- php: version: - 8.1 # see https://www.php.net/supported-versions.php symfony_env: &amp;#34;{{ _env_type }}&amp;#34; apache: # Global default config for apache2.conf. user: www-data mods_enabled: - rewrite - ssl - proxy - proxy_fcgi - fcgid http: server_names_hash_bucket_size: 256 access_log: /var/log/apache2-access.log error_log: /var/log/apache2-error.log error_log_level: &amp;#34;notice&amp;#34; # Group prefix. Useful for grouping by environments. log_group_prefix: &amp;#34;&amp;#34; # Main log stream for apache (Cloudwatch). log_stream_name: example # We can only have one backend, due to the way we use &amp;#34;common&amp;#34; templates.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apparmor/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apparmor/</guid>
+      <description>Apparmor This role installs the apparmor application for additional security. Documentation for Debian is here:&#xA;https://wiki.debian.org/AppArmor/HowToUse The only additional feature of this role, aside from installing the package, is to create custom apparmor profiles. To create profiles you can provide a list with the variable apparmor.custom_profiles. Each item should have two elements, filename and contents. It is vitally important that filename matches the path to the binary you wish to provide a profile for.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_extra_packages/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_extra_packages/</guid>
+      <description>Extra packages Provides a wrapper for installing packages through apt.&#xA;Default variables --- apt_extra_packages: [] </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_repository/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_repository/</guid>
+      <description>APT Repository Role for handling the installation and management of APT repos. Uses the DEB822 format.&#xA;The variables uris, suites and components combine to build an APT repository request, for example these are the variables for the MySQL 8.0 repository:&#xA;uris: - http://repo.mysql.com/apt/debian/ suites: - &amp;#34;{{ ansible_distribution_release }}&amp;#34; components: - mysql-8.0 This example results in APT referring to the following URI on a Debian 11 (bullseye) system: https://repo.mysql.com/apt/debian/dists/bullseye/mysql-8.0/ Installing with key fingerprints This role does not currently support importing keys from a key server.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_unattended_upgrades/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_unattended_upgrades/</guid>
+      <description>APT Unattended Upgrades Provides a wrapper for managing the APT unattended-upgrades configuration.&#xA;Overview Since Debian 9 the unattended-upgrades package and service have been enabled by default. This role allows you to configure that by replacing the standard config with a templated copy. By default we enable unattended-upgrades with standard Debian updates and Debian security patches, plus emailing of results in the case of an upgrade error.&#xA;General settings You should make sure you set apt_unattended_upgrades.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cli/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cli/</guid>
+      <description>AWS CLI Installs the AWS client for Linux.&#xA;Default variables --- aws_cli: version: latest # Specify a particular version number in X.X.X format to override refresh: false # Set to true to upgrade or downgrade the AWS client, which also clears out install files in /opt/aws-cli </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cloudwatch_agent/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cloudwatch_agent/</guid>
+      <description>AWS Cloudwatch agent Install and configure the cloudwatch agent. Note that retention policies can not be set here, you will have to use the amazon.aws.cloudwatchlogs_log_group module in your playbooks.&#xA;Default variables --- aws_cloudwatch_agent: # Stream name. log_stream_name: example # Namespace for metrics. Leave empty to use the default CWAgent. metrics_namespace: example # Group prefix. Useful for grouping by environments. # Eg. instead of &amp;#34;syslog&amp;#34;, you can have &amp;#34;dev syslog&amp;#34;, &amp;#34;prod syslog&amp;#34;, etc.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_efs_client/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_efs_client/</guid>
+      <description>EFS client Mounts EFS volume(s) to specific mount point(s).&#xA;How the client package is created Because AWS do not ship a .deb file but provide build instructions instead , we use GitHub Actions in a dedicated repository to build the efs-utils package. By default this role will fetch a .deb package from the Code Enigma repository, here:&#xA;https://github.com/codeenigma/aws-efs-utils-deb-builder/tags If you wish to provide your own package, use aws_efs_client.deb_url to provide a full URL to a downloadable .</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_ssm_agent/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_ssm_agent/</guid>
+      <description>AWS SSM agent Install and configure the SSM agent.&#xA;Default variables --- aws_ssm_agent: region: &amp;#34;{{ _aws_region }}&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_deploy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_deploy/</guid>
+      <description>ce-deploy Installs Code Enigma&amp;rsquo;s deploy stack on a server.&#xA;Default variables --- _ce_deploy: username: &amp;#34;{% if is_local %}ce-dev{% else %}deploy{% endif %}&amp;#34; ce_deploy: # These are usually set in the _init role using _venv_path, _venv_command and _venv_install_username but can be overridden. #venv_path: &amp;#34;/home/{{ _ce_deploy.username }}/ce-python&amp;#34; #venv_command: /usr/bin/python3 -m venv #venv_install_username: &amp;#34;{{ _ce_deploy.username }}&amp;#34; #upgrade_timer_name: upgrade_ce_deploy_ansible # Other ce-deploy settings. aws_support: true # installs boto3 new_user: true # set to false if user already exists or is ephemeral, e.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_dev/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_dev/</guid>
+      <description>Extra packages Provides a wrapper for installing packages through apt.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_patcher/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_patcher/</guid>
+      <description>Automated patching Runs automated patching for apt-based package management systems.&#xA;Default variables --- ce_patcher: username: controller reboot: false </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_provision/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_provision/</guid>
+      <description>ce-provision Installs Code Enigma&amp;rsquo;s infrastructure management stack on a server. Note, the _init role creates the user and installs Ansible in a virtual environment, so that must be run prior to the ce_provision role.&#xA;Default variables --- # See roles/_init/defaults/main.yml for Ansible installation, controller user creation and extra variables repo settings. ce_provision: # These are usually set in the _init role using _venv_path, _venv_command and _venv_install_username but can be overridden. #venv_path: &amp;#34;/home/{{ _ce_provision_username }}/ce-python&amp;#34; #venv_command: /usr/bin/python3 -m venv #venv_install_username: &amp;#34;{{ _ce_provision_username }}&amp;#34; #upgrade_timer_name: upgrade_ce_provision_ansible # Other ce-provision settings.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/clamav/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/clamav/</guid>
+      <description>ClamAV This role provides a wrapper for Jeff Geerling&amp;rsquo;s Ansible role for ClamAV .&#xA;This role optionally provides systemd timers for routine scanning if you are not running ClamAV in daemon mode.&#xA;Default variables --- clamav: # wrapper scripts for clamav scripts: - location: /usr/local/clamav/script name: clamscan_daily exclude_directories: - /sys/ - /var/swap/ scan_location: / log_name: clamav_daily.log # scheduled scans, set to an empty list for no timers timers: - clamscan_daily: timer_command: /usr/local/clamav/script/clamscan_daily # path to clamscan wrapper script, ensure it is defined in clamav.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_ce/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_ce/</guid>
+      <description>Docker CE Installs Docker Engine community edition and related tools. Will install the Docker Compose plugin by default.&#xA;Default variables --- docker_ce: apt_origin: &amp;#34;origin=download.docker.com/linux,codename=${distro_codename},label=docker-ce&amp;#34; # used by apt_unattended_upgrades apt_signed_by: https://download.docker.com/linux/debian/gpg docker_compose: true </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_registry/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_registry/</guid>
+      <description>Docker Registry Provides a local Docker registry, predominantly used by ce-dev and the push and pull commands, but can be used to create a Docker registry on any target host. It uses the official Docker registry image to spin up a container on the target host which hosts the registry. The provided docker-compose.yml.j2 template can be overridden to provide an alternative Docker Compose service configuration.&#xA;Default variables --- docker_registry: bind: 127.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/duplicity/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/duplicity/</guid>
+      <description>Duplicity Role to install and configure the Duplicity backup engine for off site backups in Linux.&#xA;Default variables --- duplicity: # These are usually set in the _init role using _venv_path, _venv_command and _venv_install_username but can be overridden. #venv_path: &amp;#34;/home/{{ user_provision.username }}/duplicity&amp;#34; #venv_command: /usr/bin/python3 -m venv #venv_install_username: &amp;#34;{{ user_provision.username }}&amp;#34; # Duplicity configuration backend: s3 # currently also support b2 for Backblaze access_key_id: &amp;#34;somekey&amp;#34; secret_access_key: &amp;#34;somesecret&amp;#34; backend_url: &amp;#34;s3-eu-west-1.amazonaws.com&amp;#34; # &amp;#34;eu-west-1&amp;#34; can be substituted for &amp;#34;{{ _aws_region }}&amp;#34; if set s3_options: &amp;#34;--s3-use-glacier-ir&amp;#34; # see the --s3 options in the documentation - https://duplicity.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/firewall_config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/firewall_config/</guid>
+      <description>Firewall Config This role provides a wrapper for Jeff Geerling&amp;rsquo;s Ansible firewall role for iptables .&#xA;Note, it explicitly does not state that dependency in meta because in some cases iptables needs installing from buster-backports and that cannot work if Ansible tries to install it as a dependency. This is why the first task in this role is installing iptables from buster-backports if the is_local variable is set (e.g we are in a ce-dev container).</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/frontail/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/frontail/</guid>
+      <description>Frontail Installs https://github.com/mthenw/frontail globally. This is used for local dev environments.&#xA;Default variables --- frontail: error_log: &amp;#34;/var/log/nginx-error.log&amp;#34; access_log: &amp;#34;/var/log/nginx-access.log&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab/</guid>
+      <description>Gitlab Configuration Because of the size of the gitlab.rb file, it is impractical to try to parameterized it. Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &amp;ldquo;override&amp;rdquo; system and provide a custom template.&#xA;Default variables --- # See https://github.com/ansible/ansible/issues/8603 ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; gitlab: apt_origin: &amp;#34;origin=packages.gitlab.com/gitlab/gitlab-ce,codename=${distro_codename},label=gitlab-ce&amp;#34; # used by apt_unattended_upgrades apt_signed_by: https://packages.gitlab.com/gitlab/gitlab-ce/gpgkey server_name: &amp;#34;gitlab.{{ _domain_name }}&amp;#34; # Add a record for GitLab in AWS Route 53 # If you use the aws_ec2_with_eip role to create your server this will not be necessary gitlab_route_53: state: present zone: &amp;#34;&amp;#34; # empty zone skips DNS creation record: &amp;#34;{{ _domain_name }}&amp;#34; type: A # change to CNAME if required value: 1.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab_runner/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab_runner/</guid>
+      <description>Gitlab Runner Install the Gitlab Runner binary from .deb package.&#xA;The role installs the gitlab-runner package on the target server and installs a default built in shell runner, though you will need to create the registration token for the runner and add it to your variables. You can define one or more runners as a list of dicts as shown below. You can also set gitlab_runner.runners to an empty list if you do not want to override the default config shipped with the Debian package.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gpg_key/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gpg_key/</guid>
+      <description>GPG Key Generates a passwordless GPG key for a given user or users.&#xA;Default variables --- gpg_key_servers: - hkps://pgp.mit.edu - hkps://keys.openpgp.org gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/haproxy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/haproxy/</guid>
+      <description>HA Proxy Default variables --- _haproxy: ssl_handling: ssl_selfsigned haproxy: template: &amp;#34;haproxy-ssl-passthru&amp;#34; ssl_handling: &amp;#34;{{ _haproxy.ssl_handling }}&amp;#34; listen_bind_address: &amp;#34;0.0.0.0&amp;#34; listen_https: true listen_http: false default_backend: default backends: - name: default ip: 127.0.0.1 port: 8080 domain: &amp;#34;{{ _domain_name }}&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/hosts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/hosts/</guid>
+      <description>Managed /etc/hosts Forked from https://github.com/bertvv/ansible-role-hosts Default variables --- hosts_hostname: &amp;#34;&amp;#34; # provide a hostname to manage the system hostname value. hosts_playbook_version: &amp;#34;1.0.1&amp;#34; # If set to true, an entry for `ansible_hostname`, bound to the host&amp;#39;s default IPv4 address is added added. hosts_add_default_ipv4: true # If set to true, basic IPv6 entries (localhost6, ip6-localnet, etc) are added. hosts_add_basic_ipv6: true # If set to true, an entry for every host managed by Ansible is added.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jenkins/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jenkins/</guid>
+      <description>Jenkins Default variables --- ldap_client: endpoints: [&amp;#34;&amp;#34;] lookup_base: &amp;#34;&amp;#34; lookup_user: &amp;#34;&amp;#34; binddn: &amp;#34;&amp;#34; bindpw: &amp;#34;&amp;#34; jenkins: apt_signed_by: https://pkg.jenkins.io/debian/jenkins.io.key server_name: &amp;#34;jenkins.{{ _domain_name }}&amp;#34; ssl_handling: &amp;#34;ssl_selfsigned&amp;#34; listen_http_port: -1 listen_https_port: 8884 listen_bind_address: &amp;#34;0.0.0.0&amp;#34; keystore_pass: &amp;#34;cleartext&amp;#34; user: &amp;#34;jenkins&amp;#34; adminuser: &amp;#34;admin&amp;#34; adminpass: &amp;#34;{{ lookup(&amp;#39;password&amp;#39;, _ce_provision_data_dir + &amp;#39;/&amp;#39; + inventory_hostname + &amp;#39;/jenkins-adminpass&amp;#39;) }}&amp;#34; # security: basic | ldap security: &amp;#34;basic&amp;#34; plugins: - ldap - mattermost ldap_endpoint: &amp;#34;{{ ldap_client.endpoints[0] }}&amp;#34; ldap_lookup_base: &amp;#34;{{ ldap_client.lookup_base }}&amp;#34; ldap_lookup_user: &amp;#34;{{ ldap_client.lookup_user }}&amp;#34; ldap_binddn: &amp;#34;{{ ldap_client.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jitsi/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jitsi/</guid>
+      <description>Jitsi Installs the Jitsi Meet video conferencing product. See https://jitsi.github.io/handbook/docs/devops-guide/devops-guide-quickstart Default variables --- jitsi: apt_signed_by: https://download.jitsi.org/jitsi-key.gpg.key server_name: &amp;#34;{{ _domain_name }}&amp;#34; email: admin@example.com </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ldap_server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ldap_server/</guid>
+      <description>LDAP Server Install slapd and dependencies to run an LDAP directory server.&#xA;Configuration By default the role simply installs slapd and nothing else. However, you can import configuration from an LDIF file using slapadd. To create a config file from another LDAP server use this command:&#xA;slapcat -n 0 &amp;gt; /path/to/my/backup.ldif Place this file in the directory referenced in the ldap_server.config.path variable and set ldap_server.config.import to true and Ansible will attempt to import your config.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/lhci/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/lhci/</guid>
+      <description>LHCI Installs the LHCI CLI for automated accessibility and performance testing. See https://github.com/GoogleChrome/lighthouse-ci/blob/main/docs/getting-started.md The role installs Xvfb for &amp;lsquo;headful&amp;rsquo; running of Google Chome. This is preconfigured to run in the background with a display ID of 99, so you should run this command before running any lhci tests to ensure Chrome has an X session to run in:&#xA;export DISPLAY=:99 Here is an example lighthouserc.yml file for running lhci in a local ce-dev container on a project called &amp;rsquo;example&amp;rsquo;:</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mailpit/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mailpit/</guid>
+      <description>Mailpit Mailpit provides a dummy SMTP mail server and a HTTP interface for checking email so you can verify email is functional in an application without actually sending it out. This is particularly handy in dev and testing environments, as well as on local development environments.&#xA;The defaults will install Mailpit as a service and start it with SMTP on port 1025 and the web UI on port 8025. Don&amp;rsquo;t forget, for access to the web UI you will need to open the firewall port.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mount_sync/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mount_sync/</guid>
+      <description>Mount sync Syncronize some &amp;ldquo;mounted&amp;rdquo; filesystems with the local one. Typically used for EFS/NFS mounts on autoscale clusters. It will:&#xA;perform an initial rsync using a cloud-init script use Unison to perform regular checks (mostly to catch edge-cases where an instance would be spinned up during the middle of a deployment) Default variables --- mount_sync: # A list of target/destination definitions. sync_pairs: - src: /my/path/to/sync dest: /another/path/to/sync minute: &amp;#34;*/10&amp;#34; name: example owner: root group: root deploy_dir: &amp;#34;/home/{{ user_deploy.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_client/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_client/</guid>
+      <description>MariaDB Client Default variables --- mysql_client: client: &amp;#34;mariadb-client&amp;#34; # package name of the MySQL client to install host: &amp;#34;localhost&amp;#34; user: &amp;#34;root&amp;#34; password: &amp;#34;password&amp;#34; creds_file_dest: &amp;#34;/home/{{ user_deploy.username }}/.mysql.creds&amp;#34; creds_file_owner: &amp;#34;{{ user_deploy.username }}&amp;#34; creds_file_group: &amp;#34;{{ user_deploy.username }}&amp;#34; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_server_oracle_ce/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_server_oracle_ce/</guid>
+      <description>MySQL Server - Oracle Community Edition Installs MySQL Server 8.0 by default.&#xA;Default variables --- mysql_server: apt_origin: &amp;#34;origin=repo.mysql.com/apt,codename=${distro_codename},label=mysql&amp;#34; # used by apt_unattended_upgrades apt_signed_by: https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 apt_repo_version: mysql-8.0 long_query_time: 4 </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nginx/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nginx/</guid>
+      <description>NGINX Install and configure the NGINX webserver.&#xA;Note, the directives are mostly DENY FIRST so if you&amp;rsquo;re expecting to find config that blocks a certain file extension or pattern you should consider it the other way and ensure that pattern is not allowed anywhere.&#xA;Default variables --- # We might not want to install PHP, but we do need the version variable for templates, hence including this. # Default version should track the php-common role.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nodejs/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nodejs/</guid>
+      <description>NodeJS Installs NodeJS from official repos.&#xA;Default variables --- nodejs: # Used by apt_unattended_upgrades apt_origin_nodejs: &amp;#34;origin=. nodistro,codename=nodistro,label=. nodistro&amp;#34; # nodejs repo apt_signed_by_nodejs: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key apt_origin_yarn: &amp;#34;origin=yarn,codename=stable,label=yarn-stable&amp;#34; # yarn repo apt_signed_by_yarn: https://dl.yarnpkg.com/debian/pubkey.gpg version: 18.x # LTS - see https://nodejs.dev/en/about/releases/ npm_packages: [] #npm_packages: # - name: coffee-script # required # version: &amp;#34;1.6.1&amp;#34; # path: /path/to/node/app # omit to install globally </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/openvpn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/openvpn/</guid>
+      <description>OpenVPN This role installs the `openvpn-install.sh`` bash script from GitHub and optionally runs it in headless mode.&#xA;Server address This will be detected automatically as the IP address of the server. If the server is configured with only internal addressing then the script will attempt to look up the public IP. To specify a value use openvpn.nat_endpoint.&#xA;PAM authentication There are two options here, one is simple PAM authentication against Linux users, the other is PAM authentication with LDAP.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/packer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/packer/</guid>
+      <description>Packer Role to install Hashicorp&amp;rsquo;s Packer binary.&#xA;Default variables --- packer: version: &amp;#34;1.9.1&amp;#34; # see https://releases.hashicorp.com/packer/ </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/pam_linotp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/pam_linotp/</guid>
+      <description>PAM LinOTP Authentication module for integrating PAM logins with LinOTP second factor of authentication. We package this from source ourselves, as LinOTP provide the source code on GitHub but no APT package.&#xA;Default variables --- pam_linotp: apt_signed_by: https://packages.codeenigma.net/debian/codeenigma.pub # LinOTP endpoint. endpoint: &amp;#34;&amp;#34; # PAM policies. su: true sudo: true ssh: true </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-cli/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-cli/</guid>
+      <description>PHP terminal client Installs and configures terminal client for PHP.&#xA;Default variables --- php: cli: expose_php: &amp;#34;{% if _env_type == &amp;#39;prod&amp;#39; %}Off{% else %}On{% endif %}&amp;#34; error_reporting: &amp;#34;{% if _env_type == &amp;#39;prod&amp;#39; %}E_ALL &amp;amp; ~E_DEPRECATED &amp;amp; ~E_STRICT{% else %}E_ALL{% endif %}&amp;#34; display_errors: &amp;#34;{% if _env_type == &amp;#39;prod&amp;#39; %}Off{% else %}On{% endif %}&amp;#34; display_startup_errors: &amp;#34;{% if _env_type == &amp;#39;prod&amp;#39; %}Off{% else %}On{% endif %}&amp;#34; html_errors: &amp;#34;{% if _env_type == &amp;#39;prod&amp;#39; %}Off{% else %}On{% endif %}&amp;#34; engine: &amp;#34;On&amp;#34; short_open_tag: &amp;#34;Off&amp;#34; max_execution_time: 120 max_input_time: 60 max_input_nesting_level: 64 max_input_vars: 1000 memory_limit: -1 log_errors_max_len: 1024 ignore_repeated_errors: &amp;#34;Off&amp;#34; ignore_repeated_source: &amp;#34;Off&amp;#34; post_max_size: 200M upload_max_filesize: 200M max_file_uploads: 20 date_timezone: &amp;#34;Europe/London&amp;#34; gc_maxlifetime: 1440 zend_assertions: -1 overrides: {} opcache: enable: 1 enable_cli: 0 memory_consumption: 128 max_accelerated_files: 2000 validate_timestamps: 1 </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-common/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-common/</guid>
+      <description>PHP common components Installs and configures PHP core and required components.&#xA;Default variables --- php: version: - 8.1 # see https://www.php.net/supported-versions.php apt_signed_by: https://packages.sury.org/php/apt.gpg apt_origin: &amp;#34;origin=deb.sury.org,codename=${distro_codename}&amp;#34; # used by apt_unattended_upgrades </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-fpm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-fpm/</guid>
+      <description>PHP-FPM Installs and configures the PHP-FPM flavour of FastCGI.&#xA;Default variables --- php: # see php-common for default version fpm: # FPM settings - official documentation is here: https://www.php.net/manual/en/install.fpm.configuration.php unix_socket: false # set to true to use a unix socket, you must also update nginx and cachetool if you do server_ip: &amp;#34;127.0.0.1&amp;#34; tcp_port: &amp;#34;&amp;#34; # leave empty to automate port selection - port will be &amp;#34;90{{ version | replace(&amp;#39;.&amp;#39;,&amp;#39;&amp;#39;) }}&amp;#34; - e.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_composer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_composer/</guid>
+      <description>PHP Composer This role is used to install the Composer package manager for PHP. It wraps the Galaxy role from Jeff Geerling which can be found here:&#xA;https://github.com/geerlingguy/ansible-role-composer Default variables php_composer: # Abstractions of default variables which can be found here: # https://github.com/geerlingguy/ansible-role-composer/blob/master/defaults/main.yml version: &amp;#39;&amp;#39; keep_updated: true version_branch: &amp;#39;&amp;#39; # empty installs latest version by default github_oauth_token: &amp;#39;&amp;#39; </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_xdebug/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_xdebug/</guid>
+      <description>PHP XDebug Installs and configures XDebug extension for PHP.&#xA;Default variables --- xdebug: cli: false fpm: false scream: 0 max_nesting_level: 1024 mode: &amp;#34;debug&amp;#34; start_with_request: &amp;#34;trigger&amp;#34; output_dir: &amp;#34;/var/log/php/xdebug&amp;#34; remote_port: &amp;#34;9003&amp;#34; # The &amp;#34;auto&amp;#34; behaviour tries to guess the best setting for when in use with ce-dev. # You can of course set it explicitely to the relevant value for your use case. remote_host: auto # Default to docker.for.mac.localhost when used in ce-dev on a Mac OS host, and to 127.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/phpmyadmin/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/phpmyadmin/</guid>
+      <description>phpMyAdmin This role only installs phpMyAdmin ready for configuration, it does not do any active configuration, nor does it create the necessary NGINX vhost. It will install debian/php-fpm so do review the variables for PHP and set what you need prior to running a first build with phpmyadmin.&#xA;Similarly, it can optionally install debian/nginx if you set phpmyadmin.install_nginx: true, so if you do that be sure to provide a sensible NGINX config.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/postfix/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/postfix/</guid>
+      <description>Postfix Installs and configures Postfix for sending mail. Mail sending is disabled by default using transport maps.&#xA;Full TLS SMTP support is optional by enabling SSL.&#xA;Default variables --- postfix: hostname: &amp;#34;{{ ansible_fqdn }}&amp;#34; # if you set this to something else you may have to create PTR records to avoid bouncing dest_hosts: &amp;#34;mail.host1.com,mail.host2.com&amp;#34; disable_vrfy: &amp;#34;no&amp;#34; # leave as &amp;#39;no&amp;#39; for Postfix config, not a YAML boolean interfaces: all # ce_dev_delivery_mode is only used when is_local == true, which means you&amp;#39;re probably using ce-dev locally.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/process_manager/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/process_manager/</guid>
+      <description>Process Manager Although there is the ansible.builtin.service module for manipulating services, if services do not stop cleanly this can cause problems. This role attempts to first stop and disable a service with the proper module, but if that fails it follows up with pkill and kill -9 commands for any trailing processes, to ensure the service is truly stopped.&#xA;Configuration This role expects only the service name as a variable, it has a concept of pluggable operations but for now only the stop operation exists.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_boto/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_boto/</guid>
+      <description>Python Boto Role to install the boto3 library for Python integration with AWS services.&#xA;Default variables python_boto: # See the invoking role for venv settings _venv_path, _venv_command and _venv_install_username. boto3_version: &amp;#34;&amp;#34; # version string, e.g. &amp;#34;1.22.13&amp;#34; - empty string means latest </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_common/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_common/</guid>
+      <description>Python Common Packages required by all Python scripts and applications.&#xA;Default variables --- python_common: cleanup: false # set to true to remove unwanted packages remove_packages: [] # list of packages to remove if cleanup: true # Example from ansible role #- python-pip #- python3-yaml # linters need a newer version of PyYAML than the one that ships with Debian #- python-botocore #- python-urllib3 # Commonly required Python system packages install_packages: - python3-distutils - python3-debian - python3-venv - cloud-init # package can get removed with python3-yaml but we need it for auto-scale </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_pip_packages/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_pip_packages/</guid>
+      <description>Python Pip Packages Role to install a list of Python packages in a specified Python virtual environment.&#xA;Default variables --- python_pip_packages: # These are usually set in the _init role using _venv_path, _venv_command and _venv_install_username but can be overridden. #venv_path: /path/to/venv #venv_command: /usr/bin/python3.11 -m venv #install_username: deploy # user to become when creating venv packages: [] # - name: pip # state: latest </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rkhunter/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rkhunter/</guid>
+      <description>rkhunter Installs and configures the rkhunter malware scanner.&#xA;Default variables --- rkhunter: apt_autogen: &amp;#34;yes&amp;#34; # automatically update the rkhunter database when apt has run - set to &amp;#34;false&amp;#34; to suppress report_email_recipient: system@example.com warning_email_recipient: &amp;#34;&amp;#34; mail_command: &amp;#39;mail -s &amp;#34;[rkhunter] Warnings found for ${HOST_NAME}&amp;#34;&amp;#39; web_command: &amp;#34;curl&amp;#34; bin_directory: &amp;#34;/bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin /usr/libexec /usr/local/libexec&amp;#34; log_file: /var/log/rkhunter.log append_log: &amp;#34;0&amp;#34; copy_log_on_error: &amp;#34;0&amp;#34; use_syslog: authpriv.warning allow_ssh_root_user: &amp;#34;{{ sshd.PermitRootLogin | default(&amp;#39;prohibit-password&amp;#39;) }}&amp;#34; disable_tests: &amp;#34;suspscan hidden_procs deleted_files packet_cap_apps apps os_specific&amp;#34; os_package_manager: &amp;#34;NONE&amp;#34; # PKGMGR=NONE is default for Debian, set it to what you need.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rsyslog/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rsyslog/</guid>
+      <description>Rsyslog Configures rsyslog in a client/server topology. Note this doesn&amp;rsquo;t allow for any advanced settings, and will group everything in the main /var/log/syslog file.&#xA;Default variables --- rsyslog: listen_port: 514 # Either client or server. role: client # For clients, server name or IP. server: my.server.example.com </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/solr/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/solr/</guid>
+      <description>solr If you need to install SOLR, you can do so by adding geerlingguy.solr to the custom galaxy-requirements.yml file in your config repo (see the ce-provision role) and then importing that same role in your playbook. Because of this we don&amp;rsquo;t set any defaults, but here&amp;rsquo;s an excerpt of the interesting ones.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssh_server/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssh_server/</guid>
+      <description>SSHD Default variables --- sshd: # Main options. Port: - 22 ListenAddress: - &amp;#34;0.0.0.0&amp;#34; - &amp;#34;::&amp;#34; AllowAgentForwarding: &amp;#34;yes&amp;#34; AllowGroups: &amp;#34;&amp;#34; AllowTcpForwarding: &amp;#34;yes&amp;#34; AuthenticationMethods: &amp;#34;&amp;#34; AuthorizedKeysCommand: &amp;#34;&amp;#34; AuthorizedKeysCommandUser: &amp;#34;nobody&amp;#34; ChallengeResponseAuthentication: &amp;#34;no&amp;#34; ClientAliveCountMax: 3 ClientAliveInterval: 60 Compression: &amp;#34;delayed&amp;#34; GatewayPorts: &amp;#34;no&amp;#34; HostKey: [] LoginGraceTime: &amp;#34;2m&amp;#34; LogLevel: &amp;#34;INFO&amp;#34; MaxAuthTries: 6 MaxSessions: 10 PasswordAuthentication: &amp;#34;no&amp;#34; PermitRootLogin: &amp;#34;prohibit-password&amp;#34; PermitTTY: &amp;#34;yes&amp;#34; PermitTunnel: &amp;#34;no&amp;#34; PermitUserEnvironment: &amp;#34;no&amp;#34; PrintLastLog: &amp;#34;yes&amp;#34; PrintMotd: &amp;#34;no&amp;#34; Protocol: &amp;#34;2&amp;#34; PubkeyAuthentication: &amp;#34;yes&amp;#34; RekeyLimit: &amp;#34;default none&amp;#34; StrictModes: &amp;#34;yes&amp;#34; Subsystem_sftp: &amp;#34;internal-sftp&amp;#34; SyslogFacility: &amp;#34;AUTH&amp;#34; TCPKeepAlive: &amp;#34;yes&amp;#34; UseDNS: &amp;#34;no&amp;#34; UsePAM: &amp;#34;yes&amp;#34; X11DisplayOffset: 10 X11Forwarding: &amp;#34;yes&amp;#34; X11UseLocalhost: &amp;#34;yes&amp;#34; # Define some defaults &amp;#34;special&amp;#34; groups.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssl/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssl/</guid>
+      <description>SSL Manages SSL certificates on servers. See the aws/aws_acm role for SSL handling in AWS services.&#xA;LetsEncrypt If you are using LetsEncrypt for handling it assumes standalone mode. If you want to do DNS validation, please do not use this role at this time. There are a few pre-requisites for standalone mode to work:&#xA;You must have firewalls open to allow traffic to ports 80 and/or 443, regardless of your configuration LetsEncrypt&amp;rsquo;s certbot application will try to use port 80, if this will not be possible you can either: change ssl.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/sudo_config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/sudo_config/</guid>
+      <description>sudo config Manages sudo permissions. Note, this role does not install any form of sudo package, it assumes the required packages are already installed and simply ensures the existance of /etc/sudoers.d and places a correctly formatted config file within. If sudo.entity_name is not set it will do nothing.&#xA;There is good documentation on the sudoer format in the Ubuntu documentation, here:&#xA;https://help.ubuntu.com/community/Sudoers Default variables --- sudo_config: entity_name: &amp;#34;&amp;#34; # comma separated list of users, sudo user alias or group name, not forgetting to prefix groups with a &amp;#39;%&amp;#39; symbol # Defaults compile the following string to give a user passwordless access to all commands on all hosts: # someuser ALL=(ALL) NOPASSWD: ALL hosts: &amp;#34;ALL&amp;#34; # can also be a comma separated list of hosts or sudo host alias operators: &amp;#34;(ALL)&amp;#34; # can also be a sudo user alias or an empty string tags: &amp;#34;NOPASSWD:&amp;#34; # colon separated list of valid sudo tags (NOEXEC, PASSWD, NOPASSWD) with trailing colon, can also be an empty string commands: &amp;#34;ALL&amp;#34; # can also be a sudo command alias or a comma separated list (see the `squashfs` role for an example) filename: &amp;#34;sudoer&amp;#34; # name of config file in /etc/sudoers.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/swap/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/swap/</guid>
+      <description>Swap General role to add swap space to servers. By default, role is set to add 4G of swap space. As a general rule of thumb, swap should be set to 2.5 times the amount of RAM. So if a server has 2G RAM, we should set swap to 5G by setting size: &amp;quot;5G&amp;quot; in the variables for that server.&#xA;Be sure to match the count variable to the size variable, the count variable will dictate the amount of swap.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/system/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/system/</guid>
+      <description>System This role provides a means of applying system variables to servers. Currently, the following entities can be managed with the role:&#xA;Force IPv4 (noipv6) Force Static IP configuration for Hetzner Cloud systems (nohetznerdhcp) Default variables --- system: noipv6: false nohetznerdhcp: false </description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/user_ansible/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/user_ansible/</guid>
+      <description>User Ansible General role to create Linux users and corresponding keys, groups, home directory, etc. You may call this role directly or it can be imported, such as when called by the user_provision and user_deploy roles for handling our system users.&#xA;Default variables --- _user_ansible_username: &amp;#34;&amp;#34; user_ansible: # This sets both username and main group. username: &amp;#34;{{ _user_ansible_username }}&amp;#34; home: &amp;#34;/home/{{ _user_ansible_username }}&amp;#34; create: true # if you know the user already exists, set this to false to not create the user.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/varnish_config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/varnish_config/</guid>
+      <description>varnish_config Installs and configures Varnish, with 6.4 being the default version. Depends on geerlingguy.varnish which does the setup bit, varnish_config handles the default.vcl file.&#xA;You can provide a template override in two locations, they will be checked in this order:&#xA;templates in the same directory as your server&amp;rsquo;s playbook files/templates in your ce-provision-config repository If no alternative is found, the default.vcl.j2 template provided with this role is used. By default the override template is expected to be named default.</description>
+    </item>
+    <item>
+      <title></title>
+      <link>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/wazuh/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/wazuh/</guid>
+      <description>wazuh Wraps the Wazuh Ansible roles to configure Wazuh in various different scenarios, based on the example configrations provided in the Wazuh documentation .&#xA;Supports standalone managers, scaled out services and agent installation (default).&#xA;Default variables --- wazuh_agent_sources_installation: enabled: true wazuh: path: wazuh #roles_directory: &amp;#34;/path/to/roles&amp;#34; # defaults to /home/controller/.ansible/roles/wazuh-ansible branch: &amp;#34;v4.7.2&amp;#34; # wazuh-ansible git branch to checkout - not to be confused with wazuh_version! # Agent variables, installed locally by default # Role defaults - https://github.</description>
+    </item>
+  </channel>
+</rss>

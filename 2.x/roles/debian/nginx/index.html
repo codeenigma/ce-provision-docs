@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="nginx">NGINX</h1>
+<p>Install and configure the NGINX webserver.</p>
+<p>Note, the directives are mostly DENY FIRST so if you&rsquo;re expecting to find config that blocks a certain file extension or pattern you should consider it the other way and ensure that pattern is not <em>allowed</em> anywhere.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># We might not want to install PHP, but we do need the version variable for templates, hence including this.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Default version should track the php-common role.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">php</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">version</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">8.1</span> <span style="color:#75715e"># see https://www.php.net/supported-versions.php</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">symfony_env</span>: <span style="color:#e6db74">&#34;{{ _env_type }}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Nginx variables actually start here.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">nginx</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Global default config for nginx.conf.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user</span>: <span style="color:#ae81ff">www-data</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">worker_processes</span>: <span style="color:#ae81ff">auto</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">events</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">worker_connections</span>: <span style="color:#ae81ff">768</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">server_names_hash_bucket_size</span>: <span style="color:#ae81ff">256</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">access_log</span>: <span style="color:#ae81ff">/var/log/nginx-access.log</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">error_log</span>: <span style="color:#ae81ff">/var/log/nginx-error.log</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssl_protocols</span>: <span style="color:#e6db74">&#34;TLSv1.2 TLSv1.3&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sendfile</span>: <span style="color:#e6db74">&#34;on&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">keepalive_timeout</span>: <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">gzip_vary</span>: <span style="color:#e6db74">&#34;on&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">gzip_types</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">text/plain</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">text/css</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">text/xml</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">text/javascript</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/javascript</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/x-javascript</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/json</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/xml</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/xml+rss</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/xhtml+xml</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/x-font-ttf</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">application/x-font-opentype</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">image/svg+xml</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">image/x-icon</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">mime_types</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/html</span>: [<span style="color:#e6db74">&#34;html&#34;</span>, <span style="color:#e6db74">&#34;htm&#34;</span>, <span style="color:#e6db74">&#34;shtml&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/css</span>: [<span style="color:#e6db74">&#34;css&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/xml</span>: [<span style="color:#e6db74">&#34;xml&#34;</span>, <span style="color:#e6db74">&#34;rss&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/gif</span>: [<span style="color:#e6db74">&#34;gif&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/jpeg</span>: [<span style="color:#e6db74">&#34;jpeg&#34;</span>, <span style="color:#e6db74">&#34;jpg&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-javascript</span>: [<span style="color:#e6db74">&#34;js&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/atom+xml</span>: [<span style="color:#e6db74">&#34;atom&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/mathml</span>: [<span style="color:#e6db74">&#34;mml&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/plain</span>: [<span style="color:#e6db74">&#34;txt&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/vnd.sun.j2me.app-descriptor</span>: [<span style="color:#e6db74">&#34;jad&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/vnd.wap.wml</span>: [<span style="color:#e6db74">&#34;wml&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">text/x-component</span>: [<span style="color:#e6db74">&#34;htc&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/png</span>: [<span style="color:#e6db74">&#34;png&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/tiff</span>: [<span style="color:#e6db74">&#34;tif&#34;</span>, <span style="color:#e6db74">&#34;tiff&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/vnd.wap.wbmp</span>: [<span style="color:#e6db74">&#34;wbmp&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/x-icon</span>: [<span style="color:#e6db74">&#34;ico&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/x-jng</span>: [<span style="color:#e6db74">&#34;jng&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/x-ms-bmp</span>: [<span style="color:#e6db74">&#34;bmp&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">image/svg+xml</span>: [<span style="color:#e6db74">&#34;svg&#34;</span>, <span style="color:#e6db74">&#34;svgz&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">font/ttf</span>: [<span style="color:#e6db74">&#34;ttf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">font/opentype</span>: [<span style="color:#e6db74">&#34;otf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/font-woff</span>: [<span style="color:#e6db74">&#34;woff&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.ms-fontobject</span>: [<span style="color:#e6db74">&#34;eot&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/java-archive</span>: [<span style="color:#e6db74">&#34;jar&#34;</span>, <span style="color:#e6db74">&#34;war&#34;</span>, <span style="color:#e6db74">&#34;ear&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/manifest+json</span>: [<span style="color:#e6db74">&#34;webmanifest&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/json</span>: [<span style="color:#e6db74">&#34;json&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/mac-binhex40</span>: [<span style="color:#e6db74">&#34;hqx&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/msword</span>: [<span style="color:#e6db74">&#34;doc&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/pdf</span>: [<span style="color:#e6db74">&#34;pdf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/postscript</span>: [<span style="color:#e6db74">&#34;ps&#34;</span>, <span style="color:#e6db74">&#34;eps&#34;</span>, <span style="color:#e6db74">&#34;ai&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/rtf</span>: [<span style="color:#e6db74">&#34;rtf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.ms-excel</span>: [<span style="color:#e6db74">&#34;xls&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.ms-powerpoint</span>: [<span style="color:#e6db74">&#34;ppt&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.wap.wmlc</span>: [<span style="color:#e6db74">&#34;wmlc&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.google-earth.kml+xml</span>: [<span style="color:#e6db74">&#34;kml&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/vnd.google-earth.kmz</span>: [<span style="color:#e6db74">&#34;kmz&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-7z-compressed</span>: [<span style="color:#e6db74">&#34;7z&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-cocoa</span>: [<span style="color:#e6db74">&#34;cco&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-java-archive-diff</span>: [<span style="color:#e6db74">&#34;jardiff&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-java-jnlp-file</span>: [<span style="color:#e6db74">&#34;jnlp&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-makeself</span>: [<span style="color:#e6db74">&#34;run&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-perl</span>: [<span style="color:#e6db74">&#34;pl&#34;</span>, <span style="color:#e6db74">&#34;pm&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-pilot</span>: [<span style="color:#e6db74">&#34;prc&#34;</span>, <span style="color:#e6db74">&#34;pdb&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-rar-compressed</span>: [<span style="color:#e6db74">&#34;rar&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-redhat-package-manager</span>: [<span style="color:#e6db74">&#34;rpm&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-sea</span>: [<span style="color:#e6db74">&#34;sea&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-shockwave-flash</span>: [<span style="color:#e6db74">&#34;swf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-stuffit</span>: [<span style="color:#e6db74">&#34;sit&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-tcl</span>: [<span style="color:#e6db74">&#34;tcl&#34;</span>, <span style="color:#e6db74">&#34;tk&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-x509-ca-cert</span>: [<span style="color:#e6db74">&#34;der&#34;</span>, <span style="color:#e6db74">&#34;pem&#34;</span>, <span style="color:#e6db74">&#34;crt&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/x-xpinstall</span>: [<span style="color:#e6db74">&#34;xpi&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/xhtml+xml</span>: [<span style="color:#e6db74">&#34;xhtml&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/zip</span>: [<span style="color:#e6db74">&#34;zip&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/octet-stream</span>: [<span style="color:#e6db74">&#34;bin&#34;</span>, <span style="color:#e6db74">&#34;exe&#34;</span>, <span style="color:#e6db74">&#34;dll&#34;</span>, <span style="color:#e6db74">&#34;deb&#34;</span>, <span style="color:#e6db74">&#34;dmg&#34;</span>, <span style="color:#e6db74">&#34;iso&#34;</span>, <span style="color:#e6db74">&#34;img&#34;</span>, <span style="color:#e6db74">&#34;msi&#34;</span>, <span style="color:#e6db74">&#34;msp&#34;</span>, <span style="color:#e6db74">&#34;msm&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">application/ogg</span>: [<span style="color:#e6db74">&#34;ogx&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">audio/midi</span>: [<span style="color:#e6db74">&#34;mid&#34;</span>, <span style="color:#e6db74">&#34;midi&#34;</span>, <span style="color:#e6db74">&#34;kar&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">audio/mpeg</span>: [<span style="color:#e6db74">&#34;mpga&#34;</span>, <span style="color:#e6db74">&#34;mpega&#34;</span>, <span style="color:#e6db74">&#34;mp2&#34;</span>, <span style="color:#e6db74">&#34;mp3&#34;</span>, <span style="color:#e6db74">&#34;m4a&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">audio/ogg</span>: [<span style="color:#e6db74">&#34;oga&#34;</span>, <span style="color:#e6db74">&#34;ogg&#34;</span>, <span style="color:#e6db74">&#34;spx&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">audio/x-realaudio</span>: [<span style="color:#e6db74">&#34;ra&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">audio/webm</span>: [<span style="color:#e6db74">&#34;weba&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/3gpp</span>: [<span style="color:#e6db74">&#34;3gpp&#34;</span>, <span style="color:#e6db74">&#34;3gp&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/mp4</span>: [<span style="color:#e6db74">&#34;mp4&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/mpeg</span>: [<span style="color:#e6db74">&#34;mpeg&#34;</span>, <span style="color:#e6db74">&#34;mpg&#34;</span>, <span style="color:#e6db74">&#34;mpe&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/ogg</span>: [<span style="color:#e6db74">&#34;ogv&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/quicktime</span>: [<span style="color:#e6db74">&#34;mov&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/webm</span>: [<span style="color:#e6db74">&#34;webm&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/x-flv</span>: [<span style="color:#e6db74">&#34;flv&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/x-mng</span>: [<span style="color:#e6db74">&#34;mng&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/x-ms-asf</span>: [<span style="color:#e6db74">&#34;asx&#34;</span>, <span style="color:#e6db74">&#34;asf&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/x-ms-wmv</span>: [<span style="color:#e6db74">&#34;wmv&#34;</span>]
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">video/x-msvideo</span>: [<span style="color:#e6db74">&#34;avi&#34;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_buffer_size</span>: <span style="color:#ae81ff">512k</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_buffers</span>: <span style="color:#e6db74">&#34;8 256k&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">client_body_buffer_size</span>: <span style="color:#ae81ff">512k</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fastcgi_buffer_size</span>: <span style="color:#ae81ff">512k</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">fastcgi_buffers</span>: <span style="color:#e6db74">&#34;8 256k&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cache_behavior_private</span>: <span style="color:#e6db74">&#34;add_header Cache-Control \&#34;private, max-age=604800\&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cache_behavior_public</span>: <span style="color:#e6db74">&#34;add_header Cache-Control \&#34;public, max-age=604800\&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_host</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_port</span>: <span style="color:#ae81ff">8443</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># You can inject custom directives into the main nginx.conf file here by providing them as a list of strings.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#custom_directives: []</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Group prefix. Useful for grouping by environments.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">log_group_prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Main log stream for nginx (Cloudwatch).</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">log_stream_name</span>: <span style="color:#ae81ff">example</span> <span style="color:#75715e"># We can only have one backend, due to the way we use &#34;common&#34; templates, moving this per domain means instead having templates per project type.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># See php.fpm.unix_socket, if true use a socket here:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">php_fastcgi_backend</span>: <span style="color:#e6db74">&#34;127.0.0.1:90{{ php.version[-1] | replace(&#39;.&#39;, &#39;&#39;) }}&#34;</span> <span style="color:#75715e"># for unix socket use &#34;unix:/var/run/php{{ php.version[-1] | replace(&#39;.&#39;,&#39;&#39;) }}-fpm.sock&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ratelimitingcrawlers</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">client_max_body_size</span>: <span style="color:#e6db74">&#34;700M&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">fastcgi_read_timeout</span>: <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">recreate_vhosts</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># handle vhosts with ansible, if &#39;true&#39; then clean up &#39;sites-enabled&#39; dir and run domain.yml.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">vhost_backup_location</span>: <span style="color:#e6db74">&#34;/home/{{ _ce_provision_username }}&#34;</span> <span style="color:#75715e"># see _init for _ce_provision_username</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">overrides</span>: [] <span style="color:#75715e"># See the &#39;_overrides&#39; role.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Nginx ships a default vhost config that can clash with other services</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># running on port 80. Set this to false to remove it after Nginx installation.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">keep_default_vhost</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">domains</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">server_name</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">access_log</span>: <span style="color:#e6db74">&#34;/var/log/nginx/access.log&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">error_log</span>: <span style="color:#e6db74">&#34;/var/log/nginx/error.log&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">error_log_level</span>: <span style="color:#e6db74">&#34;notice&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">access_log_format</span>: <span style="color:#e6db74">&#34;main&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Server specific log stream (Cloudwatch),</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">log_stream_name</span>: <span style="color:#ae81ff">example</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">webroot</span>: <span style="color:#e6db74">&#34;/var/www/html&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">project_type</span>: <span style="color:#e6db74">&#34;flat&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ssl</span>: <span style="color:#75715e"># @see the &#39;ssl&#39; role.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">replace_existing</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">domains</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">handling</span>: <span style="color:#ae81ff">selfsigned</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Sample LetsEncrypt config, because include_role will not merge defaults these all need providing:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># handling: letsencrypt</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># http_01_port: 5000</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># autorenew: true</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># email: sysadm@codeenigma.com</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># services: []</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># web_server: standalone</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># certbot_register_command: &#34;certonly --agree-tos --preferred-challenges http -n&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># certbot_renew_command: &#34;certonly --agree-tos --force-renew&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># reload_command: restart</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># reload:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#   - nginx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># on_calendar: &#34;Mon *-*-* 04:00:00&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ratelimitingcrawlers</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">is_default</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">is_behind_cloudfront</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to disable gzip.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">basic_auth</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">auth_enabled</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">auth_file</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># optionally provide the path on the deploy server to a htpasswd file - WARNING - it must be valid and will not be checked!</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">auth_user</span>: <span style="color:#e6db74">&#34;hello&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">auth_pass</span>: <span style="color:#e6db74">&#34;P3nguin!&#34;</span> <span style="color:#75715e"># if no password is provided one will be generated automatically and displayed in the build output.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">auth_message</span>: <span style="color:#ae81ff">Restricted content</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">servers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">ssl</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">https_redirect</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># You can inject custom directives into any server block in any vhost here by providing them as a list of strings.</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">#custom_directives: []</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">port</span>: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">ssl</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">https_redirect</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e">#custom_directives: []</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">upstreams</span>: []
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># upstreams:</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#   - name: &#39;backend_example&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#     backends:</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#       - 142.42.64.2:8080</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">#       - 142.42.64.3:8080</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#nginx">NGINX</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

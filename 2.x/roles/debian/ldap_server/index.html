@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="ldap-server">LDAP Server</h1>
+<p>Install <code>slapd</code> and dependencies to run an LDAP directory server.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="configuration">Configuration</h2>
+<p>By default the role simply installs <code>slapd</code> and nothing else. However, you can import configuration from an LDIF file using <code>slapadd</code>. To create a config file from another LDAP server use this command:</p>
+<ul>
+<li><code>slapcat -n 0 &gt; /path/to/my/backup.ldif</code></li>
+</ul>
+<p>Place this file in the directory referenced in the <code>ldap_server.config.path</code> variable and set <code>ldap_server.config.import</code> to <code>true</code> and Ansible will attempt to import your config. You may have your config spread across multiple LDIF files, this is fine - put them all in the same directory and name them alphabetically if process order is important. By default the role expects the config to be stored in your <code>ce-provision-config</code> repository.</p>
+<p>SSL is optional but if you do use it then you will be obliged to use the <code>manual</code> handling type of the SSL role, because LDAP expects a separate CA certificate file and only <code>manual</code> supports that. See the <code>ssl</code> role documentation for details.</p>
+<p>This role does not try to import actual directory data, it concerns itself only with configuring a server. If you want to import data, you can export it from another server using <code>slapcat</code> in a similar way to the config, the only change is the database number:</p>
+<ul>
+<li><code>slapcat -n 1 &gt; /path/to/my/data.ldif</code></li>
+</ul>
+<p>Because this is sensitive data, you probably do not want to store it anywhere, rather import it and destroy it. If you want to write a private play to import your data, here&rsquo;s a sample from our own private LDAP project:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Stop slapd service.</span> <span style="color:#75715e"># you must stop the service or the database will be locked</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.service</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">slapd</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">state</span>: <span style="color:#ae81ff">stopped</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This is defending against a specific bug with Docker and the init script - https://stackoverflow.com/questions/30671693</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Ensure running slapd processes are killed.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.command</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cmd</span>: <span style="color:#ae81ff">pkill slapd</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">failed_when</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Copy LDAP data from config repo.</span> <span style="color:#75715e"># we&#39;ve temporarily placed the directory data on our controller, this copies it to the LDAP server</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.copy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">src</span>: <span style="color:#e6db74">&#34;{{ _ce_provision_base_dir }}/config/files/ldap_server/data/data.ldif&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">dest</span>: <span style="color:#ae81ff">/usr/local/src/custom-ldap-schemas/data.ldif</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">owner</span>: <span style="color:#ae81ff">openldap</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">group</span>: <span style="color:#ae81ff">openldap</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">mode</span>: <span style="color:#ae81ff">0644</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Import our LDAP data.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.command</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cmd</span>: <span style="color:#e6db74">&#34;slapadd -F /etc/ldap/slapd.d -n 1 -l /usr/local/src/custom-ldap-schemas/data.ldif&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become_user</span>: <span style="color:#ae81ff">openldap</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Start slapd service.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.service</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">slapd</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">state</span>: <span style="color:#ae81ff">started</span>
+</span></span></code></pre></div><p>If you create a similar role on your controller server or in your config repository you can have Ansible import your data.</p>
+<h2 id="replication">Replication</h2>
+<p>By default replication settings are not applied. If you want to set up a server to replicate another, existing LDAP host, you can set the details in <code>ldap_server.replication</code>. Note, passwords will be plain text so it is strongly advised you SOPS encrypt them before storing them in a code repository.</p>
+<p>The role sets up basic replication and makes no assumptions about permissions for the replication user it creates on the host. If you need to set special permissions for replication on the host machine then you should write a custom role. You can use <code>delegate_to: &quot;{{ ldap_server.replication.host }}&quot;</code> in your tasks to execute tasks against the LDAP host and still have access to all the variables set for the consumer.</p>
+<p>This is a good general resource on LDAP replication and how to configure it: 
+<a href="http://www.rjsystems.nl/en/2100-d6-openldap-consumer.php"  target="_blank" rel="noopener">http://www.rjsystems.nl/en/2100-d6-openldap-consumer.php</a>
+</p>
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">ldap_server</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">slapd</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">user</span>: <span style="color:#ae81ff">openldap</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">services</span>: <span style="color:#e6db74">&#34;ldap:/// ldapi:/// ldaps:///&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ulimit</span>: <span style="color:#e6db74">&#34;8192&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">options</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">purge</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Use this only for a completely clean install.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># For safety, by default no config handling will occur. Use these variables to enable and provide LDIF files.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">config</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">import</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># The path to your LDIF files which define your schema.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># All organisations have a different schema so this should be kept in your config repository.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Execution order can be important, so ensure your files are named in alphabetical order.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#e6db74">&#34;{{ _ce_provision_base_dir }}/config/files/ldap_server/config&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">purge</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">backup</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to create local backups of LDAP</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">backup_path</span>: <span style="color:#ae81ff">/opt/slap-bak</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">backup_script</span>: <span style="color:#ae81ff">/usr/local/bin/slap-bak</span> <span style="color:#75715e"># full filename of the backup script</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">slapcat_path</span>: <span style="color:#ae81ff">/usr/sbin</span> <span style="color:#75715e"># path to the location of slapcat on the server</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">on_calendar</span>: <span style="color:#e6db74">&#34;*-*-* 23:45:00&#34;</span> <span style="color:#75715e"># see systemd.time documentation - https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># TLS settings in LDAP are not separately handled, you need to manually set it up or use the config import feature.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># If you use &#39;manual&#39; SSL handling you need to provide a separate CA certificate.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># If you use &#39;letsencrypt&#39; SSL handling then the LDAP TLS settings in your imported config should be as follows:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   olcTLSCACertificateFile: /etc/letsencrypt/live/{{ _domain_name }}/chain.pem</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   olcTLSCertificateFile: /etc/letsencrypt/live/{{ _domain_name }}/cert.pem</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   olcTLSCertificateKeyFile:  /etc/letsencrypt/live/{{ _domain_name }}/privkey.pem</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssl</span>: <span style="color:#75715e"># @see the &#39;ssl&#39; role - does nothing by default.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">replace_existing</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">domain</span>: <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">handling</span>: <span style="color:#e6db74">&#34;unmanaged&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">key</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cert</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ca_cert</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Sample LetsEncrypt config, because include_role will not merge defaults these all need providing:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># handling: letsencrypt</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># http_01_port: 5000</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># autorenew: true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># email: sysadm@codeenigma.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># services: []</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># web_server: standalone</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># certbot_register_command: &#34;certonly --agree-tos --preferred-challenges http -n&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># certbot_renew_command: &#34;certonly --agree-tos --force-renew&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># reload_command: restart</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># reload:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#   - slapd</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># on_calendar: &#34;Mon *-*-* 04:00:00&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">replication</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">host</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># host must be present in config/hosts for ce-provision, leave empty if no replication is desired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">port</span>: <span style="color:#e6db74">&#34;636&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">searchbase</span>: <span style="color:#e6db74">&#34;dc=example,dc=com&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">admin_cn</span>: <span style="color:#e6db74">&#34;cn=admin&#34;</span> <span style="color:#75715e"># the admin user&#39;s canonical name, assumed to be the same on host and consumer</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">admin_pwd</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># the host admin bind password</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">bind_cn</span>: <span style="color:#e6db74">&#34;cn={{ _domain_name }}&#34;</span> <span style="color:#75715e"># the canonical name of the user on the host with read access to fetch changes</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">bind_pwd</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># the desired replication user password - will be generated if not provided</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">interval</span>: <span style="color:#e6db74">&#34;00:00:07:00&#34;</span> <span style="color:#75715e"># defaults to every 7 minutes</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#ldap-server">LDAP Server</a>
+      <ul>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#replication">Replication</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

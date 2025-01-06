@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="mailpit">Mailpit</h1>
+<p>
+<a href="https://mailpit.axllent.org"  target="_blank" rel="noopener">Mailpit</a>
+ provides a dummy SMTP mail server and a HTTP interface for checking email so you can verify email is functional in an application without actually sending it out. This is particularly handy in dev and testing environments, as well as on local development environments.</p>
+<p>The defaults will install Mailpit as a service and start it with SMTP on port 1025 and the web UI on port 8025. Don&rsquo;t forget, for access to the web UI you will need to open the firewall port. By default the web UI is on port 8025.</p>
+<p>The role will also attempt to create a self-signed SSL certificate for Mailpit unless you set <code>mailpit.create_cert</code> to <code>false</code>. If you already have an SSL certificate you may do this and provide the paths to cert and key and, as long as <code>mailpit.https</code> is set to <code>true</code> the service will try to start with the specified cert and key. There are also ready defaults for LetsEncrypt commented out.</p>
+<p>If you set <code>mailpit.service</code> to <code>false</code> then the role will simply install Mailpit and stop, leaving it to you to start and stop the application.</p>
+<p>This role works fine in Docker, however 
+<a href="https://mailpit.axllent.org/docs/install/docker/"  target="_blank" rel="noopener">for <code>ce-dev</code> you might consider using the Mailpit container instead</a>
+.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">mailpit</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">script_install_path</span>: <span style="color:#e6db74">&#34;/home/{{ user_provision.username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">https</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">create_cert</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">service</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">database_directory</span>: <span style="color:#e6db74">&#34;/home/{{ user_provision.username }}/mailpit&#34;</span> <span style="color:#75715e"># must be readable and writeable by the executing user</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">database_filename</span>: <span style="color:#ae81ff">mailpit.db</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">smtp_listen</span>: <span style="color:#ae81ff">0.0.0.0</span>:<span style="color:#ae81ff">1025</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_listen</span>: <span style="color:#ae81ff">0.0.0.0</span>:<span style="color:#ae81ff">8025</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_webroot</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_authfile_src</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># path to your base auth passwords file on the Ansible controller - see https://mailpit.axllent.org/docs/configuration/http-authentication/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_authfile_dest</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># path where you want to place your passwords file on the target - leave empty for no basic auth</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_ssl_cert</span>: <span style="color:#e6db74">&#34;/etc/ssl/selfsigned/{{ _domain_name }}.cert&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_ui_ssl_key</span>: <span style="color:#e6db74">&#34;/etc/ssl/selfsigned/{{ _domain_name }}.key&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># LetsEncrypt example paths</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#web_ui_ssl_cert: &#34;/etc/letsencrypt/live/{{ _domain_name }}/fullchain.pem&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#web_ui_ssl_key: &#34;/etc/letsencrypt/live/{{ _domain_name }}/privkey.pem&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">additional_options</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># runtime custom options - see https://mailpit.axllent.org/docs/configuration/runtime-options/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># only used if https: false, otherwise must run as root</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user</span>: <span style="color:#e6db74">&#34;{{ user_provision.username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">group</span>: <span style="color:#e6db74">&#34;{{ user_provision.username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># @see the &#39;ssl&#39; role - defaults to using LetsEncrypt</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssl</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">replace_existing</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">domains</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;{{ _domain_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">handling</span>: <span style="color:#ae81ff">selfsigned</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># example LetsEncrypt config</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#handling: letsencrypt</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#http_01_port: 80</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#autorenew: true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#email: sysadm@codeenigma.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#services:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  - nginx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#web_server: standalone</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#certbot_register_command: &#34;certonly --agree-tos --preferred-challenges http -n&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#certbot_renew_command: &#34;certonly --agree-tos --force-renew&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#reload_command: restart</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#reload:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  - mailpit</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#on_calendar: &#34;Mon *-*-* 04:00:00&#34;</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#mailpit">Mailpit</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

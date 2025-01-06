@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="autoscale-cluster">Autoscale cluster</h1>
+<p>Supports either AWS EC2 Autoscaling Groups (ASGs) or AWS ECS clusters. Note, this role only deals with setting up the config and surrounding services, it does not handle any deployment of code or containers. If you want to use Code Enigma complementary tools, see these two roles in our <code>ce-deploy</code> project:</p>
+<ul>
+<li>
+<a href="https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_container"  target="_blank" rel="noopener">https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_container</a>
+ (ECS)</li>
+<li>
+<a href="https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_code"  target="_blank" rel="noopener">https://github.com/codeenigma/ce-deploy/tree/1.x/roles/deploy_code</a>
+ (EC2)</li>
+</ul>
+<p>Note also that the <code>deploy_code</code> role needs to be used in tandem with this <code>ce-provision</code> role, which ensures there is a <code>cloud-init</code> script in place to install the code in the event of an instance replacement:</p>
+<ul>
+<li>
+<a href="https://github.com/codeenigma/ce-provision/tree/1.x/roles/mount_sync"  target="_blank" rel="noopener">https://github.com/codeenigma/ce-provision/tree/1.x/roles/mount_sync</a>
+</li>
+</ul>
+<h2 id="networking">Networking</h2>
+<p>Regardless of the scenario, ECS or EC2, if you decide to use a private subnet instead of giving your instances or containers public IP addresses, you will need at least one NAT gateway (more than one for resilience). When you are creating NAT gateways they must be in a <em>public</em> subnet and your routing tables in the private subnets should use the NAT gateway as the default route. Do not put the NAT gateways on the private subnets, it cannot possibly work and your containers or instances will not have internet access.</p>
+<p><code>ce-provision</code> will handle this for you in most cases.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">aws_ec2_autoscale_cluster</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">type</span>: <span style="color:#e6db74">&#34;ec2&#34;</span> <span style="color:#75715e"># can also be &#34;ecs&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">deploy_cluster</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># setting this to false will make Ansible prepare the way for a cluster without actually building it, so deployment can be deferred to the code pipeline</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">acm</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create_cert</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">extra_domains</span>: [] <span style="color:#75715e"># list of Subject Alternative Name domains and zones</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  - domain: www2.example.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#    zone: example.com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#    aws_profile: &#34;{{ _aws_profile }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">route_53</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">aws_profile</span>: <span style="color:#ae81ff">another</span> <span style="color:#75715e"># the zone might not be in the same account as the certificate</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">zone</span>: <span style="color:#ae81ff">example.com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">vpc_id</span>: <span style="color:#ae81ff">vpc-XXXX</span> <span style="color:#75715e"># One of vpc_id or vpc_name is mandatory.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># vpc_name: example-vpc</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">subnets</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># If rds.rds.true is set and you are creating an RDS instance then you must use at least two AZs, this is hard requirement.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># This means your region and environment must also have a minimum of two subnets - see `aws_vpc_subnet`</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - az: a</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#   cidr: &#34;10.0.3.0/26&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">az</span>: <span style="color:#ae81ff">b</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">cidr_block</span>: <span style="color:#e6db74">&#34;10.0.3.64/26&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># Name of a public subnet in the same AZ.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">public_subnet</span>: <span style="color:#ae81ff">public-b</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">az</span>: <span style="color:#ae81ff">c</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">cidr_block</span>: <span style="color:#e6db74">&#34;10.0.3.128/26&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">public_subnet</span>: <span style="color:#ae81ff">public-c</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">instance_nic_delete_on_termination</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">instance_type</span>: <span style="color:#ae81ff">t3.micro</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">instance_disable_api_termination</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Only valid for t2/3 instances, omit for other types.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#instance_credit_specification:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  cpu_credits: unlimited # unlimited or standard</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">assign_public_ip</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span> <span style="color:#75715e"># This needs to match your &#34;provision&#34; user SSH key.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_owner</span>: <span style="color:#ae81ff">self</span> <span style="color:#75715e"># Default to self-created image.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root_volume_size</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root_volume_type</span>: <span style="color:#ae81ff">gp3</span> <span style="color:#75715e"># available options - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root_volume_delete_on_termination</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">device_name</span>: <span style="color:#ae81ff">/dev/xvda</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">encrypt_boot</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EBS volumes or not, passed to the aws_ami role and to EBS volumes when instances are built</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Container variables - if type is &#34;ecs&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">container_repo_name</span>: <span style="color:#ae81ff">example/project</span> <span style="color:#75715e"># leave an empty string to not create a repo</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ElastiCache variables</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache_engine</span>: <span style="color:#ae81ff">memcached</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#cache_engine_version: 1.4.14</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#cache_parameter_group: my_custom_parameters</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache_node_type</span>: <span style="color:#ae81ff">cache.t3.medium</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache_nodes</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache_port</span>: <span style="color:#ae81ff">11211</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ECS variables - role assumes container, service and task creation will be done by code pipelines</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ecs_capacity_providers</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">FARGATE</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ecs_capacity_provider_strategy</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">capacity_provider</span>: <span style="color:#ae81ff">FARGATE</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">base</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">weight</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ecs_purge_capacity_providers</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># EC2 variables</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_playbook_file</span>: <span style="color:#e6db74">&#34;{{ playbook_dir }}/ami.yml&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_operation</span>: <span style="color:#ae81ff">create</span> <span style="color:#75715e"># see aws_ami for details, use &#39;repack&#39; to build AMIs from running instances, use &#39;create&#39; to force a new Packer image each time</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Overrides extra_vars in the aws_ami role.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_extra_vars</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_resource_name: {{ _aws_resource_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_infra_name: {{ _infra_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_env_type: {{ _env_type }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_region: {{ _aws_region }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_profile: {{ _aws_profile }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_subnet_name</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}-a&#34;</span> <span style="color:#75715e"># Usually cluster subnets do not have Internet Gateways so cannot be used, so we use one that does have an IGW.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">packer_on_error</span>: <span style="color:#ae81ff">cleanup</span> <span style="color:#75715e"># see aws_ami for details</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">packer_force</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># see aws_ami for details</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">packer_vpc_filter</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># see aws_ami for details</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">packer_subnet_filter_az</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># see aws_ami for details</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">packer_name_filter</span>: <span style="color:#e6db74">&#34;debian-12-amd64-*&#34;</span> <span style="color:#75715e"># see aws_ami for details, Packer base image</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_refresh</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to build a new AMI or not.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_refresh</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to build a new ASG or not.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Define if you want to launch config to use a specific AMI, e.g. to pack a new AMI but not use it right away for QA reasons.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#image_id: ami-0123456789abcdefg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_cloudwatch_policy_scale_up_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-up-policy&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_cloudwatch_policy_scale_down_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-down-policy&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_scaling_policies</span>: <span style="color:#75715e"># List of AutoScale policies. See ec2_scaling_policy module docs for options and details.</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-up-policy&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">policy_type</span>: <span style="color:#e6db74">&#34;SimpleScaling&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment_type</span>: <span style="color:#e6db74">&#34;ChangeInCapacity&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment</span>: <span style="color:#ae81ff">2</span> <span style="color:#75715e"># Add two servers per scaling event</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment_step</span>: <span style="color:#ae81ff">1</span> <span style="color:#75715e"># Only used when adjustment_type is PercentChangeInCapacity.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">cooldown</span>: <span style="color:#ae81ff">120</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-scale-down-policy&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">policy_type</span>: <span style="color:#e6db74">&#34;SimpleScaling&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment_type</span>: <span style="color:#e6db74">&#34;ChangeInCapacity&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment</span>: -<span style="color:#ae81ff">1</span> <span style="color:#75715e"># Reduce by one server at a time</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">adjustment_step</span>: -<span style="color:#ae81ff">1</span> <span style="color:#75715e"># Only used when adjustment_type is PercentChangeInCapacity.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">cooldown</span>: <span style="color:#ae81ff">120</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_cloudwatch_alarm_scale_up_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-cloudwatch-metric-alarm-cpu-scale-up&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_cloudwatch_alarm_scale_down_name</span>: <span style="color:#e6db74">&#34;{{ _env_type }}-cloudwatch-metric-alarm-cpu-scale-down&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">asg_cloudwatch_alarms</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">scale_direction</span>: <span style="color:#e6db74">&#34;up&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;CPU over 80% so scale up.&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;CPUUtilization&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/EC2&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Percent&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;GreaterThanOrEqualToThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">period</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">scale_direction</span>: <span style="color:#e6db74">&#34;down&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;CPU under 40% so scale down.&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;CPUUtilization&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/EC2&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">40</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Percent&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;LessThanOrEqualToThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">period</span>: <span style="color:#ae81ff">120</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">desired_capacity</span>: <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Zero means use min_size.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">min_size</span>: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">max_size</span>: <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Security groups for the instances cluster.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># An internal one will be created automatically, use these vars to provide additional groups</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># All security group lists should be a list of security group names, they will be automatically converted to IDs by the aws_security_groups as necessary</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cluster_security_groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_security_groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs_security_groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">rds_security_groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">elasticache_security_groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ALB health checks - these are health check settings applied to the load balancer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_health_check_type</span>: <span style="color:#ae81ff">ELB</span> <span style="color:#75715e"># Uses ALB health checks, set to EC2 to use default AWS instance status checks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_health_check_period</span>: <span style="color:#ae81ff">1200</span> <span style="color:#75715e"># Length of time in seconds after a new EC2 instance comes into service that Auto Scaling starts checking its health</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Target Group health checks - these are distinct and separate checks carried out by the Target Group for the cluster</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">target_group_http_port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">deregistration_delay_timeout</span>: <span style="color:#ae81ff">60</span> <span style="color:#75715e"># seconds to wait before removing instance from Target Group</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_protocol</span>: <span style="color:#e6db74">&#34;http&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_path</span>: <span style="color:#e6db74">&#34;/&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_port</span>: <span style="color:#e6db74">&#34;traffic-port&#34;</span> <span style="color:#75715e"># Default is traffic-port, which matches the target port. Can be overridden with a port number.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_success_codes</span>: <span style="color:#e6db74">&#34;200&#34;</span> <span style="color:#75715e"># Can be single code, like &#34;200&#34;, or a comma-separated value with ranges: &#34;200,250-260&#34;.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_interval</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_timeout</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_healthy_count</span>: <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_unhealthy_count</span>: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ALB settings</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">create_elb</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># determines whether an ELB (currently, this is an ALB) is created as part of the ASG. This needs to be `true` in order to create a CloudFront distribution.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_idle_timeout</span>: <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_http_port</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_https_port</span>: <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">Name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># An IAM Role name to associate with instances.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">iam_role_name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Hosts to peer with. This will gather vpc info from the Name tag and create a peering connection and route tables.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">peering</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">utility-server.example.com</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Associated RDS instance.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">rds</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rds</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># whether to create an instance.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">db_instance_class</span>: <span style="color:#ae81ff">db.t3.medium</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># name: example # Default is cluster name.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># description: example # Default is cluster name.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">multi_az</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">publicly_accessible</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Wether to allocate an IP address.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">engine</span>: <span style="color:#ae81ff">mariadb</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># engine_version: &#39;5.7.2&#39; # Omit to use latest.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># In an Aurora cluster reader and writer can swap role at any time, so by default we name them &#39;blue&#39; and &#39;green&#39;.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aurora_suffix</span>: <span style="color:#ae81ff">blue</span> <span style="color:#75715e"># appended to cluster name to create a unique instance name for the first (initially write) instance.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aurora_reader</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># If true, an Aurora reader instance will be created.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aurora_reader_suffix</span>: <span style="color:#ae81ff">green</span> <span style="color:#75715e"># appended to cluster name to create unique instance name for the second (initially read-only) instance - must not match aurora_suffix.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># db_cluster_identifier: example # Default is cluster name.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># See parameter group docs: https://docs.ansible.com/ansible/latest/collections/community/aws/rds_param_group_module.html</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># db_parameter_group_name: &#34;example&#34; # Omit to use default.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># db_parameter_group_description: &#34;Custom parameter group&#34; # Description of parameter group.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># db_parameter_group_engine: &#34;mariadb10.5&#34; # accepts different values to RDS instance &#39;engine&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># db_parameters: {} # dictionary of available parameters.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># character_set_name: undefined # not required. The character set to associate with the DB cluster.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">allocated_storage</span>: <span style="color:#ae81ff">100</span> <span style="color:#75715e"># Initial size in GB. Minimum is 100.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">max_allocated_storage</span>: <span style="color:#ae81ff">1000</span> <span style="color:#75715e"># Max size in GB for autoscaling.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">storage_encrypted</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the RDS instance or not.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># storage_type: standard # not required. choices: standard;gp2;gp3;io1. I(storage_type) does not apply to Aurora DB instances.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># storage_throughput: 125 # required if storage_type is &#34;gp3&#34;. For &lt;400Gb storage it&#39;s limited to 125Mbs. Requires botocore &gt;= 1.29.0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">master_username</span>: <span style="color:#ae81ff">hello</span> <span style="color:#75715e"># The name of the master user for the DB cluster. Must be 1-16 letters or numbers and begin with a letter.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">master_user_password</span>: <span style="color:#ae81ff">hellothere</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># force_update_password: true # not required. Set to True to update your cluster password with I(master_user_password).</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># enable_performance_insights: undefined # not required. Whether to enable Performance Insights for the DB instance.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># preferred_backup_window: undefined # not required. The daily time range (in UTC) of at least 30 minutes, during which automated backups are created if automated backups are enabled using I(backup_retention_period). The option must be in the format of &#34;hh24:mi-hh24:mi&#34; and not conflict with I(preferred_maintenance_window).</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">copy_tags_to_snapshot</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># preferred_maintenance_window: undefined # not required. The weekly time range (in UTC) of at least 30 minutes, during which system maintenance can occur. Sample: &#34;sun:09:31-sun:10:01&#34;.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">allow_major_version_upgrade</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># auto_minor_version_upgrade: undefined # not required. Whether minor version upgrades are applied automatically to the DB instance during the maintenance window.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rds_cloudwatch_alarms</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example_free_storage_space_threshold_{{ _env_type }}_asg&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;Average database free storage space over the last 10 minutes too low.&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;FreeStorageSpace&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/RDS&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">20000000000</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Bytes&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;LessThanOrEqualToThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">period</span>: <span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example_cpu_utilization_too_high_{{ _env_type }}_asg&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;Average database CPU utilization over last 10 minutes too high.&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;CPUUtilization&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/RDS&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">65</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Percent&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;GreaterThanOrEqualToThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">period</span>: <span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example_freeable_memory_too_low_{{ _env_type }}_asg&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;Average database freeable memory over last 10 minutes too low, performance may suffer.&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;FreeableMemory&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/RDS&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">100000000</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Bytes&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;LessThanThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">period</span>: <span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example_disk_queue_depth_too_high_{{ _env_type }}_asg&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;Average database disk queue depth over last 10 minutes too high, performance may suffer.&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;DiskQueueDepth&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/RDS&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">64</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Count&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;GreaterThanThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">period</span>: <span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;example_swap_usage_too_high_{{ _env_type }}_asg&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">description</span>: <span style="color:#e6db74">&#34;Average database swap usage over last 10 minutes too high, performance may suffer.&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric</span>: <span style="color:#e6db74">&#34;SwapUsage&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;AWS/RDS&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">statistic</span>: <span style="color:#e6db74">&#34;Average&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#ae81ff">256000000</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">unit</span>: <span style="color:#e6db74">&#34;Bytes&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">comparison</span>: <span style="color:#e6db74">&#34;GreaterThanThreshold&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">period</span>: <span style="color:#ae81ff">600</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">evaluation_periods</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">sns</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">sns</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;Notify-Email&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">display_name</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Display name for the topic, for when the topic is owned by this AWS account.</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_min_delay_target</span>: <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_max_delay_target</span>: <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_num_retries</span>: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_num_max_delay_retries</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_num_no_delay_retries</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_num_min_delay_retries</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_default_healthy_retry_policy_backoff_function</span>: <span style="color:#e6db74">&#34;linear&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">delivery_policy_disable_subscription_overrides</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">subscriptions</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#f92672">endpoint</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">protocol</span>: <span style="color:#e6db74">&#34;email&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Whether to back up the RDS instance. Set to the plan you want to use, or an empty string if you don&#39;t want to back up.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Add an CNAM record tied to the ALB.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Set the zone to empty to skip.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">route_53</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">zone</span>: <span style="color:#e6db74">&#34;example.com&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">record</span>: <span style="color:#e6db74">&#34;*.{{ _domain_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws_profile</span>: <span style="color:#ae81ff">another</span> <span style="color:#75715e"># Not necessarily the same as the &#34;target&#34; one.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssl_certificate_ARN</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssl_extra_certificate_ARNs</span>: [] <span style="color:#75715e"># Optional list of extra certificate ARNs to add to the ALB.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cloudfront</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create_cert</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">create_distribution</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cf_certificate_ARN</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Certificate must be in us-east-1 for CloudFront. Define a certificate to build a distribution.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Add rules to http or https listener</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">listeners_http</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Example of a domain redirect rule</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  rules:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#    - Conditions:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#        - Field: host-header</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#          Values:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            - &#34;example-redirect.com&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#      Priority: &#39;4&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#      Actions:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#        - Type: redirect</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#          RedirectConfig:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            Host: &#34;codeenigma.com&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            Port: &#34;#{port}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            Protocol: &#34;HTTPS&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            Path: &#34;/#{path}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            Query: &#34;#{query}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#            StatusCode: &#34;HTTP_301&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">listeners_https</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Add custom listeners. See https://docs.ansible.com/ansible/latest/collections/community/aws/elb_application_lb_module.html</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">listeners</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_ssl_policy</span>: <span style="color:#e6db74">&#34;ELBSecurityPolicy-TLS-1-2-2017-01&#34;</span> <span style="color:#75715e"># Sets the ALB SSL policy to only accect TLSv1.2 and apply more secure ciphers.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to create an EFS volume.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs_encrypt</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EFS volume</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs_backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Whether to back up the EFS volume. Set to the plan you want to use, or an empty string if you don&#39;t want to back up.</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#autoscale-cluster">Autoscale cluster</a>
+      <ul>
+        <li><a href="#networking">Networking</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

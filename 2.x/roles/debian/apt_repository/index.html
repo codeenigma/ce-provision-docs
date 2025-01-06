@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="apt-repository">APT Repository</h1>
+<p>Role for handling the installation and management of APT repos. Uses the DEB822 format.</p>
+<p>The variables <code>uris</code>, <code>suites</code> and <code>components</code> combine to build an APT repository request, for example these are the variables for the MySQL 8.0 repository:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>  <span style="color:#f92672">uris</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">http://repo.mysql.com/apt/debian/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">suites</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;{{ ansible_distribution_release }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">components</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">mysql-8.0</span>
+</span></span></code></pre></div><p>This example results in APT referring to the following URI on a Debian 11 (bullseye) system: 
+<a href="https://repo.mysql.com/apt/debian/dists/bullseye/mysql-8.0/"  target="_blank" rel="noopener">https://repo.mysql.com/apt/debian/dists/bullseye/mysql-8.0/</a>
+</p>
+<h2 id="installing-with-key-fingerprints">Installing with key fingerprints</h2>
+<p>This role does not currently support importing keys from a key server. Since key servers are deprecated, it likely never will. You should either provide an ASCII armored key as a block of text or the URL of a GPG or ASCII armored key.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">apt_repository</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">legacy_repo</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># optionally provide repo string of old list file to clean up, we are creating a new DEB822 format source file</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">format</span>: <span style="color:#ae81ff">deb822</span> <span style="color:#75715e"># can be either deb822 or list for legacy repos</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#list_repo_string: &#34;http://pkg.jenkins.io/debian binary/&#34; # if `format: list` is set we can override the auto-generated repo string here</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">types</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">deb</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">uris</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">https://example.com/apt</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#signed_by: https://example.com/apt-key.asc # either the path to the key or the key contents</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">suites</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;{{ ansible_distribution_release }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">components</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">main</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_refresh_timer_OnCalendar</span>: <span style="color:#e6db74">&#34;Mon *-*-* 00:00:00&#34;</span> <span style="color:#75715e"># see systemd.time documentation - https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#apt-repository">APT Repository</a>
+      <ul>
+        <li><a href="#installing-with-key-fingerprints">Installing with key fingerprints</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

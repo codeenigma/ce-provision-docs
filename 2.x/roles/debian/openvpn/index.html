@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="openvpn">OpenVPN</h1>
+<p>This role installs 
+<a href="https://github.com/angristan/openvpn-install"  target="_blank" rel="noopener">the `openvpn-install.sh`` bash script from GitHub</a>
+ and optionally runs it in headless mode.</p>
+<h2 id="server-address">Server address</h2>
+<p>This will be detected automatically as the IP address of the server. If the server is configured with only internal addressing then the script will attempt to look up the public IP. To specify a value use <code>openvpn.nat_endpoint</code>.</p>
+<h2 id="pam-authentication">PAM authentication</h2>
+<p>There are two options here, one is simple PAM authentication against Linux users, the other is PAM authentication with LDAP. If you want to provide a custom PAM configuration you should set <code>openvpn.pam.enabled</code> to <code>true</code> and create your own template to override the <code>openvpn.pam.j2</code> template provided. This file is placed in <code>/etc/pam.d/openvpn</code> and loaded by the OpenVPN authentication module to perform authorisation checks.</p>
+<p>The LDAP integration ships with a default configuration for PAM which, as above, can be overridden. It assumes the use of 
+<a href="https://github.com/codeenigma/ce-provision/tree/2.x/roles/debian/pam_ldap"  target="_blank" rel="noopener">our <code>pam_ldap</code> role</a>
+ for the LDAP variables and defaults to those values, but they can be set explicitly if required.</p>
+<h2 id="hardcoded-values">Hardcoded values</h2>
+<p>At the moment we do not support headless customisation of encryption settings. This seems possible 
+<a href="https://github.com/angristan/openvpn-install/blob/master/openvpn-install.sh#L392-L401"  target="_blank" rel="noopener">by setting the right variables</a>
+ and we&rsquo;ll add it later if we can. The defaults are sane, but please note the default cipher is <code>AES-128-GCM</code>. We have allowed for finding and replacing this value as part of our role.</p>
+<p>
+<a href="https://github.com/angristan/openvpn-install/blob/master/openvpn-install.sh#L900C19-L900C35"  target="_blank" rel="noopener">The client config directory is set to <code>/etc/openvpn/ccd</code>.</a>
+</p>
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">openvpn</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">script_install_path</span>: <span style="color:#e6db74">&#34;/home/{{ user_provision.username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">fqdn</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># fully qualified domain name of VPN server for use in client config, uses IP address if empty - only works with port_choice: &#34;1&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">auto_install</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># post install server config tweaks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ipv4_settings</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># defaults to `10.8.0.0 255.255.255.0` - example, to use 192.168.140.0/24 set &#34;192.168.140.0 255.255.255.0&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cipher</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># defaults to AES-128-GCM, see https://github.com/angristan/openvpn-install/blob/master/openvpn-install.sh#L404-L410</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allow_floating_client_ip</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># allow for ISP address change with DHCP (option float)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">multiple_connections</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to enable multiple VPN connections (option duplicate-cn)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">push_routes_ipv4</span>: [] <span style="color:#75715e"># list of VPN push routes for ipv4 networks</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Examples:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - &#34;192.168.1.0 255.255.255.0&#34; # push range 192.168.1.0/24, format = &#34;IP-address/range netmask&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - &#34;1.2.3.4 255.255.255.255&#34; # push specific IP 1.2.3.4</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - &#34;www.google-analytics.com 255.255.255.255&#34; # push any IP resolving to www.google-analytics.com, must set allow_pull_fqdn to true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">push_routes_ipv6</span>: [] <span style="color:#75715e"># list of VPN push routes for ipv6 networks - ipv6_support must be &#34;y&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># PAM and LDAP authentication</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">pam</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># relies on `openvpn-plugin-auth-pam.so` which is bundled with OpenVPN server for Debian</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">module_path</span>: <span style="color:#ae81ff">/usr/lib/x86_64-linux-gnu/openvpn/plugins/openvpn-plugin-auth-pam.so</span> <span style="color:#75715e"># use `dpkg -L openvpn | grep &#39;\bpam\b&#39;` to discover the path</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">config_template</span>: <span style="color:#ae81ff">openvpn.pam.j2</span> <span style="color:#75715e"># allow override of PAM config template</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ldap</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># if true we assume the pam_ldap role is also being used on this server</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">config_template</span>: <span style="color:#ae81ff">openvpn.pam.ldap.j2</span> <span style="color:#75715e"># allow override of PAM config template for LDAP</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">endpoints</span>: <span style="color:#e6db74">&#34;{{ pam_ldap.endpoints | default(&#39;[]&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">lookup_base</span>: <span style="color:#e6db74">&#34;{{ pam_ldap.lookup_base | default(&#39;&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">lookup_filter</span>: <span style="color:#e6db74">&#34;|(objectClass=inetOrgPerson)&#34;</span> <span style="color:#75715e"># LDAP filter to apply to lookups</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">login_attribute</span>: <span style="color:#ae81ff">uid</span> <span style="color:#75715e"># the LDAP attribute to check the OpenVPN username against</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">group_base</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># e.g. ou=Groups,dc=example,dc=com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">group_dn</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># restrict to specific group, e.g. cn=admins,ou=Groups,dc=example,dc=com</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">group_attribute</span>: <span style="color:#ae81ff">memberUid</span> <span style="color:#75715e"># the LDAP group attribute to check the OpenVPN username against</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssl_certificate</span>: <span style="color:#e6db74">&#34;{{ pam_ldap.ssl_certificate | default(&#39;&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssl_certificate_check</span>: <span style="color:#e6db74">&#34;{{ pam_ldap.ssl_certificate_check | default(true) }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># post install client config tweaks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tls_cipher</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># defaults to TLS-ECDHE-ECDSA-WITH-AES-128-GCM-SHA256, see https://github.com/angristan/openvpn-install/blob/master/openvpn-install.sh#L486-L518</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allow_pull_fqdn</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># this must be enabled if you want to push FQDNs (option allow-pull-fqdn)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">auth_user_pass</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># enforce authorisation with a username and password - desired for LDAP authentication</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># headless script variables</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">approve_ip</span>: <span style="color:#e6db74">&#34;y&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ipv6_support</span>: <span style="color:#e6db74">&#34;n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">port_choice</span>: <span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#75715e"># 1 = use default 1194, 3 means use a random port</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">protocol_choice</span>: <span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#75715e"># 1 = udp, 2 = tcp</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">dns</span>: <span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#75715e"># 1 = system default, see options - https://github.com/angristan/openvpn-install/blob/master/openvpn-install.sh#L314-L327</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">compression_enabled</span>: <span style="color:#e6db74">&#34;n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">compression_choice</span>: <span style="color:#e6db74">&#34;1&#34;</span> <span style="color:#75715e"># only works if compression_enabled is &#34;y&#34;, 1 = LZ4-v2, 2 = LZ4, 3 = LZ0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">test_username</span>: <span style="color:#ae81ff">example</span> <span style="color:#75715e"># this will be used to create a client config in the `script_install_path` location</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#nat_endpoint: &#34;$(curl -4 ifconfig.co)&#34; # for servers behind NAT, see https://github.com/angristan/openvpn-install?tab=readme-ov-file#headless-install</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#openvpn">OpenVPN</a>
+      <ul>
+        <li><a href="#server-address">Server address</a></li>
+        <li><a href="#pam-authentication">PAM authentication</a></li>
+        <li><a href="#hardcoded-values">Hardcoded values</a></li>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="aws-infrastructure">AWS Infrastructure</h1>
+<p>These roles help you manage assets in AWS. Because these roles are AWS specific, you should not try to use them in a non-AWS environment. There are also some quite specific variables we expect to exist, specifically:</p>
+<ul>
+<li><code>_aws_region</code></li>
+<li><code>_aws_profile</code></li>
+<li><code>_aws_resource_name</code></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="hosts-and-groups-handling">Hosts and groups handling</h2>
+<p>These roles assume you use the AWS EC2 inventory plugin to automatically build inventory:</p>
+<ul>
+<li>
+<a href="https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html"  target="_blank" rel="noopener">https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_ec2_inventory.html</a>
+</li>
+</ul>
+<p>This can be loaded via your <code>ansible.cfg</code> file in your config repository.</p>
+<p>You should place a file called <code>aws_ec2.yml</code> in the <code>hosts</code> directory of your config repository. Our standard file looks like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">plugin</span>: <span style="color:#ae81ff">amazon.aws.aws_ec2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">filters</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tag:Ansible</span>: <span style="color:#ae81ff">managed</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">keyed_groups</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">tags.Name</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">tags.Env</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">tags.Profile</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">tags.Infra</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">prefix</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span></code></pre></div><h3 id="how-it-works">How it works</h3>
+<p>The plugin is loading all EC2 instances that are tagged with <code>Ansible: managed</code> and then grouping them by the tags <code>Name</code>, <code>Env</code>, <code>Profile</code> and <code>Infra</code>. Any hyphens in tags are automatically converted to underscores, and the prefixing convention is taken from the default behaviour of the <code>ansible.builtin.constructed</code> plugin, which you can read here - note specifically the <code>leading_separator</code> parameter and its documentation:</p>
+<ul>
+<li>
+<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html#parameter-leading_separator"  target="_blank" rel="noopener">https://docs.ansible.com/ansible/latest/collections/ansible/builtin/constructed_inventory.html#parameter-leading_separator</a>
+</li>
+</ul>
+<p>Consequently, because we group all infra by the <code>Name</code> tag, effectively our inventory will always contain a group consisting of the name of that machine, prefixed with an underscore, for example the server named <code>web1-example-com</code> would end up in a group of one instance like this:</p>
+<pre tabindex="0"><code>  |--@_web1_example_com:
+  |  |--ec2-1-112-233-9.eu-west-1.compute.amazonaws.com
+</code></pre><p>In this way we can act on a specific host or group of hosts by invoking its unique group, for example you can use a line like this at the top of your infrastructure plays to load the target(s) using a group name:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">hosts</span>: <span style="color:#e6db74">&#34;_{{ _aws_resource_name | regex_replace(&#39;-&#39;, &#39;_&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><h3 id="debugging-and-viewing-hosts">Debugging and viewing hosts</h3>
+<p>You can view the graphed <em>default</em> infrastructure from the command line of a controller with a command like this when logged in as the <code>ce-provision</code> user, usually <code>controller</code>:</p>
+<pre tabindex="0"><code>ansible-inventory -i ~/ce-provision/hosts/aws_ec2.yml --graph
+</code></pre><p>If you wanted to see the inventory for another boto profile you need to set the <code>AWS_PROFILE</code> environment variable. For example, this would graph the <code>acme</code> profile&rsquo;s inventory:</p>
+<pre tabindex="0"><code>AWS_PROFILE=acme ansible-inventory -i ~/ce-provision/hosts/aws_ec2.yml --graph
+</code></pre><p>You will note there are other groupings, for example you can call all the <code>_prod</code> infrastructure because there is also a grouping against the <code>Env</code> tag, or you can call all the <code>_web</code> servers because they are also grouped by <code>Profile</code>, and so on.</p>
+<h3 id="unmanaged-infra">Unmanaged infra</h3>
+<p>If you want a host that is not tagged with <code>Ansible: managed</code> in AWS, or indeed not in AWS at all, to be &ldquo;known&rdquo; to Ansible you need to add it to <code>hosts.yml</code> in your config repo.</p>
+<h3 id="using-group_vars">Using group_vars</h3>
+<p>Once you understand this, the <code>group_vars</code> directory within your config repository starts to make sense. You can set variables that apply to any group that gets created automatically by the inventory plugin, for example, if you have a test infrastructure called <code>test</code> you can have a <code>hosts/group_vars/_test</code> folder containing variables which will apply to <em>every single server</em> in the <code>test</code> infra and take precedence over the defaults, which you can define in <code>hosts/group_vars/all</code>. Similarly we might have a <code>_production</code> folder containing variables for every server tagged in a <code>production</code> environment, regardless of infra.</p>
+<p>You can play with tags in your plugin config to create the combinations and groupings you need.</p>
+<h2 id="connection-types">Connection types</h2>
+<p>There are two different patterns for acting on AWS infrastructure. When you are connecting to an existing server and manipulating the standard packages, such as you would with any other server, you can make your playbook start like this for auto-discovery:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">hosts</span>: <span style="color:#e6db74">&#34;_{{ _aws_resource_name | regex_replace(&#39;-&#39;, &#39;_&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><p>However, when you are <em>building</em> AWS infrastructure and manipulating things via the AWS API, most of your actions need to occur on the controller, because your individual servers do not have the AWS API credentials. To achieve this, while retaining the necessary group variables, we use this pattern:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">hosts</span>: <span style="color:#e6db74">&#34;_{{ _aws_resource_name | regex_replace(&#39;-&#39;, &#39;_&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">connection</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><p>The last two lines are very important, <code>connection: local</code> tells Ansible to stay on the controller and <code>become: false</code> tells it to stay as the <code>controller</code> user which has the AWS credentials available to it.</p>
+<p>If you need to carry out tasks on the remote server(s) during an AWS infrastructure build you will need to set <code>connection: ssh</code> on a task level so the action occurs on the intended target.</p>
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#aws-infrastructure">AWS Infrastructure</a>
+      <ul>
+        <li><a href="#hosts-and-groups-handling">Hosts and groups handling</a>
+          <ul>
+            <li><a href="#how-it-works">How it works</a></li>
+            <li><a href="#debugging-and-viewing-hosts">Debugging and viewing hosts</a></li>
+            <li><a href="#unmanaged-infra">Unmanaged infra</a></li>
+            <li><a href="#using-group_vars">Using group_vars</a></li>
+          </ul>
+        </li>
+        <li><a href="#connection-types">Connection types</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>

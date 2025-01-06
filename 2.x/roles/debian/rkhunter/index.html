@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html><head><script src="/ce-provision-docs/2.x/livereload.js?mindelay=10&amp;v=2&amp;port=4000&amp;path=ce-provision-docs/2.x/livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>ce-provision</title>
+  <meta name="viewport" content="width=device-width,minimum-scale=1">
+  
+  <link rel="stylesheet" href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
+</head><body class="doc"><header><a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x//home">ce-provision</a></header><article>
+        <h1 id="rkhunter">rkhunter</h1>
+<p>Installs and configures the rkhunter malware scanner.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="default-variables">Default variables</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">rkhunter</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">apt_autogen</span>: <span style="color:#e6db74">&#34;yes&#34;</span> <span style="color:#75715e"># automatically update the rkhunter database when apt has run - set to &#34;false&#34; to suppress</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">report_email_recipient</span>: <span style="color:#ae81ff">system@example.com</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">warning_email_recipient</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">mail_command</span>: <span style="color:#e6db74">&#39;mail -s &#34;[rkhunter] Warnings found for ${HOST_NAME}&#34;&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_command</span>: <span style="color:#e6db74">&#34;curl&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">bin_directory</span>: <span style="color:#e6db74">&#34;/bin /usr/bin /sbin /usr/sbin /usr/local/bin /usr/local/sbin /usr/libexec /usr/local/libexec&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">log_file</span>: <span style="color:#ae81ff">/var/log/rkhunter.log</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">append_log</span>: <span style="color:#e6db74">&#34;0&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">copy_log_on_error</span>: <span style="color:#e6db74">&#34;0&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">use_syslog</span>: <span style="color:#ae81ff">authpriv.warning</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allow_ssh_root_user</span>: <span style="color:#e6db74">&#34;{{ sshd.PermitRootLogin | default(&#39;prohibit-password&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">disable_tests</span>: <span style="color:#e6db74">&#34;suspscan hidden_procs deleted_files packet_cap_apps apps os_specific&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">os_package_manager</span>: <span style="color:#e6db74">&#34;NONE&#34;</span> <span style="color:#75715e"># PKGMGR=NONE is default for Debian, set it to what you need.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">scriptwhitelist</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/bin/egrep</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/bin/fgrep</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/bin/egrep</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/bin/fgrep</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/bin/ldd</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - /usr/bin/lwp-request</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/sbin/adduser</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - /usr/sbin/prelink</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/sbin/unhide.rb</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/usr/bin/which</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allowhiddendir</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/etc/.java</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/tmp/.ce-deploy</span> <span style="color:#75715e"># see https://github.com/codeenigma/ce-deploy/blob/1.x/roles/database_backup/database_backup-mysql/defaults/main.yml#L7</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allowhiddenfile</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/etc/.etckeeper</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allowdevfile</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/dev/shm/network/ifstate</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allowipcproc</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">allow_system_remote_logging</span>: <span style="color:#e6db74">&#34;0&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">supscan_directories</span>: <span style="color:#e6db74">&#34;/tmp /var/tmp&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">supscan_maxsize</span>: <span style="color:#e6db74">&#34;10240000&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">supscan_threshold</span>: <span style="color:#e6db74">&#34;200&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">use_locking</span>: <span style="color:#e6db74">&#34;0&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">lock_timeout</span>: <span style="color:#e6db74">&#34;300&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">show_lock_messages</span>: <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
+
+    </article>
+    <aside>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rkhunter">rkhunter</a>
+      <ul>
+        <li><a href="#default-variables">Default variables</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </aside><aside class="menu">
+<p> </p>
+<ul>
+<li>
+<a href="//" >Home</a>
+
+<ul>
+<li>
+<a href="//install" >Install</a>
+</li>
+<li>
+<a href="//scripts" >Usage</a>
+</li>
+<li>
+<a href="http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles" >Roles</a>
+
+<ul>
+<li>
+<a href="//roles/aws" >AWS Infrastructure</a>
+
+<ul>
+<li>
+<a href="//roles/aws/aws_acl" >AWS ACL</a>
+</li>
+<li>
+<a href="//roles/aws/aws_acm" >AWS Certificate Manager</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami_asg_cleanup" >AWS AMI ASG Cleanup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ami" >AWS AMI</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup" >AWS Backup</a>
+</li>
+<li>
+<a href="//roles/aws/aws_backup_validation" >AWS Backup Validation</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudfront_distribution" >AWS CloudFront distribution</a>
+</li>
+<li>
+<a href="//roles/aws/aws_cloudwatch_log_group" >Cloudwatch log group</a>
+</li>
+<li>
+<a href="//roles/aws/aws_credentials" >Amazon credentials</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_autoscale_cluster" >Autoscale cluster</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_metric_alarm" >EC2 CloudWatch Metric Alarm</a>
+</li>
+<li>
+<a href="//roles/aws/aws_ec2_with_eip" >EC2 instance with EIP</a>
+</li>
+<li>
+<a href="//roles/aws/aws_efs" >AWS EFS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_elasticache" >AWS ElastiCache</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_role" >AWS IAM EC2</a>
+</li>
+<li>
+<a href="//roles/aws/aws_iam_saml" >AWS IAM SAML</a>
+</li>
+<li>
+<a href="//roles/aws/_aws_network_info" >AWS Network Info</a>
+</li>
+<li>
+<a href="//roles/aws/aws_opensearch" >AWS OpenSearch</a>
+</li>
+<li>
+<a href="//roles/aws/aws_provision_ec2_keypair" >AWS key pair.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_rds" >AWS RDS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_resource_group" >AWS Resource Group.</a>
+</li>
+<li>
+<a href="//roles/aws/aws_s3_bucket" >AWS S3 Bucket</a>
+</li>
+<li>
+<a href="//roles/aws/aws_security_groups" >AWS Security Groups</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sg_iptables" >AWS SG/firewall role</a>
+</li>
+<li>
+<a href="//roles/aws/aws_sns" >AWS SNS</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc" >VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_route" >Update main route for a given VPC</a>
+</li>
+<li>
+<a href="//roles/aws/aws_vpc_subnet" >VPC</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/contrib" >Contributed roles</a>
+</li>
+<li>
+<a href="//roles/debian" >Debian Packages</a>
+
+<ul>
+<li>
+<a href="//roles/debian/ansible_galaxy" >Ansible Galaxy</a>
+</li>
+<li>
+<a href="//roles/debian/ansible" >Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/apache" >APACHE</a>
+</li>
+<li>
+<a href="//roles/debian/apparmor" >Apparmor</a>
+</li>
+<li>
+<a href="//roles/debian/apt_extra_packages" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/apt_repository" >APT Repository</a>
+</li>
+<li>
+<a href="//roles/debian/apt_unattended_upgrades" >APT Unattended Upgrades</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cli" >AWS CLI</a>
+</li>
+<li>
+<a href="//roles/debian/aws_cloudwatch_agent" >AWS Cloudwatch agent</a>
+</li>
+<li>
+<a href="//roles/debian/aws_efs_client" >EFS client</a>
+</li>
+<li>
+<a href="//roles/debian/aws_ssm_agent" >AWS SSM agent</a>
+</li>
+<li>
+<a href="//roles/debian/ce_deploy" >ce-deploy</a>
+</li>
+<li>
+<a href="//roles/debian/ce_dev" >Extra packages</a>
+</li>
+<li>
+<a href="//roles/debian/ce_patcher" >Automated patching</a>
+</li>
+<li>
+<a href="//roles/debian/ce_provision" >ce-provision</a>
+</li>
+<li>
+<a href="//roles/debian/clamav" >ClamAV</a>
+</li>
+<li>
+<a href="//roles/debian/docker_ce" >Docker CE</a>
+</li>
+<li>
+<a href="//roles/debian/docker_registry" >Docker Registry</a>
+</li>
+<li>
+<a href="//roles/debian/duplicity" >Duplicity</a>
+</li>
+<li>
+<a href="//roles/debian/firewall_config" >Firewall Config</a>
+</li>
+<li>
+<a href="//roles/debian/frontail" >Frontail</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab" >Gitlab</a>
+</li>
+<li>
+<a href="//roles/debian/gitlab_runner" >Gitlab Runner</a>
+</li>
+<li>
+<a href="//roles/debian/gpg_key" >GPG Key</a>
+</li>
+<li>
+<a href="//roles/debian/haproxy" >HA Proxy</a>
+</li>
+<li>
+<a href="//roles/debian/hosts" >Managed /etc/hosts</a>
+</li>
+<li>
+<a href="//roles/debian/jenkins" >Jenkins</a>
+</li>
+<li>
+<a href="//roles/debian/jitsi" >Jitsi</a>
+</li>
+<li>
+<a href="//roles/debian/ldap_server" >LDAP Server</a>
+</li>
+<li>
+<a href="//roles/debian/lhci" >LHCI</a>
+</li>
+<li>
+<a href="//roles/debian/mailpit" >Mailpit</a>
+</li>
+<li>
+<a href="//roles/debian/mount_sync" >Mount sync</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_client" >MariaDB Client</a>
+</li>
+<li>
+<a href="//roles/debian/mysql_server_oracle_ce" >MySQL Server - Oracle Community Edition</a>
+</li>
+<li>
+<a href="//roles/debian/nginx" >NGINX</a>
+</li>
+<li>
+<a href="//roles/debian/nodejs" >NodeJS</a>
+</li>
+<li>
+<a href="//roles/debian/openvpn" >OpenVPN</a>
+</li>
+<li>
+<a href="//roles/debian/packer" >Packer</a>
+</li>
+<li>
+<a href="//roles/debian/pam_linotp" >PAM LinOTP</a>
+</li>
+<li>
+<a href="//roles/debian/php-cli" >PHP terminal client</a>
+</li>
+<li>
+<a href="//roles/debian/php-common" >PHP common components</a>
+</li>
+<li>
+<a href="//roles/debian/php_composer" >PHP Composer</a>
+</li>
+<li>
+<a href="//roles/debian/php-fpm" >PHP-FPM</a>
+</li>
+<li>
+<a href="//roles/debian/phpmyadmin" >phpMyAdmin</a>
+</li>
+<li>
+<a href="//roles/debian/php_xdebug" >PHP XDebug</a>
+</li>
+<li>
+<a href="//roles/debian/postfix" >Postfix</a>
+</li>
+<li>
+<a href="//roles/debian/process_manager" >Process Manager</a>
+</li>
+<li>
+<a href="//roles/debian/python_boto" >Python Boto</a>
+</li>
+<li>
+<a href="//roles/debian/python_common" >Python Common</a>
+</li>
+<li>
+<a href="//roles/debian/python_pip_packages" >Python Pip Packages</a>
+</li>
+<li>
+<a href="//roles/debian/rkhunter" >rkhunter</a>
+</li>
+<li>
+<a href="//roles/debian/rsyslog" >Rsyslog</a>
+</li>
+<li>
+<a href="//roles/debian/solr" >solr</a>
+</li>
+<li>
+<a href="//roles/debian/ssh_server" >SSHD</a>
+</li>
+<li>
+<a href="//roles/debian/ssl" >SSL</a>
+</li>
+<li>
+<a href="//roles/debian/sudo_config" >sudo config</a>
+</li>
+<li>
+<a href="//roles/debian/swap" >Swap</a>
+</li>
+<li>
+<a href="//roles/debian/system" >System</a>
+</li>
+<li>
+<a href="//roles/debian/user_ansible" >User Ansible</a>
+</li>
+<li>
+<a href="//roles/debian/varnish_config" >varnish_config</a>
+</li>
+<li>
+<a href="//roles/debian/wazuh" >wazuh</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_init" >Init role</a>
+</li>
+<li>
+<a href="//roles/_meta" >&ldquo;Meta&rdquo; roles that group individual roles together.</a>
+
+<ul>
+<li>
+<a href="//roles/_meta/aws_account" >AWS account</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_client_instance" >AWS client</a>
+</li>
+<li>
+<a href="//roles/_meta/aws_region" >AWS region</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="//roles/_overrides" >_overrides.</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</aside>
+    </body>
+</html>
