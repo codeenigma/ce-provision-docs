@@ -2,218 +2,218 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/_sidebar/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/_sidebar/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/contribute/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/contribute/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/install/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/install/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_init/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_init/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_meta/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_account/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_meta/aws_account/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_client_instance/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_meta/aws_client_instance/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_meta/aws_region/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_meta/aws_region/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/_overrides/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/_overrides/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/_aws_network_info/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/_aws_network_info/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acl/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_acl/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_acm/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_acm/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_ami/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ami_asg_cleanup/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_ami_asg_cleanup/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_backup/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_backup_validation/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_backup_validation/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudfront_distribution/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_cloudfront_distribution/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_cloudwatch_log_group/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_cloudwatch_log_group/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_credentials/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_credentials/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_autoscale_cluster/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_ec2_autoscale_cluster/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_metric_alarm/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_ec2_metric_alarm/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_ec2_with_eip/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_ec2_with_eip/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_efs/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_efs/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_elasticache/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_elasticache/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_role/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_iam_role/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_iam_saml/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_iam_saml/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_opensearch/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_opensearch/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_rds/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_rds/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_resource_group/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_resource_group/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_s3_bucket/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_s3_bucket/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_security_groups/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_security_groups/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sg_iptables/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_sg_iptables/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_sns/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_sns/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_vpc/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_route/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_vpc_route/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/aws/aws_vpc_subnet/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_vpc_subnet/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/contrib/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/contrib/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ansible/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ansible_galaxy/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ansible_galaxy/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apache/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/apache/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apparmor/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/apparmor/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_extra_packages/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/apt_extra_packages/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_repository/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/apt_repository/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/apt_unattended_upgrades/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/apt_unattended_upgrades/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cli/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/aws_cli/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_cloudwatch_agent/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/aws_cloudwatch_agent/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_efs_client/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/aws_efs_client/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/aws_ssm_agent/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/aws_ssm_agent/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_deploy/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ce_deploy/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_dev/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ce_dev/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_patcher/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ce_patcher/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ce_provision/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ce_provision/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/clamav/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/clamav/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_ce/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/docker_ce/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/docker_registry/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/docker_registry/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/duplicity/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/duplicity/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/firewall_config/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/firewall_config/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/frontail/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/frontail/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/gitlab/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gitlab_runner/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/gitlab_runner/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/gpg_key/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/gpg_key/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/haproxy/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/haproxy/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/hosts/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/hosts/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jenkins/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/jenkins/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/jitsi/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/jitsi/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ldap_server/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ldap_server/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/lhci/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/lhci/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mailpit/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/mailpit/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mount_sync/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/mount_sync/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_client/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/mysql_client/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/mysql_server_oracle_ce/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/mysql_server_oracle_ce/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nginx/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/nginx/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/nodejs/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/nodejs/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/openvpn/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/openvpn/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/packer/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/packer/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/pam_linotp/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/pam_linotp/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-cli/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/php-cli/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-common/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/php-common/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php-fpm/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/php-fpm/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_composer/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/php_composer/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/php_xdebug/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/php_xdebug/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/phpmyadmin/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/phpmyadmin/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/postfix/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/postfix/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/process_manager/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/process_manager/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_boto/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/python_boto/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_common/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/python_common/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/python_pip_packages/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/python_pip_packages/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rkhunter/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/rkhunter/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/rsyslog/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/rsyslog/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/solr/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/solr/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssh_server/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ssh_server/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/ssl/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/ssl/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/sudo_config/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/sudo_config/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/swap/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/swap/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/system/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/system/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/user_ansible/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/user_ansible/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/varnish_config/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/varnish_config/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/debian/wazuh/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/wazuh/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/scripts/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/scripts/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/categories/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/categories/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/roles/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/</loc>
   </url><url>
-    <loc>http://wikis2pages-hugo:4000/ce-provision-docs/2.x/tags/</loc>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/tags/</loc>
   </url>
 </urlset>
