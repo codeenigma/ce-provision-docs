@@ -516,7 +516,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/nodejs/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/nodejs/</guid>
-      <description>NodeJS Installs NodeJS from official repos.&#xA;Default variables --- nodejs: # Used by apt_unattended_upgrades apt_origin_nodejs: &amp;#34;origin=. nodistro,codename=nodistro,label=. nodistro&amp;#34; # nodejs repo apt_signed_by_nodejs: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key apt_origin_yarn: &amp;#34;origin=yarn,codename=stable,label=yarn-stable&amp;#34; # yarn repo apt_signed_by_yarn: https://dl.yarnpkg.com/debian/pubkey.gpg version: 18.x # LTS - see https://nodejs.dev/en/about/releases/ npm_packages: [] #npm_packages: # - name: coffee-script # required # version: &amp;#34;1.6.1&amp;#34; # path: /path/to/node/app # omit to install globally </description>
+      <description>NodeJS Installs NodeJS from official repos.&#xA;Default variables --- nodejs: # Used by apt_unattended_upgrades apt_origin_nodejs: &amp;#34;origin=Node Source,codename=nodistro,label=Node Source&amp;#34; # nodejs repo apt_signed_by_nodejs: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key apt_origin_yarn: &amp;#34;origin=yarn,codename=stable,label=yarn-stable&amp;#34; # yarn repo apt_signed_by_yarn: https://dl.yarnpkg.com/debian/pubkey.gpg version: 18.x # LTS - see https://nodejs.dev/en/about/releases/ npm_packages: [] #npm_packages: # - name: coffee-script # required # version: &amp;#34;1.6.1&amp;#34; # path: /path/to/node/app # omit to install globally </description>
     </item>
     <item>
       <title></title>
