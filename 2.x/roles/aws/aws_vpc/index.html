@@ -17,23 +17,132 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">example-vpc-2</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cidr_block</span>: <span style="color:#e6db74">&#34;10.0.0.0/16&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cidr_block</span>: <span style="color:#e6db74">&#34;{{ _aws_vpc_cidr_base }}.0.0/16&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ipv6_cidr: true # uncomment to request an Amazon-provided IPv6 CIDR block with /56 prefix length.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>: {}
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#Type: &#34;util&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">assign_instances_ipv6</span>: <span style="color:#66d9ef">false</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">security_groups</span>:
-</span></span><span style="display:flex;"><span>    []
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># - name: web - open</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#   description: Allow all incoming traffic on ports 80 and 443</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#   rules:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#     - proto: tcp</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#       ports:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#         - 80</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#         - 443</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#       cidr_ip: 0.0.0.0/0</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#       rule_desc: Allow all incoming traffic on ports 80 and 443</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># List of security groups to create in this VPC, see below for example structure.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">security_groups</span>: <span style="color:#e6db74">&#34;{{ _security_groups_defaults }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Load common security groups below into a list to use with the aws_vpc.security_groups variable.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_security_groups_defaults</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.common_network }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.ssh_open }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.web_open }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.mailpit_open }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.ftp_open }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.sftp_open }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.ossec }}&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#e6db74">&#34;{{ _common_security_groups.openvpn }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Here is a set of example and commonly required security groups.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This closely follows our common firewall rules in roles/debian/firewall_config.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_common_security_groups</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">common_network</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">common_network</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Common network access configuration for all servers.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">icmp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">from_port</span>: <span style="color:#ae81ff">8</span> <span style="color:#75715e"># ICMP type (8 is IPv4 echo)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">to_port</span>: -<span style="color:#ae81ff">1</span> <span style="color:#75715e"># ICMP subtype (-1 for any)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow ICMP IPv4 ping.</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">icmp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">from_port</span>: <span style="color:#ae81ff">128</span> <span style="color:#75715e"># ICMP type (128 is IPv6 echo)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">to_port</span>: -<span style="color:#ae81ff">1</span> <span style="color:#75715e"># ICMP subtype (-1 for any)</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ipv6</span>: <span style="color:#e6db74">&#34;::/0&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow ICMP IPv6 ping.</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#e6db74">&#34;{{ _aws_vpc_cidr_base }}.0.0/16&#34;</span> <span style="color:#75715e"># see _init - 10.0.0.0/16 by default</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">0-65535</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all tcp traffic on internal network.</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">udp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#e6db74">&#34;{{ _aws_vpc_cidr_base }}.0.0/16&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">0-65535</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all udp traffic on internal network.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules_egress</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">1-1024</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">2049</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow ports 1-1024 and 2049 for NFS over tcp as standard.</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">udp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">1-1024</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow ports 1-1024 over udp as standard.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssh_open</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ssh_open</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on port 22.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">22</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming tcp traffic on port 22.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">web_open</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">web_open</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming web traffic on ports 80 and 443.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">443</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming tcp traffic on ports 80 and 443.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">mailpit_open</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">mailpit_open</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on port 8025 for Mailpit.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">8025</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming tcp traffic on port 8025.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ftp_open</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ftp_open</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on ports 20 and 21 for FTP.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">21</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming tcp traffic on ports 20 and 21.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">sftp_open</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">sftp_open</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on ports 989 and 990 for sFTP.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">tcp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">898</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">990</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming tcp traffic on ports 989 and 990.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ossec</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">ossec</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on ports 1514 and 1515 for OSSEC.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">udp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">1514</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">1515</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming udp traffic on ports 1514 and 1515.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">openvpn</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">openvpn</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">description</span>: <span style="color:#ae81ff">Allow all incoming traffic on port 1194 for OpenVPN.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">rules</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">proto</span>: <span style="color:#ae81ff">udp</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">ports</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">1194</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">cidr_ip</span>: <span style="color:#ae81ff">0.0.0.0</span><span style="color:#ae81ff">/0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">rule_desc</span>: <span style="color:#ae81ff">Allow all incoming udp traffic on port 1194.</span>
 </span></span></code></pre></div><!-- raw HTML omitted -->
 
     </article>
