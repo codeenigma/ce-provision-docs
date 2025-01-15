@@ -96,7 +96,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_acl/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_acl/</guid>
-      <description>AWS ACL Creates an ACL to be attached to a CloudFront distribution or an Application Load Balancer (ALB).&#xA;Default variables --- aws_acl: - name: &amp;#34;{{ _infra_name }}_main_acl&amp;#34; description: &amp;#34;ACL rules from ce-provision-config&amp;#34; scope: CLOUDFRONT # Can be REGIONAL for ALBs region: &amp;#34;us-east-1&amp;#34; tags: &amp;#34;{{ _aws_tags }}&amp;#34; recreate: false # set to true to creating the ACL rules: rate_limit: value: 600 # set to 0 to skip rate limit rule, set to a value to set how many requests to allow in period before blocking priority: 2 # can be float with 1 decimal place ip_sets: - rule_name: &amp;#34;Allowed-IPs-rule&amp;#34; set_name: &amp;#34;Allowed-IPs-set&amp;#34; description: &amp;#34;List of IPs to whitelist - Ansible managed&amp;#34; action: allow priority: 1 list: - 1.</description>
+      <description>AWS ACL Creates an ACL to be attached to a CloudFront distribution or an Application Load Balancer (ALB).&#xA;Default variables to create WAF If the var is list type, it will go through the process of creating and assignng rules to WAF aws_acl.yml needs to be located in global or regional vars&#xA;If you don&amp;rsquo;t need one of the rules on the WAF, we can just remove it from the &amp;ldquo;rules&amp;rdquo;</description>
     </item>
     <item>
       <title></title>
@@ -152,7 +152,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_credentials/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_credentials/</guid>
-      <description>Amazon credentials Simple role generating credentials &amp;ldquo;profiles&amp;rdquo; in users $HOME/.aws/credentials.&#xA;Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1 access_key_id: XXX secret_access_key: XXXX - name: example access_key_id: XXX secret_access_key: XXXX - user: root profiles: - name: another access_key_id: XXX secret_access_key: XXXX - name: profile2 access_key_id: XXX secret_access_key: XXXX </description>
+      <description>Amazon credentials Simple role generating credentials &amp;ldquo;profiles&amp;rdquo; in users $HOME/.aws/credentials.&#xA;Default variables --- aws_credentials: - user: ce-dev profiles: - name: profile1 # profiles should never contain hyphens access_key_id: XXX secret_access_key: XXXX - name: example access_key_id: XXX secret_access_key: XXXX - user: root profiles: - name: another access_key_id: XXX secret_access_key: XXXX - name: profile2 access_key_id: XXX secret_access_key: XXXX </description>
     </item>
     <item>
       <title></title>
@@ -215,7 +215,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/aws/aws_provision_ec2_keypair/</guid>
-      <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;&#xA;Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; key_name: &amp;#34;{{ ce_provision.username }}@{{ ansible_hostname }}&amp;#34; </description>
+      <description>AWS key pair. Creates a key pair for the current &amp;ldquo;provision user&amp;rdquo;&#xA;Default variables --- aws_provision_ec2_keypair: aws_profile: &amp;#34;{{ _aws_profile }}&amp;#34; region: &amp;#34;{{ _aws_region }}&amp;#34; key_name: &amp;#34;{{ _ce_provision_username }}@{{ ansible_hostname }}&amp;#34; key_type: ed25519 # defaults to ed25519 as used in the ce_provision role, set to rsa to or ecdsa as necessary </description>
     </item>
     <item>
       <title></title>
@@ -460,7 +460,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/gpg_key/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/gpg_key/</guid>
-      <description>GPG Key Generates a passwordless GPG key for a given user or users.&#xA;Default variables --- gpg_key_servers: - hkps://pgp.mit.edu - hkps://keys.openpgp.org gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
+      <description>GPG Key Generates a passwordless GPG key for a given user or users.&#xA;Default variables --- gpg_key_servers: - hkps://keyserver.ubuntu.com - hkps://pgp.mit.edu - hkps://keys.openpgp.org gpg_key: - username: example # Must exist already on the server. publish: false # Whether to publish to HKS public servers. key_type: &amp;#34;RSA&amp;#34; key_length: 4096 email: example@example.com expire: 0 </description>
     </item>
     <item>
       <title></title>

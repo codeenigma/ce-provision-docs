@@ -17,7 +17,8 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">aws_provision_ec2_keypair</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_name</span>: <span style="color:#e6db74">&#34;{{ _ce_provision_username }}@{{ ansible_hostname }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_type</span>: <span style="color:#ae81ff">ed25519</span> <span style="color:#75715e"># defaults to ed25519 as used in the ce_provision role, set to rsa to or ecdsa as necessary</span>
 </span></span></code></pre></div><!-- raw HTML omitted -->
 
     </article>
