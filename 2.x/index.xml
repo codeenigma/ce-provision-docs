@@ -558,7 +558,7 @@
       <link>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/packer/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/packer/</guid>
-      <description>Packer Role to install Hashicorp&amp;rsquo;s Packer binary.&#xA;Default variables --- packer: version: &amp;#34;1.11.2&amp;#34; # see https://releases.hashicorp.com/packer/ </description>
+      <description>Packer Role to install Hashicorp&amp;rsquo;s Packer binary.&#xA;Default variables --- packer: version: &amp;#34;1.11.2&amp;#34; # see https://releases.hashicorp.com/packer/ plugins: - github.com/hashicorp/amazon - github.com/hashicorp/ansible </description>
     </item>
     <item>
       <title></title>
