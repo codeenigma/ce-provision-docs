@@ -19,6 +19,29 @@
 </span></span><span style="display:flex;"><span><span style="color:#f92672">gitlab_runner</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">apt_origin</span>: <span style="color:#e6db74">&#34;origin=packages.gitlab.com/runner/gitlab-runner,codename=${distro_codename},label=gitlab-runner&#34;</span> <span style="color:#75715e"># used by apt_unattended_upgrades</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">apt_signed_by</span>: <span style="color:#ae81ff">https://packages.gitlab.com/runner/gitlab-runner/gpgkey</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">use_docker</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># set to true to install Docker and use the &#39;docker&#39; executor</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">install_fargate</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">restart</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if you&#39;re applying settings to a server responsible for its own runners</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">username</span>: <span style="color:#e6db74">&#34;{{ ce_deploy.username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">docker_group</span>: <span style="color:#e6db74">&#34;docker&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">runner_workingdir</span>: <span style="color:#e6db74">&#34;/home/{{ ce_deploy.username }}/build&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">runner_config</span>: <span style="color:#e6db74">&#34;/etc/gitlab-runner/config.toml&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># see https://gitlab.com/gitlab-org/ci-cd/custom-executor-drivers/fargate/-/tree/master/docs</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">fargate</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cluster</span>: <span style="color:#e6db74">&#34;my-cluster&#34;</span> <span style="color:#75715e"># ECS cluster name</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">profile</span>: <span style="color:#e6db74">&#34;example&#34;</span> <span style="color:#75715e"># AWS boto profile name - can be substituted for &#34;{{ _aws_profile }}&#34; if set</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;eu-west-1&#34;</span> <span style="color:#75715e"># AWS region name - can be substituted for &#34;{{ _aws_region }}&#34; if set</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">subnet</span>: <span style="color:#e6db74">&#34;subnet-abcdef123456&#34;</span> <span style="color:#75715e"># subnet ID</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">security_group</span>: <span style="color:#e6db74">&#34;my-security-group&#34;</span> <span style="color:#75715e"># SG name</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">task_definition</span>: <span style="color:#e6db74">&#34;my-task:1&#34;</span> <span style="color:#75715e"># task definition in format name:revision, if revision is not provided ECS will use latest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_ip</span>: <span style="color:#e6db74">&#34;false&#34;</span> <span style="color:#75715e"># if your containers need a public IP assigning</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;1.4.0&#34;</span> <span style="color:#75715e"># Fargate platform version</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metadata_dir</span>: <span style="color:#e6db74">&#34;/opt/gitlab-runner/metadata&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssh_user</span>: <span style="color:#e6db74">&#34;root&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssh_port</span>: <span style="color:#ae81ff">22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">##################################################</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># @TODO - these variables are not currently used #</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">##################################################</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">concurrent_jobs</span>: <span style="color:#ae81ff">10</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">check_interval</span>: <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">session_timeout</span>: <span style="color:#ae81ff">1800</span>
@@ -45,25 +68,9 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  run_args: &#39;[&#34;--config&#34;, &#34;/etc/gitlab-runner/fargate.toml&#34;, &#34;custom&#34;, &#34;run&#34;]&#39;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  cleanup_exec: &#34;/opt/gitlab-runner/fargate&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  cleanup_args: &#39;[&#34;--config&#34;, &#34;/etc/gitlab-runner/fargate.toml&#34;, &#34;custom&#34;, &#34;cleanup&#34;]&#39;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">install_fargate</span>: <span style="color:#66d9ef">false</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">restart</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># set to false if you&#39;re applying settings to a server responsible for its own runners</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">username</span>: <span style="color:#e6db74">&#34;{{ ce_deploy.username }}&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">docker_group</span>: <span style="color:#e6db74">&#34;docker&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">runner_workingdir</span>: <span style="color:#e6db74">&#34;/home/{{ ce_deploy.username }}/build&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">runner_config</span>: <span style="color:#e6db74">&#34;/etc/gitlab-runner/config.toml&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># see https://gitlab.com/gitlab-org/ci-cd/custom-executor-drivers/fargate/-/tree/master/docs</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">fargate</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cluster</span>: <span style="color:#e6db74">&#34;my-cluster&#34;</span> <span style="color:#75715e"># ECS cluster name</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">profile</span>: <span style="color:#e6db74">&#34;example&#34;</span> <span style="color:#75715e"># AWS boto profile name - can be substituted for &#34;{{ _aws_profile }}&#34; if set</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;eu-west-1&#34;</span> <span style="color:#75715e"># AWS region name - can be substituted for &#34;{{ _aws_region }}&#34; if set</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">subnet</span>: <span style="color:#e6db74">&#34;subnet-abcdef123456&#34;</span> <span style="color:#75715e"># subnet ID</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">security_group</span>: <span style="color:#e6db74">&#34;my-security-group&#34;</span> <span style="color:#75715e"># SG name</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">task_definition</span>: <span style="color:#e6db74">&#34;my-task:1&#34;</span> <span style="color:#75715e"># task definition in format name:revision, if revision is not provided ECS will use latest</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">public_ip</span>: <span style="color:#e6db74">&#34;false&#34;</span> <span style="color:#75715e"># if your containers need a public IP assigning</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;1.4.0&#34;</span> <span style="color:#75715e"># Fargate platform version</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metadata_dir</span>: <span style="color:#e6db74">&#34;/opt/gitlab-runner/metadata&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssh_user</span>: <span style="color:#e6db74">&#34;root&#34;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssh_port</span>: <span style="color:#ae81ff">22</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">##################################################</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># End @TODO                                      #</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">##################################################</span>
 </span></span></code></pre></div><!-- raw HTML omitted -->
 
     </article>
