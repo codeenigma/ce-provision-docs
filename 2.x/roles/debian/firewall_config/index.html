@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="firewall-config">Firewall Config</h1>
 <p>This role provides a wrapper for 
 <a href="https://github.com/geerlingguy/ansible-role-firewall/"  target="_blank" rel="noopener">Jeff Geerling&rsquo;s Ansible firewall role for iptables</a>
@@ -14,8 +16,8 @@
 <p>Note, it explicitly does not state that dependency in <code>meta</code> because in some cases <code>iptables</code> needs installing from <code>buster-backports</code> and that cannot work if Ansible tries to install it as a dependency. This is why the first task in this role is installing <code>iptables</code> from <code>buster-backports</code> if the <code>is_local</code> variable is set (e.g we are in a 
 <a href="https://github.com/codeenigma/ce-dev/"  target="_blank" rel="noopener">ce-dev</a>
  container).</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
 <h2 id="usage">Usage</h2>
 <p>The role has a concept of <code>rulesets</code> which take the form of a set of lists of firewall rules to apply. We ship some standard <code>rulesets</code>, such as this one called <code>web_open</code> which opens TCP ports 80 and 443:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">firewall_config</span>:
@@ -39,7 +41,7 @@
 </span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">ssh_restricted</span>
 </span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">web_open</span>
 </span></span></code></pre></div><p>So Ansible will apply my custom <code>ssh_restricted</code> ruleset and the built-in <code>web_open</code> ruleset.</p>
-<!-- raw HTML omitted -->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">firewall_config</span>:
@@ -122,7 +124,7 @@
 </span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;iptables -A INPUT -s 10.8.0.0/24 -i tun0 -j ACCEPT&#34;</span> <span style="color:#75715e"># Accept traffic from the VPN on all interfaces - change this if you change openvpn_config default addresses</span>
 </span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;iptables -A FORWARD -i tun0 -o eth0 -j ACCEPT&#34;</span> <span style="color:#75715e"># Forward traffic from the VPN interface out via eth0</span>
 </span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE&#34;</span> <span style="color:#75715e"># Replace the source IP with the eth0 public IP when forwarding outbound</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -462,5 +464,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="varnish_config">varnish_config</h1>
 <p>Installs and configures Varnish, with 6.4 being the default version. Depends on <code>geerlingguy.varnish</code> which does the setup bit, <code>varnish_config</code> handles the <code>default.vcl</code> file.</p>
 <p>You can provide a template override in two locations, they will be checked in this order:</p>
@@ -18,9 +20,9 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">varnish_config</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">template_filename</span>: <span style="color:#ae81ff">my-app.v1.vcl</span>
 </span></span></code></pre></div><p>This behaviour allows you to manage different Varnish templates for different applications. You may of course provide your own variables in the <code>varnish_config</code> dictionary for your custom template.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Defaults file for varnish_config, other variables exist from importing geerlingguy.varnish and can be overriden</span>
@@ -41,7 +43,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">upstream_proxies</span>: []
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Provide an alternative filename if you are providing a template.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">template_filename</span>: <span style="color:#ae81ff">default.vcl</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -380,5 +382,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

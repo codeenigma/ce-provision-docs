@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-ami">AWS AMI</h1>
 <p>Creates an image from a selected base with Packer, provisioned with an Ansible Playbook.</p>
 <h2 id="dependencies">Dependencies</h2>
@@ -15,11 +17,73 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">hosts</span>: <span style="color:#e6db74">&#34;{{ _aws_ami_host | default(&#39;default&#39;) }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
 </span></span></code></pre></div><p>Like that it will use <code>_aws_ami_host</code> if available and default to <code>default</code> if not, which is the value expected by Packer for the &lsquo;create&rsquo; operation.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
-<div class="highlight">e></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">aws_ami</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">instance_type</span>: <span style="color:#ae81ff">c7a.large</span> <span style="color:#75715e"># more performant packer instances mean less waiting for AMIs!</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">virtualization_type</span>: <span style="color:#ae81ff">hvm</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root_device_type</span>: <span style="color:#ae81ff">ebs</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name_filter</span>: <span style="color:#e6db74">&#34;debian-12-amd64-*&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ami_name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">owner</span>: <span style="color:#e6db74">&#34;136693071363&#34;</span> <span style="color:#75715e"># Global AWS account ID of owner, defaults to Debian official</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ssh_username</span>: <span style="color:#e6db74">&#34;admin&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">public_key_name</span>: <span style="color:#ae81ff">id_ed25519.pub</span> <span style="color:#75715e"># from Debian 12 (Bookworm) onwards RSA keys, i.e. id_rsa.pub, are deprecated</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">encrypt_boot</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># EBS volume options</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">device_name</span>: <span style="color:#ae81ff">/dev/xvda</span> <span style="color:#75715e"># default for Debian AMIs</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">volume_type</span>: <span style="color:#ae81ff">gp3</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">volume_size</span>: <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#vpc_filter: &#34;example&#34; # If defined, Packer will search for a VPC with the `Name` tag of the value given. vpc_id takes precednece over this if both are defined. This also assumes the VPC is not the default and has a CIDR block of /16.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">vpc_filter</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#subnet_filter_az: &#34;a&#34; # If vpc_id and/or vpc_filter are defined, subnet_filter_az MUST be defined and must match an AZ that has public networking.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">subnet_filter_az</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">playbook_file</span>: <span style="color:#e6db74">&#34;{{ playbook_dir }}/base-playbook.yml&#34;</span> <span style="color:#75715e"># Path to a playbook used to provision the image. If using &#39;repack&#39; make sure the playbook host is _aws_ami_host.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">force</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Forces a builder to run when artifacts from a previous build prevent a build from running. May be necessary if on_error is &#39;abort&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># on_error can be one of:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - cleanup (default): cleans up after the previous steps, deleting temporary files and virtual machines.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - abort: exits without any cleanup, which might require the next build to use -force.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">on_error</span>: <span style="color:#e6db74">&#34;cleanup&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Ansible groups to add the target to. Useful for picking up group_vars.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">groups</span>: []
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># groups:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   - &#34;all&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#   - &#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># List of additional arguments to pass as ansible --extra-vars.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Values must me escaped already, they will be passed as-is.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">extra_vars</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_resource_name: {{ _aws_resource_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_region: {{ _aws_region }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_aws_profile: {{ _aws_profile }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_infra_name: {{ _infra_name }}&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;_env_type: {{ _env_type }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">Name</span>: <span style="color:#e6db74">&#34;example&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Operation can be one of:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - create: Create a new image.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - ensure: Only create an image if it doesn&#39;t already exists.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - delete: Delete image and snapshots.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># - repack: Create a new image from a running EC2 instance.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#@todo find better names.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">operation</span>: <span style="color:#ae81ff">ensure</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Only used by the &#39;repack&#39; operation to define temporary EC2 instance</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">repack</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">root_volume_type</span>: <span style="color:#ae81ff">gp3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">root_volume_size</span>: <span style="color:#ae81ff">20</span> <span style="color:#75715e"># Important, for an ASG this must not be larger than the value set in the Launch Configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">cluster_name</span>: <span style="color:#e6db74">&#34;example&#34;</span> <span style="color:#75715e"># To look up EC2 instances to use for an AMI</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">iam_role</span>: <span style="color:#e6db74">&#34;example&#34;</span> <span style="color:#75715e"># The IAM role to be assumed by the temporary EC2 instance for repacking an AMI</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">controller_cidr</span>: <span style="color:#e6db74">&#34;0.0.0.0/0&#34;</span> <span style="color:#75715e"># The CIDR IP block for controller access to the temporary EC2 instance</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">vpc_id</span>: <span style="color:#ae81ff">vpc-XXXX</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">vpc_subnet_id</span>: <span style="color:#ae81ff">subnet-01234567890abcdef</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">key_name</span>: <span style="color:#e6db74">&#34;{{ ce_provision.username }}@{{ ansible_hostname }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ebs_optimized</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">device_name</span>: <span style="color:#ae81ff">/dev/xvda</span>
+</span></span></code></pre></div><!--ENDROLEVARS-->
+
     </article>
     <aside>
         <nav id="TableOfContents">
@@ -358,5 +422,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

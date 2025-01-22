@@ -5,13 +5,15 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-key-pair">AWS key pair.</h1>
 <p>Creates a key pair for the current &ldquo;provision user&rdquo;</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">aws_provision_ec2_keypair</span>:
@@ -19,7 +21,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">region</span>: <span style="color:#e6db74">&#34;{{ _aws_region }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_name</span>: <span style="color:#e6db74">&#34;{{ _ce_provision_username }}@{{ ansible_hostname }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">key_type</span>: <span style="color:#ae81ff">ed25519</span> <span style="color:#75715e"># defaults to ed25519 as used in the ce_provision role, set to rsa to or ecdsa as necessary</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -358,5 +360,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

@@ -5,16 +5,18 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-rds">AWS RDS</h1>
 <p>Creates an RDS instance and associated ressources.</p>
 <p>If the <code>engine</code> variable is set to <strong>aurora-mysql</strong>, you&rsquo;ll need to manually create the Aurora cluster first. Typically, a controller will already exist, so something like this can be run from the controller:</p>
 <pre tabindex="0"><code>AWS_PROFILE=example aws rds create-db-cluster --db-cluster-identifier example-aurora-cluster --engine aurora-mysql --engine-version 5.7.mysql_aurora.2.10.2 --db-subnet-group-name example-aurora --vpc-security-group-ids sg-abcdefghijklmnop --storage-encrypted --master-username &#34;auroradev&#34; --master-user-password &#34;aurora12345&#34;
 </code></pre><p>You&rsquo;ll need to have created the subnet group first as well as the security groups.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">aws_rds</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
@@ -125,7 +127,7 @@
 </span></span><span style="display:flex;"><span>      - <span style="color:#f92672">endpoint</span>: <span style="color:#e6db74">&#34;admin@example.com&#34;</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">protocol</span>: <span style="color:#e6db74">&#34;email&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Name of the AWS Backup plan to use to backup the instance.</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -464,5 +466,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

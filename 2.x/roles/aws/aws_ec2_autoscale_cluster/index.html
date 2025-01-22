@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="autoscale-cluster">Autoscale cluster</h1>
 <p>Supports either AWS EC2 Autoscaling Groups (ASGs) or AWS ECS clusters. Note, this role only deals with setting up the config and surrounding services, it does not handle any deployment of code or containers. If you want to use Code Enigma complementary tools, see these two roles in our <code>ce-deploy</code> project:</p>
 <ul>
@@ -26,9 +28,9 @@
 <h2 id="networking">Networking</h2>
 <p>Regardless of the scenario, ECS or EC2, if you decide to use a private subnet instead of giving your instances or containers public IP addresses, you will need at least one NAT gateway (more than one for resilience). When you are creating NAT gateways they must be in a <em>public</em> subnet and your routing tables in the private subnets should use the NAT gateway as the default route. Do not put the NAT gateways on the private subnets, it cannot possibly work and your containers or instances will not have internet access.</p>
 <p><code>ce-provision</code> will handle this for you in most cases.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">aws_ec2_autoscale_cluster</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span>
@@ -330,7 +332,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Whether to create an EFS volume.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs_encrypt</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to encrypt the EFS volume</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">efs_backup</span>: <span style="color:#e6db74">&#34;{{ _infra_name }}-{{ _env_type }}&#34;</span> <span style="color:#75715e"># Whether to back up the EFS volume. Set to the plan you want to use, or an empty string if you don&#39;t want to back up.</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -670,5 +672,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

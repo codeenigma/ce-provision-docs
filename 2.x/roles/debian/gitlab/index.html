@@ -5,15 +5,17 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="gitlab">Gitlab</h1>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
 <h2 id="configuration">Configuration</h2>
 <p>Because of the size of the gitlab.rb file, it is impractical to try to parameterized it.
 Only a few basic variables are thus provided. To further customize it, the recommended approach is to leverage the &ldquo;override&rdquo; system and provide a custom template.</p>
-<!-- raw HTML omitted -->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># See https://github.com/ansible/ansible/issues/8603</span>
@@ -112,7 +114,7 @@ Only a few basic variables are thus provided. To further customize it, the recom
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">redirect_http_to_https</span>: <span style="color:#e6db74">&#34;true&#34;</span> <span style="color:#75715e"># must be enabled if you&#39;re using LetsEncrypt above</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">redirect_http_to_https_port</span>: <span style="color:#ae81ff">80</span> <span style="color:#75715e"># must be 80 if you&#39;re using LetsEncrypt above</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">custom_nginx_config</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># include extra config, for example &#34;include /etc/nginx/conf.d/example.conf;&#34;</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -452,5 +454,6 @@ Only a few basic variables are thus provided. To further customize it, the recom
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

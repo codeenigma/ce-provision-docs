@@ -5,16 +5,18 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-cloudwatch-agent">AWS Cloudwatch agent</h1>
 <p>Install and configure the cloudwatch agent.
 Note that retention policies can not be set here,
 you will have to use the <code>amazon.aws.cloudwatchlogs_log_group</code>
 module in your playbooks.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">aws_cloudwatch_agent</span>:
@@ -32,7 +34,7 @@ module in your playbooks.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws_access_key_id</span>: <span style="color:#ae81ff">XXX</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws_secret_access_key</span>: <span style="color:#ae81ff">XXX</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">region</span>: <span style="color:#ae81ff">eu-west-1</span> <span style="color:#75715e"># AWS region name - can be substituted for &#34;{{ _aws_region }}&#34; if set</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -371,5 +373,6 @@ module in your playbooks.</p>
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

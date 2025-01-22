@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-certificate-manager">AWS Certificate Manager</h1>
 <p>Fork from 
 <a href="https://github.com/FairwindsOps/ansible-acm"  target="_blank" rel="noopener">https://github.com/FairwindsOps/ansible-acm</a>
@@ -19,9 +21,9 @@
 </blockquote>
 <p>Additionally, this role attempts to be idempotent by running <code>aws acm list-certificates</code> and ensuring that the domain of the cert being requested is not included in the current list of certificates.</p>
 <p>Whenever this role runs it will set the <code>aws_acm_certificate_arn</code> variable so you have the ARN of the certificate, whether it exists already or it is newly created. If applicable it will <em>also</em> set the <code>aws_acm_obsolete_certificate_arn</code> variable, so you can choose to use that to automatically delete a certificate that has been replaced later.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">aws_acm</span>:
@@ -38,7 +40,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">route_53</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span> <span style="color:#75715e"># the zone might not be in the same account as the certificate</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">zone</span>: <span style="color:#ae81ff">example.com</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -377,5 +379,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

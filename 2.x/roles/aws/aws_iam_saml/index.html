@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="aws-iam-saml">AWS IAM SAML</h1>
 <p>Creates the necessary policies and roles for SAML-based SSO in AWS and optionally creates Service Provider (SP) includes for 
 <a href="https://simplesamlphp.org/"  target="_blank" rel="noopener">SimpleSAMLphp</a>
@@ -14,8 +16,8 @@
 <p>All tasks in this role are optional and can be skipped by simply not presenting a variable.</p>
 <p>Variables are generic for AWS SAML configuration up until the <code>saml_metadata_document</code> variable. Groups are intended to be LDAP groups, but in reality they can be any array of values you wish to pass to AWS to match against the <code>eduPersonAffiliation</code> SAML attribute on login.</p>
 <p>Variables from <code>linotp_server</code> onwards assume you use SimpleSAMLphp as your organisation&rsquo;s SAML Identity Provider (IdP) and should not be used unless you have a SimpleSAMLphp instance set up in a specific way.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
 <h2 id="configuring-simplesamlphp">Configuring SimpleSAMLphp</h2>
 <p>If you do not wish to make use of the automatic SimpleSAMLphp configuration you can simply ignore this section, with the default variables all the tasks will be skipped. If you do wish to use these tasks then you will need to ensure your provisioning server can commit to a Git repository that contains your SimpleSAMLphp configuration code. How you organise your SimpleSAMLphp repo is up to you, however there are some important points about config file organisation below.</p>
 <p>The role will create two SimpleSAMLphp files, an include file intended to be used to populate a consolidated login page of a series of AWS accounts, as you might require for a support team or IT department, and an SP for the AWS account. If you do not wish to use either of these files you can simply disregard them and the ensuing instructions.</p>
@@ -61,7 +63,7 @@
 <p>Be sure to leave the default attribute name <code>groups</code> as is, this role assumes that is the case.</p>
 <h2 id="dependencies">Dependencies</h2>
 <p>This requires boto and AWS-CLI on the provisioning server.</p>
-<!-- raw HTML omitted -->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">aws_iam_saml</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">aws_profile</span>: <span style="color:#e6db74">&#34;{{ _aws_profile }}&#34;</span> <span style="color:#75715e"># Boto profile to use for AWS connections</span>
@@ -84,7 +86,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">saml_include_path</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Location to save the AWS admin include</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">saml_sp_path</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># Location to save account-specific SP in</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">saml_sp_certificate</span>: <span style="color:#e6db74">&#34;&#34;</span> <span style="color:#75715e"># The value for the X509Certificate</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -425,5 +427,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

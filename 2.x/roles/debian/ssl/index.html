@@ -5,12 +5,14 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="ssl">SSL</h1>
 <p>Manages SSL certificates on servers. See the <code>aws/aws_acm</code> role for SSL handling in AWS services.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
 <h2 id="letsencrypt">LetsEncrypt</h2>
 <p>If you are using LetsEncrypt for handling it assumes <code>standalone</code> mode. If you want to do DNS validation, please do not use this role at this time. There are a few pre-requisites for <code>standalone</code> mode to work:</p>
 <ul>
@@ -49,7 +51,7 @@ location /.well-known/acme-challenge/ {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">on_calendar</span>: <span style="color:#e6db74">&#34;Mon *-*-* 04:00:00&#34;</span>
 </span></span></code></pre></div><p>As in the example above, you need to include <em>all</em> variables required by the <code>letsencrypt</code> SSL handler because defaults will not load from the <code>ssl</code> role in this context.</p>
 <p>If you are using Nginx or Apache you can set the <code>ssl.web_server</code> for each domain to either <code>nginx</code> or <code>apache</code> to have the necessary plugin installed for <code>certbot</code> to do automatic handling of LetsEncrypt requests. Be aware, it does this by temporarily altering your web server config and reloading - use this option at your own risk. This is <em>not</em> intended to be used with but <em>instead of</em> <code>ssl.http_01_port</code>.</p>
-<!-- raw HTML omitted -->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">ssl</span>:
@@ -69,14 +71,14 @@ location /.well-known/acme-challenge/ {
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----BEGIN CERTIFICATE-----
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    f34XAAVI+R04k0TLUcfeU4/8QYQ3qY1aDvwonT3PE6VYRAGMGJflz//133EquNUR
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    oMz3CA==
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----END CERTIFICATE-----</span>    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----END CERTIFICATE-----</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># For &#34;manual&#34; handling, this is the content of the key.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># For &#34;unmanaged&#34; handling, this must be set to the absolute path on the target.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">key</span>: |<span style="color:#e6db74">
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----BEGIN PRIVATE KEY-----
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    79RG06iurGJEorFopyQesKwix1h6aBYXpM8yZ0IPR0leeeipBtYHIwbPHEYRJiFn
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    6XoQQlb5mYuLKCzAZws9uceeVH+z
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----END PRIVATE KEY-----</span>    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    -----END PRIVATE KEY-----</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Set this to true to have Ansible replace the existing certificate.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">replace_existing</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>
@@ -112,7 +114,7 @@ location /.well-known/acme-challenge/ {
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># ssl_facts</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># A dict of domain names with key/cert destination paths.</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># { }</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -452,5 +454,6 @@ location /.well-known/acme-challenge/ {
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

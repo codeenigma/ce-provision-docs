@@ -5,8 +5,10 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="apparmor">Apparmor</h1>
 <p>This role installs the <code>apparmor</code> application for additional security. Documentation for Debian is here:</p>
 <ul>
@@ -17,9 +19,9 @@
 <p>The only additional feature of this role, aside from installing the package, is to create custom <code>apparmor</code> profiles. To create profiles you can provide a list with the variable <code>apparmor.custom_profiles</code>. Each item should have two elements, <code>filename</code> and <code>contents</code>. It is vitally important that <code>filename</code> matches the path to the binary you wish to provide a profile for. In the example commented out in the defaults you will note the filename is <code>usr.sbin.clamd</code> which means it applies to the binary at <code>/usr/sbin/clamd</code>, which is the location of the ClamAV daemon.</p>
 <p>The <code>contents</code> part is literally what will be placed in the file when the template is copied accross. In the case of our example, <code>/home/deploy/** r,</code>, this means allow the binary at <code>/usr/sbin/clamd</code> to read anything in the <code>/home/deploy</code> directory - our typical application location - and do not block that activity. In other words, do not impede virus scanning.</p>
 <p>If needed you can utilise Ansible&rsquo;s inheritance model to create your own, more complex <code>custom_profile.j2</code> template file with your playbook and provide additional variables per item. Essentially what ships with the role is a simple example that is fit for most purposes.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">apparmor</span>:
@@ -29,7 +31,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#  contents: |</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#    /home/deploy/** r,</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -368,5 +370,6 @@
 </li>
 </ul>
 </aside>
+
     </body>
 </html>

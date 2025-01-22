@@ -5,14 +5,16 @@
   <title>ce-provision</title>
   <meta name="viewport" content="width=device-width,minimum-scale=1">
   
-  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.a5be948f3ce84fca7dc597e47b7bb98101cec76fa354cce27baa38078b559a24.css">
-</head><body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x/home">ce-provision</a></header><article>
+  
+  <link rel="stylesheet" href="https://codeenigma.github.io/ce-provision-docs/2.x/css/main.min.79491ecfb2c47d70d8ee01dcbdaa7ed03bd0c57f2b497b82742ef3eeb30ae0db.css">
+</head>
+<body class="doc"><header><a href="https://codeenigma.github.io/ce-provision-docs/2.x//home">ce-provision</a></header><article>
         <h1 id="ec2-cloudwatch-metric-alarm">EC2 CloudWatch Metric Alarm</h1>
 <p>Creates an EC2 alarm for CloudWatch. You can use this role to set any alarm, the EC2 AutoScale role
 uses it to set autoscaling alarms for autoscaling policies if you need an example.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<!--TOC-->
+<!--ENDTOC-->
+<!--ROLEVARS-->
 <h2 id="default-variables">Default variables</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">aws_ec2_metric_alarm</span>:
@@ -34,7 +36,7 @@ uses it to set autoscaling alarms for autoscaling policies if you need an exampl
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">insufficient_data_actions</span>: [] <span style="color:#75715e"># List of ARNs of actions to take if the alarm has insufficient data.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">ok_actions</span>: [] <span style="color:#75715e"># List of ARNs of actions to take if the alarm is in an OK state.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">treat_missing_data</span>: <span style="color:#e6db74">&#34;missing&#34;</span> <span style="color:#75715e"># What to do if data is missing (see API docs for options).</span>
-</span></span></code></pre></div><!-- raw HTML omitted -->
+</span></span></code></pre></div><!--ENDROLEVARS-->
 
     </article>
     <aside>
@@ -373,5 +375,6 @@ uses it to set autoscaling alarms for autoscaling policies if you need an exampl
 </li>
 </ul>
 </aside>
+
     </body>
 </html>
