@@ -36,7 +36,7 @@
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">timer_OnCalendar</span>: <span style="color:#e6db74">&#34;*-*-* 02:30:00&#34;</span> <span style="color:#75715e"># see systemd.time documentation - https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">server_name</span>: <span style="color:#e6db74">&#34;{{ inventory_hostname }}&#34;</span> <span style="color:#75715e"># for identification via email, defaults to Ansible inventory name.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">log_location</span>: <span style="color:#ae81ff">/var/log/clamav</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">send_mail: false # Important</span>: <span style="color:#ae81ff">will not send any emails by default.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">send_mail</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Important - will not send any emails by default.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">send_on_fail</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># Only sends emails on scan failure, will not email for successful scans.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">report_recipient_email</span>: <span style="color:#ae81ff">mail@example.com</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">report_sender_email</span>: <span style="color:#ae81ff">admin@server.example.com</span>
