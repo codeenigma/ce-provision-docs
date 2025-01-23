@@ -39,8 +39,7 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">_apt_unattended_upgrades_default_origins</span>:
 </span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;origin=Debian,codename=${distro_codename},label=Debian&#34;</span>
-</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;origin=Debian,codename=${distro_codename},label=Debian-Security&#34;</span>
-</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#e6db74">&#34;origin=Debian,codename=${distro_codename}-security,label=Debian-Security&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">apt_unattended_upgrades</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">enable</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># unattended-upgrades template vars.</span>
