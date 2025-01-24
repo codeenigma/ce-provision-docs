@@ -31,7 +31,14 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Local username of the deploy user.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">utility_host</span>: <span style="color:#e6db74">&#34;localhost&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">utility_username</span>: <span style="color:#e6db74">&#34;{{ _user_ansible_username }}&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">sudoer</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">sudo_config</span>: {} <span style="color:#75715e"># an empty dictionary will skip creating a sudo config</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Example sudo config allowing full sudo permissions - see the debian/sudo_config role for more details.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  entity_name: &#34;{{ _user_ansible_username }}&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  hosts: &#34;ALL&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  operators: &#34;(ALL)&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  tags: &#34;NOPASSWD:&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  commands: &#34;ALL&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#  filename: &#34;{{ _user_ansible_username }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># List of additional groups to add the user to.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">groups</span>: []
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># List of SSH pub keys to authorize. These must be provided as strings (content of the pub key).</span>
