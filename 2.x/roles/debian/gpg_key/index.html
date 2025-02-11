@@ -18,8 +18,8 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#f92672">gpg_key_servers</span>:
 </span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">hkps://keyserver.ubuntu.com</span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">hkps://pgp.mit.edu</span>
 </span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">hkps://keys.openpgp.org</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#- hkps://pgp.mit.edu # removed from defaults - not reliable</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">gpg_key</span>:
 </span></span><span style="display:flex;"><span>  - <span style="color:#f92672">username</span>: <span style="color:#ae81ff">example</span> <span style="color:#75715e"># Must exist already on the server.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">publish</span>: <span style="color:#66d9ef">false</span> <span style="color:#75715e"># Whether to publish to HKS public servers.</span>
