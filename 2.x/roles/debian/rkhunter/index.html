@@ -30,6 +30,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">allow_ssh_root_user</span>: <span style="color:#e6db74">&#34;{{ sshd.PermitRootLogin | default(&#39;prohibit-password&#39;) }}&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">disable_tests</span>: <span style="color:#e6db74">&#34;suspscan hidden_procs deleted_files packet_cap_apps apps os_specific&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">os_package_manager</span>: <span style="color:#e6db74">&#34;NONE&#34;</span> <span style="color:#75715e"># PKGMGR=NONE is default for Debian, set it to what you need.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">portpathwhitelist</span>: []
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">scriptwhitelist</span>:
 </span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/bin/egrep</span>
 </span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">/bin/fgrep</span>
