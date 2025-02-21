@@ -135,6 +135,8 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">cache_behavior_public</span>: <span style="color:#e6db74">&#34;add_header Cache-Control \&#34;public, max-age=604800\&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_host</span>: <span style="color:#ae81ff">localhost</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">proxy_port</span>: <span style="color:#ae81ff">8443</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Set a custom port for Let&#39;s Encrypt to bind to during the initial certificate run</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># vhost_letsencrypt_port: []</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># You can inject custom directives into the main nginx.conf file here by providing them as a list of strings.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">#custom_directives: []</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Group prefix. Useful for grouping by environments.</span>
