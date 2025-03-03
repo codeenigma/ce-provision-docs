@@ -147,6 +147,7 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">php_fastcgi_backend</span>: <span style="color:#e6db74">&#34;127.0.0.1:90{{ php.version[-1] | replace(&#39;.&#39;, &#39;&#39;) }}&#34;</span> <span style="color:#75715e"># for unix socket use &#34;unix:/var/run/php{{ php.version[-1] | replace(&#39;.&#39;,&#39;&#39;) }}-fpm.sock&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">ratelimitingcrawlers</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">client_max_body_size</span>: <span style="color:#e6db74">&#34;700M&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># drupal_fallback: []</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Default location behavior for nginx</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># If no custom location behavior is defined, this will be used:</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># nginx_location_behavior: [&#39;try_files @rewrite /index.php?$query_string;&#39;]</span>
