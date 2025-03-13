@@ -206,6 +206,8 @@
   </url><url>
     <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/varnish_config/</loc>
   </url><url>
+    <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/vim/</loc>
+  </url><url>
     <loc>https://codeenigma.github.io/ce-provision-docs/2.x/roles/debian/wazuh/</loc>
   </url><url>
     <loc>https://codeenigma.github.io/ce-provision-docs/2.x/scripts/</loc>
