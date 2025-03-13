@@ -178,6 +178,12 @@
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_timeout</span>: <span style="color:#ae81ff">5</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_healthy_count</span>: <span style="color:#ae81ff">5</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">health_check_unhealthy_count</span>: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">## Target Group Stickiness. Disabled by default unless set otherwise. Uncomment if needed:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># target_group_stickiness_enabled: true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># target_group_stickiness_type: &#34;lb_cookie&#34; # Valid values are lb_cookie, app_cookie or source_ip.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># target_group_stickiness_app_cookie_name: &#34;my_app_cookie&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># target_group_stickiness_app_cookie_duration: 86400</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># target_group_stickiness_lb_cookie_duration: 86400</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e"># ALB settings</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">create_elb</span>: <span style="color:#66d9ef">true</span> <span style="color:#75715e"># determines whether an ELB (currently, this is an ALB) is created as part of the ASG. This needs to be `true` in order to create a CloudFront distribution.</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">alb_idle_timeout</span>: <span style="color:#ae81ff">60</span>
